@@ -1,0 +1,31 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Room {
+  id        String    @id @default(cuid())
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  messages  Message[]
+
+  @@index([code])
+  @@index([expiresAt])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([roomId])
+  @@index([createdAt])
+}
