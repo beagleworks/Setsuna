@@ -15,31 +15,31 @@ Setsunaのユーザーインターフェースとユーザー体験の仕様を�
 
 ## カラーパレット
 
-| 用途 | カラー | Tailwind |
-|------|--------|----------|
-| プライマリ | #3B82F6 | `blue-500` |
-| プライマリホバー | #2563EB | `blue-600` |
-| 背景 | #F9FAFB | `gray-50` |
-| カード背景 | #FFFFFF | `white` |
-| テキスト | #111827 | `gray-900` |
-| サブテキスト | #6B7280 | `gray-500` |
-| ボーダー | #E5E7EB | `gray-200` |
-| 成功 | #10B981 | `emerald-500` |
-| エラー | #EF4444 | `red-500` |
-| 警告 | #F59E0B | `amber-500` |
+| 用途             | カラー  | Tailwind      |
+| ---------------- | ------- | ------------- |
+| プライマリ       | #3B82F6 | `blue-500`    |
+| プライマリホバー | #2563EB | `blue-600`    |
+| 背景             | #F9FAFB | `gray-50`     |
+| カード背景       | #FFFFFF | `white`       |
+| テキスト         | #111827 | `gray-900`    |
+| サブテキスト     | #6B7280 | `gray-500`    |
+| ボーダー         | #E5E7EB | `gray-200`    |
+| 成功             | #10B981 | `emerald-500` |
+| エラー           | #EF4444 | `red-500`     |
+| 警告             | #F59E0B | `amber-500`   |
 
 ---
 
 ## タイポグラフィ
 
-| 要素 | サイズ | ウェイト | Tailwind |
-|------|--------|----------|----------|
-| ロゴ | 2rem | Bold | `text-3xl font-bold` |
-| 見出し1 | 1.5rem | Semibold | `text-2xl font-semibold` |
-| 見出し2 | 1.25rem | Semibold | `text-xl font-semibold` |
-| 本文 | 1rem | Normal | `text-base` |
-| 小テキスト | 0.875rem | Normal | `text-sm` |
-| キャプション | 0.75rem | Normal | `text-xs` |
+| 要素         | サイズ   | ウェイト | Tailwind                 |
+| ------------ | -------- | -------- | ------------------------ |
+| ロゴ         | 2rem     | Bold     | `text-3xl font-bold`     |
+| 見出し1      | 1.5rem   | Semibold | `text-2xl font-semibold` |
+| 見出し2      | 1.25rem  | Semibold | `text-xl font-semibold`  |
+| 本文         | 1rem     | Normal   | `text-base`              |
+| 小テキスト   | 0.875rem | Normal   | `text-sm`                |
+| キャプション | 0.75rem  | Normal   | `text-xs`                |
 
 ---
 
@@ -78,7 +78,7 @@ Setsunaのユーザーインターフェースとユーザー体験の仕様を�
 │    │                                            │     │
 │    │   ルームコード:                           │     │
 │    │   ┌──────────────────────────────────┐   │     │
-│    │   │  A 1 B 2 C 3                     │   │     │
+│    │   │  A B C D 2 3                     │   │     │
 │    │   └──────────────────────────────────┘   │     │
 │    │                                            │     │
 │    │        ┌──────────────────────┐           │     │
@@ -92,11 +92,11 @@ Setsunaのユーザーインターフェースとユーザー体験の仕様を�
 
 #### コンポーネント
 
-| コンポーネント | 説明 |
-|----------------|------|
-| ロゴ | アプリ名「Setsuna」とサブタイトル |
-| RoomCreator | ルーム作成カード |
-| RoomJoiner | ルーム参加カード |
+| コンポーネント | 説明                              |
+| -------------- | --------------------------------- |
+| ロゴ           | アプリ名「Setsuna」とサブタイトル |
+| RoomCreator    | ルーム作成カード                  |
+| RoomJoiner     | ルーム参加カード                  |
 
 #### インタラクション
 
@@ -112,7 +112,7 @@ Setsunaのユーザーインターフェースとユーザー体験の仕様を�
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  ← 戻る              A1B2C3              📋 コピー    │
+│  ← 戻る              ABCD23              📋 コピー    │
 │                   残り: 23:45:30                       │
 ├────────────────────────────────────────────────────────┤
 │                                                        │
@@ -161,21 +161,21 @@ Setsunaのユーザーインターフェースとユーザー体験の仕様を�
 
 #### ヘッダー
 
-| 要素 | 説明 |
-|------|------|
-| 戻るボタン | ホームページへ戻る |
-| ルームコード | 現在のルームコード表示 |
-| コピーボタン | ルームURL/コードをコピー |
-| 残り時間 | 有効期限までのカウントダウン |
+| 要素         | 説明                         |
+| ------------ | ---------------------------- |
+| 戻るボタン   | ホームページへ戻る           |
+| ルームコード | 現在のルームコード表示       |
+| コピーボタン | ルームURL/コードをコピー     |
+| 残り時間     | 有効期限までのカウントダウン |
 
 #### コンポーネント
 
-| コンポーネント | 説明 |
-|----------------|------|
-| MessageInput | テキスト入力エリア |
-| MessageList | メッセージ一覧 |
-| MessageItem | 個別メッセージカード |
-| CopyButton | クリップボードコピー |
+| コンポーネント | 説明                 |
+| -------------- | -------------------- |
+| MessageInput   | テキスト入力エリア   |
+| MessageList    | メッセージ一覧       |
+| MessageItem    | 個別メッセージカード |
+| CopyButton     | クリップボードコピー |
 
 #### インタラクション
 
@@ -203,21 +203,16 @@ interface ButtonProps {
 
 #### バリエーション
 
-| バリアント | スタイル |
-|------------|----------|
-| primary | 青背景、白文字 |
-| secondary | グレー背景、ダーク文字 |
-| outline | 白背景、青ボーダー、青文字 |
+| バリアント | スタイル                   |
+| ---------- | -------------------------- |
+| primary    | 青背景、白文字             |
+| secondary  | グレー背景、ダーク文字     |
+| outline    | 白背景、青ボーダー、青文字 |
 
 ### Input
 
 ```tsx
-interface InputProps {
-  type: 'text' | 'password';
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-  maxLength?: number;
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 ```
@@ -232,15 +227,30 @@ interface CardProps {
 }
 ```
 
-### Toast
+### CopyButton
 
 ```tsx
-interface ToastProps {
-  message: string;
-  type: 'success' | 'error' | 'info';
-  duration?: number; // デフォルト: 3000ms
+interface CopyButtonProps {
+  text: string;
+  className?: string;
 }
 ```
+
+コピー成功時にアイコンがチェックマークに変わり、3秒後に元に戻ります。
+
+### MessageInput
+
+```tsx
+interface MessageInputProps {
+  onSubmit: (content: string) => Promise<void>;
+  disabled?: boolean;
+}
+```
+
+- 文字数カウンター表示（0 / 10,000 文字）
+- 10,000文字超過時に警告表示
+- Ctrl+Enter で送信可能
+- テキストエリア自動リサイズ
 
 ---
 
@@ -248,28 +258,28 @@ interface ToastProps {
 
 ### ブレークポイント
 
-| 名前 | 幅 | 対象デバイス |
-|------|-----|--------------|
-| sm | 640px | スマートフォン横向き |
-| md | 768px | タブレット |
-| lg | 1024px | ラップトップ |
-| xl | 1280px | デスクトップ |
+| 名前 | 幅     | 対象デバイス         |
+| ---- | ------ | -------------------- |
+| sm   | 640px  | スマートフォン横向き |
+| md   | 768px  | タブレット           |
+| lg   | 1024px | ラップトップ         |
+| xl   | 1280px | デスクトップ         |
 
 ### レイアウト調整
 
 #### ホームページ
 
-| 画面サイズ | レイアウト |
-|------------|------------|
-| モバイル | カード縦並び、フル幅 |
+| 画面サイズ     | レイアウト             |
+| -------------- | ---------------------- |
+| モバイル       | カード縦並び、フル幅   |
 | タブレット以上 | カード横並び、中央寄せ |
 
 #### ルームページ
 
-| 画面サイズ | レイアウト |
-|------------|------------|
-| モバイル | 入力エリア上部固定、メッセージリストスクロール |
-| タブレット以上 | 入力エリアとメッセージリスト左右分割も検討 |
+| 画面サイズ     | レイアウト                                     |
+| -------------- | ---------------------------------------------- |
+| モバイル       | 入力エリア上部固定、メッセージリストスクロール |
+| タブレット以上 | 入力エリアとメッセージリスト左右分割も検討     |
 
 ---
 
@@ -277,26 +287,40 @@ interface ToastProps {
 
 ### トランジション
 
-| 要素 | アニメーション | 時間 |
-|------|----------------|------|
-| ボタンホバー | 背景色変化 | 150ms |
-| カードホバー | シャドウ強調 | 200ms |
+| 要素         | アニメーション                | 時間  |
+| ------------ | ----------------------------- | ----- |
+| ボタンホバー | 背景色変化                    | 150ms |
+| カードホバー | シャドウ強調                  | 200ms |
 | 新メッセージ | フェードイン + スライドダウン | 300ms |
-| トースト | スライドイン → スライドアウト | 300ms |
+| トースト     | スライドイン → スライドアウト | 300ms |
 
 ### Tailwindクラス
 
 ```css
 /* トランジション */
-.transition-colors { transition-property: color, background-color, border-color; }
-.duration-150 { transition-duration: 150ms; }
-.duration-200 { transition-duration: 200ms; }
-.duration-300 { transition-duration: 300ms; }
+.transition-colors {
+  transition-property: color, background-color, border-color;
+}
+.duration-150 {
+  transition-duration: 150ms;
+}
+.duration-200 {
+  transition-duration: 200ms;
+}
+.duration-300 {
+  transition-duration: 300ms;
+}
 
 /* アニメーション */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .animate-fadeIn {
@@ -310,13 +334,13 @@ interface ToastProps {
 
 ### キーボード操作
 
-| キー | 動作 |
-|------|------|
-| Tab | 次のフォーカス要素へ |
-| Shift + Tab | 前のフォーカス要素へ |
-| Enter | ボタンクリック、フォーム送信 |
-| Ctrl + Enter | テキストエリアから送信 |
-| Escape | モーダル/トースト閉じる |
+| キー         | 動作                         |
+| ------------ | ---------------------------- |
+| Tab          | 次のフォーカス要素へ         |
+| Shift + Tab  | 前のフォーカス要素へ         |
+| Enter        | ボタンクリック、フォーム送信 |
+| Ctrl + Enter | テキストエリアから送信       |
+| Escape       | モーダル/トースト閉じる      |
 
 ### ARIA属性
 

@@ -6,19 +6,19 @@ Setsunaは**Turso**（SQLite互換のエッジデータベース）を使用し�
 
 ## データベース構成
 
-| 項目 | 値 |
-|------|-----|
-| データベース | Turso |
-| エンジン | libSQL (SQLite互換) |
-| ORM | Prisma |
-| アダプター | @prisma/adapter-libsql |
+| 項目         | 値                     |
+| ------------ | ---------------------- |
+| データベース | Turso                  |
+| エンジン     | libSQL (SQLite互換)    |
+| ORM          | Prisma                 |
+| アダプター   | @prisma/adapter-libsql |
 
 ### 環境別設定
 
-| 環境 | 接続先 |
-|------|--------|
+| 環境 | 接続先                                   |
+| ---- | ---------------------------------------- |
 | 開発 | ローカルSQLiteファイル (`file:./dev.db`) |
-| 本番 | Tursoクラウド (`libsql://xxx.turso.io`) |
+| 本番 | Tursoクラウド (`libsql://xxx.turso.io`)  |
 
 ---
 
@@ -70,19 +70,19 @@ model Message {
 
 ルーム（テキスト共有セッション）を管理します。
 
-| カラム | 型 | NULL | デフォルト | 説明 |
-|--------|-----|------|-----------|------|
-| `id` | TEXT | NO | `cuid()` | 主キー（CUID形式） |
-| `code` | TEXT | NO | - | ルームコード（6文字、ユニーク） |
-| `createdAt` | DATETIME | NO | `now()` | 作成日時 |
-| `expiresAt` | DATETIME | NO | - | 有効期限（作成から24時間後） |
+| カラム      | 型       | NULL | デフォルト | 説明                            |
+| ----------- | -------- | ---- | ---------- | ------------------------------- |
+| `id`        | TEXT     | NO   | `cuid()`   | 主キー（CUID形式）              |
+| `code`      | TEXT     | NO   | -          | ルームコード（6文字、ユニーク） |
+| `createdAt` | DATETIME | NO   | `now()`    | 作成日時                        |
+| `expiresAt` | DATETIME | NO   | -          | 有効期限（作成から24時間後）    |
 
 #### インデックス
 
-| インデックス名 | カラム | 用途 |
-|----------------|--------|------|
-| `Room_code_key` | `code` | ルームコードでの検索（ユニーク制約） |
-| `Room_expiresAt_idx` | `expiresAt` | 期限切れルームの検索・削除 |
+| インデックス名       | カラム      | 用途                                 |
+| -------------------- | ----------- | ------------------------------------ |
+| `Room_code_key`      | `code`      | ルームコードでの検索（ユニーク制約） |
+| `Room_expiresAt_idx` | `expiresAt` | 期限切れルームの検索・削除           |
 
 #### 制約
 
@@ -94,25 +94,25 @@ model Message {
 
 ルーム内で共有されるテキストメッセージを管理します。
 
-| カラム | 型 | NULL | デフォルト | 説明 |
-|--------|-----|------|-----------|------|
-| `id` | TEXT | NO | `cuid()` | 主キー（CUID形式） |
-| `content` | TEXT | NO | - | メッセージ内容（最大10,000文字） |
-| `roomId` | TEXT | NO | - | 所属ルームID（外部キー） |
-| `createdAt` | DATETIME | NO | `now()` | 作成日時 |
+| カラム      | 型       | NULL | デフォルト | 説明                             |
+| ----------- | -------- | ---- | ---------- | -------------------------------- |
+| `id`        | TEXT     | NO   | `cuid()`   | 主キー（CUID形式）               |
+| `content`   | TEXT     | NO   | -          | メッセージ内容（最大10,000文字） |
+| `roomId`    | TEXT     | NO   | -          | 所属ルームID（外部キー）         |
+| `createdAt` | DATETIME | NO   | `now()`    | 作成日時                         |
 
 #### インデックス
 
-| インデックス名 | カラム | 用途 |
-|----------------|--------|------|
-| `Message_roomId_idx` | `roomId` | ルームごとのメッセージ取得 |
-| `Message_createdAt_idx` | `createdAt` | 時系列ソート |
+| インデックス名          | カラム      | 用途                       |
+| ----------------------- | ----------- | -------------------------- |
+| `Message_roomId_idx`    | `roomId`    | ルームごとのメッセージ取得 |
+| `Message_createdAt_idx` | `createdAt` | 時系列ソート               |
 
 #### 外部キー制約
 
-| 参照元 | 参照先 | ON DELETE |
-|--------|--------|-----------|
-| `roomId` | `Room.id` | CASCADE |
+| 参照元   | 参照先    | ON DELETE |
+| -------- | --------- | --------- |
+| `roomId` | `Room.id` | CASCADE   |
 
 > **CASCADE削除**: ルームが削除されると、関連するすべてのメッセージも自動的に削除されます。
 
@@ -146,28 +146,7 @@ model Message {
 
 ## Prismaクライアント設定
 
-### 開発環境 (SQLite)
-
-```typescript
-// src/lib/db.ts
-import { PrismaClient } from '@prisma/client';
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    log: ['query', 'error', 'warn'],
-  });
-
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
-}
-```
-
-### 本番環境 (Turso)
+### 統一実装（開発/本番自動切り替え）
 
 ```typescript
 // src/lib/db.ts
@@ -175,25 +154,35 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaLibSQL } from '@prisma/adapter-libsql';
 import { createClient } from '@libsql/client';
 
-const libsql = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
-
-const adapter = new PrismaLibSQL(libsql);
-
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({ adapter });
+function createPrismaClient(): PrismaClient {
+  // Production: Use Turso
+  if (process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH_TOKEN) {
+    const libsql = createClient({
+      url: process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    });
+    const adapter = new PrismaLibSQL(libsql);
+    return new PrismaClient({ adapter });
+  }
+
+  // Development: Use local SQLite
+  return new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  });
+}
+
+export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = prisma;
 }
 ```
+
+環境変数 `TURSO_DATABASE_URL` と `TURSO_AUTH_TOKEN` が設定されている場合はTursoに接続し、それ以外はローカルSQLiteを使用します。
 
 ---
 
@@ -271,10 +260,13 @@ async function createMessage(roomCode: string, content: string) {
 ### メッセージ一覧取得
 
 ```typescript
-async function getMessages(roomCode: string, options?: {
-  after?: string;
-  limit?: number;
-}) {
+async function getMessages(
+  roomCode: string,
+  options?: {
+    after?: string;
+    limit?: number;
+  }
+) {
   const { after, limit = 50 } = options ?? {};
 
   const room = await prisma.room.findUnique({
@@ -290,9 +282,11 @@ async function getMessages(roomCode: string, options?: {
       roomId: room.id,
       ...(after && {
         createdAt: {
-          gt: (await prisma.message.findUnique({
-            where: { id: after },
-          }))?.createdAt,
+          gt: (
+            await prisma.message.findUnique({
+              where: { id: after },
+            })
+          )?.createdAt,
         },
       }),
     },
@@ -364,11 +358,11 @@ turso db shell setsuna < migration.sql
 
 ## 環境変数
 
-| 変数名 | 開発環境 | 本番環境 |
-|--------|----------|----------|
-| `DATABASE_URL` | `file:./dev.db` | - |
-| `TURSO_DATABASE_URL` | - | `libsql://xxx.turso.io` |
-| `TURSO_AUTH_TOKEN` | - | `eyJhbGciOi...` |
+| 変数名               | 開発環境        | 本番環境                |
+| -------------------- | --------------- | ----------------------- |
+| `DATABASE_URL`       | `file:./dev.db` | -                       |
+| `TURSO_DATABASE_URL` | -               | `libsql://xxx.turso.io` |
+| `TURSO_AUTH_TOKEN`   | -               | `eyJhbGciOi...`         |
 
 ---
 

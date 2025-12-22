@@ -10,13 +10,13 @@ Setsunaのテスト戦略と各テストケースの仕様を定義します。
 
 t-wada氏のTDD（テスト駆動開発）の原則に従い、**入出力が明確でロジックが複雑な部分**にはTDDを適用し、**視覚的確認が必要なUI部分**には後付けテストを適用します。
 
-| レイヤー | アプローチ | 理由 |
-|----------|-----------|------|
-| `src/lib/` | **TDD** | 純粋なロジック、明確な仕様 |
-| `src/app/api/` | **TDD** | API仕様が定義済み |
-| `src/components/` | **後付け** | 視覚的確認が必要 |
-| `src/hooks/` | **ハイブリッド** | ロジック部分はTDD |
-| E2E | **後付け** | 全体結合後に実施 |
+| レイヤー          | アプローチ       | 理由                       |
+| ----------------- | ---------------- | -------------------------- |
+| `src/lib/`        | **TDD**          | 純粋なロジック、明確な仕様 |
+| `src/app/api/`    | **TDD**          | API仕様が定義済み          |
+| `src/components/` | **後付け**       | 視覚的確認が必要           |
+| `src/hooks/`      | **ハイブリッド** | ロジック部分はTDD          |
+| E2E               | **後付け**       | 全体結合後に実施           |
 
 ### TDDサイクル（Red → Green → Refactor）
 
@@ -30,12 +30,12 @@ t-wada氏のTDD（テスト駆動開発）の原則に従い、**入出力が明
 
 ## テストツール
 
-| ツール | 用途 | バージョン |
-|--------|------|-----------|
-| Vitest | ユニット/統合テスト | ^2.0 |
-| Testing Library | コンポーネントテスト | ^16 |
-| MSW | APIモック | ^2.0 |
-| Playwright | E2Eテスト | ^1.40 |
+| ツール          | 用途                 | バージョン |
+| --------------- | -------------------- | ---------- |
+| Vitest          | ユニット/統合テスト  | ^2.0       |
+| Testing Library | コンポーネントテスト | ^16        |
+| MSW             | APIモック            | ^2.0       |
+| Playwright      | E2Eテスト            | ^1.40      |
 
 ### 依存パッケージ
 
@@ -110,12 +110,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        'node_modules/',
-        'src/**/*.d.ts',
-        'src/types/',
-        '**/*.config.*',
-      ],
+      exclude: ['node_modules/', 'src/**/*.d.ts', 'src/types/', '**/*.config.*'],
       thresholds: {
         global: {
           branches: 80,
@@ -189,13 +184,13 @@ export default defineConfig({
 
 #### generateRoomCode
 
-| テストケース | 期待結果 | 優先度 |
-|-------------|---------|--------|
-| 6文字のコードを生成する | `code.length === 6` | 高 |
-| 許可された文字のみを含む | `/^[A-HJ-NP-Z2-9]{6}$/` にマッチ | 高 |
-| 紛らわしい文字を含まない | `0, O, 1, I, L` を含まない | 高 |
-| 毎回異なるコードを生成する | 100回生成して重複なし | 中 |
-| 暗号学的に安全な乱数を使用 | `crypto.randomBytes` を使用 | 高 |
+| テストケース               | 期待結果                         | 優先度 |
+| -------------------------- | -------------------------------- | ------ |
+| 6文字のコードを生成する    | `code.length === 6`              | 高     |
+| 許可された文字のみを含む   | `/^[A-HJ-NP-Z2-9]{6}$/` にマッチ | 高     |
+| 紛らわしい文字を含まない   | `0, O, 1, I, L` を含まない       | 高     |
+| 毎回異なるコードを生成する | 100回生成して重複なし            | 中     |
+| 暗号学的に安全な乱数を使用 | `crypto.randomBytes` を使用      | 高     |
 
 ```typescript
 // src/lib/room-code.test.ts
@@ -230,16 +225,16 @@ describe('generateRoomCode', () => {
     expect(codes.size).toBe(100);
   });
 
-  it('十分なエントロピーを持つ（32^6 = 約10億通り）', () => {
-    // ALLOWED_CHARSが32文字であることを確認
-    expect(ALLOWED_CHARS).toHaveLength(32);
+  it('十分なエントロピーを持つ（31^6 ≒ 約8.9億通り）', () => {
+    // ALLOWED_CHARSが31文字であることを確認（0,O,1,I,Lを除外）
+    expect(ALLOWED_CHARS).toHaveLength(31);
   });
 });
 
 describe('validateRoomCode', () => {
   it('有効なコードをtrueで返す', () => {
-    expect(validateRoomCode('A1B2C3')).toBe(true);
-    expect(validateRoomCode('ABCDEF')).toBe(true);
+    expect(validateRoomCode('ABCD23')).toBe(true);
+    expect(validateRoomCode('HJKMNP')).toBe(true);
     expect(validateRoomCode('234567')).toBe(true);
   });
 
@@ -268,14 +263,14 @@ describe('validateRoomCode', () => {
 
 ### 2. sse-manager.ts（TDD）
 
-| テストケース | 期待結果 | 優先度 |
-|-------------|---------|--------|
-| 接続を追加できる | 接続がMapに追加される | 高 |
-| 接続を削除できる | 接続がMapから削除される | 高 |
-| ルームの全接続にブロードキャストできる | 全controllerにenqueueが呼ばれる | 高 |
-| 存在しないルームへのブロードキャストは何もしない | エラーなく終了 | 中 |
-| 接続数を取得できる | 正しい数を返す | 中 |
-| 切断された接続は自動削除される | enqueue失敗時に削除 | 高 |
+| テストケース                                     | 期待結果                        | 優先度 |
+| ------------------------------------------------ | ------------------------------- | ------ |
+| 接続を追加できる                                 | 接続がMapに追加される           | 高     |
+| 接続を削除できる                                 | 接続がMapから削除される         | 高     |
+| ルームの全接続にブロードキャストできる           | 全controllerにenqueueが呼ばれる | 高     |
+| 存在しないルームへのブロードキャストは何もしない | エラーなく終了                  | 中     |
+| 接続数を取得できる                               | 正しい数を返す                  | 中     |
+| 切断された接続は自動削除される                   | enqueue失敗時に削除             | 高     |
 
 ```typescript
 // src/lib/sse-manager.test.ts
@@ -296,43 +291,43 @@ describe('SSEManager', () => {
   });
 
   it('接続を追加できる', () => {
-    const connection = manager.addConnection('ROOM01', mockController);
+    const connectionId = manager.addConnection('ABCD23', mockController);
 
-    expect(connection.roomCode).toBe('ROOM01');
-    expect(manager.getConnectionCount('ROOM01')).toBe(1);
+    expect(connectionId).toBeDefined();
+    expect(manager.getConnectionCount('ABCD23')).toBe(1);
   });
 
   it('同じルームに複数接続を追加できる', () => {
     const controller2 = { ...mockController, enqueue: vi.fn() };
 
-    manager.addConnection('ROOM01', mockController);
-    manager.addConnection('ROOM01', controller2 as any);
+    manager.addConnection('ABCD23', mockController);
+    manager.addConnection('ABCD23', controller2 as any);
 
-    expect(manager.getConnectionCount('ROOM01')).toBe(2);
+    expect(manager.getConnectionCount('ABCD23')).toBe(2);
   });
 
   it('接続を削除できる', () => {
-    const connection = manager.addConnection('ROOM01', mockController);
-    manager.removeConnection(connection);
+    const connectionId = manager.addConnection('ABCD23', mockController);
+    manager.removeConnection('ABCD23', connectionId);
 
-    expect(manager.getConnectionCount('ROOM01')).toBe(0);
+    expect(manager.getConnectionCount('ABCD23')).toBe(0);
   });
 
   it('ルームの全接続にブロードキャストできる', () => {
     const controller2 = { enqueue: vi.fn() } as any;
 
-    manager.addConnection('ROOM01', mockController);
-    manager.addConnection('ROOM01', controller2);
+    manager.addConnection('ABCD23', mockController);
+    manager.addConnection('ABCD23', controller2);
 
-    manager.broadcast('ROOM01', 'message', { text: 'hello' });
+    manager.broadcast('ABCD23', 'message', { text: 'hello' });
 
     expect(mockController.enqueue).toHaveBeenCalled();
     expect(controller2.enqueue).toHaveBeenCalled();
   });
 
   it('ブロードキャストはSSE形式でデータを送信する', () => {
-    manager.addConnection('ROOM01', mockController);
-    manager.broadcast('ROOM01', 'message', { text: 'hello' });
+    manager.addConnection('ABCD23', mockController);
+    manager.broadcast('ABCD23', 'message', { text: 'hello' });
 
     const call = (mockController.enqueue as any).mock.calls[0][0];
     const decoded = new TextDecoder().decode(call);
@@ -344,18 +339,18 @@ describe('SSEManager', () => {
   it('存在しないルームへのブロードキャストは何もしない', () => {
     // エラーが発生しないことを確認
     expect(() => {
-      manager.broadcast('NONEXISTENT', 'message', { text: 'hello' });
+      manager.broadcast('ZZZZZ9', 'message', { text: 'hello' });
     }).not.toThrow();
   });
 
   it('接続数を取得できる', () => {
-    expect(manager.getConnectionCount('ROOM01')).toBe(0);
+    expect(manager.getConnectionCount('ABCD23')).toBe(0);
 
-    manager.addConnection('ROOM01', mockController);
-    expect(manager.getConnectionCount('ROOM01')).toBe(1);
+    manager.addConnection('ABCD23', mockController);
+    expect(manager.getConnectionCount('ABCD23')).toBe(1);
 
-    manager.addConnection('ROOM01', { enqueue: vi.fn() } as any);
-    expect(manager.getConnectionCount('ROOM01')).toBe(2);
+    manager.addConnection('ABCD23', { enqueue: vi.fn() } as any);
+    expect(manager.getConnectionCount('ABCD23')).toBe(2);
   });
 
   it('切断された接続はブロードキャスト時に自動削除される', () => {
@@ -365,12 +360,12 @@ describe('SSEManager', () => {
       }),
     } as any;
 
-    manager.addConnection('ROOM01', failingController);
-    expect(manager.getConnectionCount('ROOM01')).toBe(1);
+    manager.addConnection('ABCD23', failingController);
+    expect(manager.getConnectionCount('ABCD23')).toBe(1);
 
-    manager.broadcast('ROOM01', 'message', { text: 'hello' });
+    manager.broadcast('ABCD23', 'message', { text: 'hello' });
 
-    expect(manager.getConnectionCount('ROOM01')).toBe(0);
+    expect(manager.getConnectionCount('ABCD23')).toBe(0);
   });
 });
 ```
@@ -381,12 +376,12 @@ describe('SSEManager', () => {
 
 ### 3. POST /api/rooms（TDD）
 
-| テストケース | 期待結果 | ステータス |
-|-------------|---------|-----------|
-| 新しいルームを作成し、コードを返す | `{ success: true, data: { room: {...} } }` | 201 |
-| expiresAtは24時間後に設定される | `expiresAt - createdAt ≈ 24h` | 201 |
-| ルームコードはユニーク | 重複時は再生成 | 201 |
-| レート制限を超えると429を返す | `{ success: false, error: {...} }` | 429 |
+| テストケース                       | 期待結果                                   | ステータス |
+| ---------------------------------- | ------------------------------------------ | ---------- |
+| 新しいルームを作成し、コードを返す | `{ success: true, data: { room: {...} } }` | 201        |
+| expiresAtは24時間後に設定される    | `expiresAt - createdAt ≈ 24h`              | 201        |
+| ルームコードはユニーク             | 重複時は再生成                             | 201        |
+| レート制限を超えると429を返す      | `{ success: false, error: {...} }`         | 429        |
 
 ```typescript
 // src/app/api/rooms/route.test.ts
@@ -412,7 +407,7 @@ describe('POST /api/rooms', () => {
   it('新しいルームを作成し、コードを返す', async () => {
     const mockRoom = {
       id: 'test-id',
-      code: 'ABC123',
+      code: 'ABCD23',
       createdAt: new Date(),
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     };
@@ -460,12 +455,12 @@ describe('POST /api/rooms', () => {
 
 ### 4. GET /api/rooms/[code]（TDD）
 
-| テストケース | 期待結果 | ステータス |
-|-------------|---------|-----------|
-| 存在するルームの情報を返す | ルーム情報 + messageCount | 200 |
-| 存在しないルームは404を返す | `ROOM_NOT_FOUND` | 404 |
-| 期限切れルームは410を返す | `ROOM_EXPIRED` | 410 |
-| 無効なコード形式は400を返す | `INVALID_ROOM_CODE` | 400 |
+| テストケース                | 期待結果                  | ステータス |
+| --------------------------- | ------------------------- | ---------- |
+| 存在するルームの情報を返す  | ルーム情報 + messageCount | 200        |
+| 存在しないルームは404を返す | `ROOM_NOT_FOUND`          | 404        |
+| 期限切れルームは410を返す   | `ROOM_EXPIRED`            | 410        |
+| 無効なコード形式は400を返す | `INVALID_ROOM_CODE`       | 400        |
 
 ```typescript
 // src/app/api/rooms/[code]/route.test.ts
@@ -479,7 +474,7 @@ describe('GET /api/rooms/[code]', () => {
   it('存在するルームの情報を返す', async () => {
     const mockRoom = {
       id: 'test-id',
-      code: 'ABC123',
+      code: 'ABCD23',
       createdAt: new Date(),
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       _count: { messages: 5 },
@@ -487,21 +482,21 @@ describe('GET /api/rooms/[code]', () => {
 
     (prisma.room.findUnique as any).mockResolvedValue(mockRoom);
 
-    const request = new Request('http://localhost/api/rooms/ABC123');
-    const response = await GET(request, { params: { code: 'ABC123' } });
+    const request = new Request('http://localhost/api/rooms/ABCD23');
+    const response = await GET(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(data.data.room.code).toBe('ABC123');
+    expect(data.data.room.code).toBe('ABCD23');
     expect(data.data.room.messageCount).toBe(5);
   });
 
   it('存在しないルームは404を返す', async () => {
     (prisma.room.findUnique as any).mockResolvedValue(null);
 
-    const request = new Request('http://localhost/api/rooms/NOROOM');
-    const response = await GET(request, { params: { code: 'NOROOM' } });
+    const request = new Request('http://localhost/api/rooms/HJKMNP');
+    const response = await GET(request, { params: { code: 'HJKMNP' } });
     const data = await response.json();
 
     expect(response.status).toBe(404);
@@ -512,15 +507,15 @@ describe('GET /api/rooms/[code]', () => {
   it('期限切れルームは410を返す', async () => {
     const mockRoom = {
       id: 'test-id',
-      code: 'ABC123',
+      code: 'ABCD23',
       createdAt: new Date(Date.now() - 48 * 60 * 60 * 1000),
       expiresAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // 期限切れ
     };
 
     (prisma.room.findUnique as any).mockResolvedValue(mockRoom);
 
-    const request = new Request('http://localhost/api/rooms/ABC123');
-    const response = await GET(request, { params: { code: 'ABC123' } });
+    const request = new Request('http://localhost/api/rooms/ABCD23');
+    const response = await GET(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(410);
@@ -540,13 +535,13 @@ describe('GET /api/rooms/[code]', () => {
 
 ### 5. POST /api/rooms/[code]/messages（TDD）
 
-| テストケース | 期待結果 | ステータス |
-|-------------|---------|-----------|
-| メッセージを作成する | 新しいメッセージ | 201 |
-| SSEでブロードキャストする | `sseManager.broadcast` が呼ばれる | 201 |
-| 10,000文字を超えると400を返す | `CONTENT_TOO_LONG` | 400 |
-| 空のcontentは400を返す | `CONTENT_EMPTY` | 400 |
-| 存在しないルームは404を返す | `ROOM_NOT_FOUND` | 404 |
+| テストケース                  | 期待結果                          | ステータス |
+| ----------------------------- | --------------------------------- | ---------- |
+| メッセージを作成する          | 新しいメッセージ                  | 201        |
+| SSEでブロードキャストする     | `sseManager.broadcast` が呼ばれる | 201        |
+| 10,000文字を超えると400を返す | `CONTENT_TOO_LONG`                | 400        |
+| 空のcontentは400を返す        | `CONTENT_EMPTY`                   | 400        |
+| 存在しないルームは404を返す   | `ROOM_NOT_FOUND`                  | 404        |
 
 ```typescript
 // src/app/api/rooms/[code]/messages/route.test.ts
@@ -560,7 +555,7 @@ vi.mock('@/lib/sse-manager');
 
 describe('POST /api/rooms/[code]/messages', () => {
   it('メッセージを作成する', async () => {
-    const mockRoom = { id: 'room-id', code: 'ABC123' };
+    const mockRoom = { id: 'room-id', code: 'ABCD23' };
     const mockMessage = {
       id: 'msg-id',
       content: 'Hello, World!',
@@ -570,13 +565,13 @@ describe('POST /api/rooms/[code]/messages', () => {
     (prisma.room.findUnique as any).mockResolvedValue(mockRoom);
     (prisma.message.create as any).mockResolvedValue(mockMessage);
 
-    const request = new Request('http://localhost/api/rooms/ABC123/messages', {
+    const request = new Request('http://localhost/api/rooms/ABCD23/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: 'Hello, World!' }),
     });
 
-    const response = await POST(request, { params: { code: 'ABC123' } });
+    const response = await POST(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(201);
@@ -584,22 +579,22 @@ describe('POST /api/rooms/[code]/messages', () => {
   });
 
   it('SSEでブロードキャストする', async () => {
-    const mockRoom = { id: 'room-id', code: 'ABC123' };
+    const mockRoom = { id: 'room-id', code: 'ABCD23' };
     const mockMessage = { id: 'msg-id', content: 'Test', createdAt: new Date() };
 
     (prisma.room.findUnique as any).mockResolvedValue(mockRoom);
     (prisma.message.create as any).mockResolvedValue(mockMessage);
 
-    const request = new Request('http://localhost/api/rooms/ABC123/messages', {
+    const request = new Request('http://localhost/api/rooms/ABCD23/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: 'Test' }),
     });
 
-    await POST(request, { params: { code: 'ABC123' } });
+    await POST(request, { params: { code: 'ABCD23' } });
 
     expect(sseManager.broadcast).toHaveBeenCalledWith(
-      'ABC123',
+      'ABCD23',
       'message',
       expect.objectContaining({ content: 'Test' })
     );
@@ -608,13 +603,13 @@ describe('POST /api/rooms/[code]/messages', () => {
   it('10,000文字を超えると400を返す', async () => {
     const longContent = 'a'.repeat(10001);
 
-    const request = new Request('http://localhost/api/rooms/ABC123/messages', {
+    const request = new Request('http://localhost/api/rooms/ABCD23/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: longContent }),
     });
 
-    const response = await POST(request, { params: { code: 'ABC123' } });
+    const response = await POST(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -622,13 +617,13 @@ describe('POST /api/rooms/[code]/messages', () => {
   });
 
   it('空のcontentは400を返す', async () => {
-    const request = new Request('http://localhost/api/rooms/ABC123/messages', {
+    const request = new Request('http://localhost/api/rooms/ABCD23/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ content: '' }),
     });
 
-    const response = await POST(request, { params: { code: 'ABC123' } });
+    const response = await POST(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(400);
@@ -638,7 +633,7 @@ describe('POST /api/rooms/[code]/messages', () => {
 
 describe('GET /api/rooms/[code]/messages', () => {
   it('メッセージ一覧を返す', async () => {
-    const mockRoom = { id: 'room-id', code: 'ABC123' };
+    const mockRoom = { id: 'room-id', code: 'ABCD23' };
     const mockMessages = [
       { id: 'msg-1', content: 'First', createdAt: new Date() },
       { id: 'msg-2', content: 'Second', createdAt: new Date() },
@@ -647,8 +642,8 @@ describe('GET /api/rooms/[code]/messages', () => {
     (prisma.room.findUnique as any).mockResolvedValue(mockRoom);
     (prisma.message.findMany as any).mockResolvedValue(mockMessages);
 
-    const request = new Request('http://localhost/api/rooms/ABC123/messages');
-    const response = await GET(request, { params: { code: 'ABC123' } });
+    const request = new Request('http://localhost/api/rooms/ABCD23/messages');
+    const response = await GET(request, { params: { code: 'ABCD23' } });
     const data = await response.json();
 
     expect(response.status).toBe(200);
@@ -791,7 +786,7 @@ describe('RoomJoiner', () => {
     render(<RoomJoiner onJoin={vi.fn()} />);
 
     const input = screen.getByRole('textbox');
-    await user.type(input, 'ABC123');
+    await user.type(input, 'ABCD23');
 
     expect(screen.getByRole('button', { name: /参加/i })).toBeEnabled();
   });
@@ -809,9 +804,9 @@ describe('RoomJoiner', () => {
     const user = userEvent.setup();
     render(<RoomJoiner onJoin={vi.fn()} />);
 
-    await user.type(screen.getByRole('textbox'), 'abc123');
+    await user.type(screen.getByRole('textbox'), 'abcd23');
 
-    expect(screen.getByRole('textbox')).toHaveValue('ABC123');
+    expect(screen.getByRole('textbox')).toHaveValue('ABCD23');
   });
 
   it('無効な文字（0, O, 1, I, L）は入力できない', async () => {
@@ -828,10 +823,10 @@ describe('RoomJoiner', () => {
     const onJoin = vi.fn();
     render(<RoomJoiner onJoin={onJoin} />);
 
-    await user.type(screen.getByRole('textbox'), 'ABC123');
+    await user.type(screen.getByRole('textbox'), 'ABCD23');
     await user.click(screen.getByRole('button', { name: /参加/i }));
 
-    expect(onJoin).toHaveBeenCalledWith('ABC123');
+    expect(onJoin).toHaveBeenCalledWith('ABCD23');
   });
 });
 ```
@@ -873,7 +868,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
     const context2 = await browser.newContext();
     const page2 = await context2.newPage();
     await page2.goto('/');
-    await page2.fill('input[placeholder*="ルームコード"]', roomCode!);
+    await page2.fill('input[placeholder="A B C D 2 3"]', roomCode!);
     await page2.click('button:has-text("参加")');
 
     // 同じルームにいることを確認
@@ -922,7 +917,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
     await page.click('button:has-text("送信")');
 
     // コピーボタンをクリック
-    await page.click('[data-testid="copy-button"]');
+    await page.click('button[aria-label="コピー"]');
 
     // クリップボードの内容を確認
     const clipboardContent = await page.evaluate(() => navigator.clipboard.readText());
@@ -986,10 +981,10 @@ npm run test:e2e:ui
 
 コミット前に自動でlint/formatを実行し、プッシュ前にテストを実行します。
 
-| フック | タイミング | 実行内容 |
-|--------|-----------|---------|
+| フック     | タイミング      | 実行内容                         |
+| ---------- | --------------- | -------------------------------- |
 | pre-commit | `git commit` 前 | lint-staged（ESLint + Prettier） |
-| pre-push | `git push` 前 | `npm run test` |
+| pre-push   | `git push` 前   | `npm run test`                   |
 
 ### lint-staged設定
 
@@ -1105,11 +1100,11 @@ jobs:
 
 ## カバレッジ目標
 
-| 対象 | 目標 |
-|------|------|
-| 全体 | 80%以上 |
-| `src/lib/` | 90%以上 |
-| `src/app/api/` | 85%以上 |
+| 対象              | 目標    |
+| ----------------- | ------- |
+| 全体              | 80%以上 |
+| `src/lib/`        | 90%以上 |
+| `src/app/api/`    | 85%以上 |
 | `src/components/` | 75%以上 |
 
 ---

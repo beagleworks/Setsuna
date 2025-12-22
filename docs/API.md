@@ -6,9 +6,9 @@ SetsunaのREST APIおよびSSE（Server-Sent Events）エンドポイントの�
 
 ## ベースURL
 
-| 環境 | URL |
-|------|-----|
-| 開発 | `http://localhost:3000/api` |
+| 環境 | URL                               |
+| ---- | --------------------------------- |
+| 開発 | `http://localhost:3000/api`       |
 | 本番 | `https://your-app.vercel.app/api` |
 
 ## 共通仕様
@@ -40,15 +40,15 @@ SetsunaのREST APIおよびSSE（Server-Sent Events）エンドポイントの�
 
 ### エラーコード一覧
 
-| コード | HTTPステータス | 説明 |
-|--------|----------------|------|
-| `ROOM_NOT_FOUND` | 404 | ルームが存在しないまたは期限切れ |
-| `ROOM_EXPIRED` | 410 | ルームの有効期限が切れている |
-| `INVALID_ROOM_CODE` | 400 | ルームコードの形式が不正 |
-| `CONTENT_TOO_LONG` | 400 | メッセージが10,000文字を超過 |
-| `CONTENT_EMPTY` | 400 | メッセージが空 |
-| `RATE_LIMIT_EXCEEDED` | 429 | レート制限を超過 |
-| `INTERNAL_ERROR` | 500 | サーバー内部エラー |
+| コード                | HTTPステータス | 説明                             |
+| --------------------- | -------------- | -------------------------------- |
+| `ROOM_NOT_FOUND`      | 404            | ルームが存在しないまたは期限切れ |
+| `ROOM_EXPIRED`        | 410            | ルームの有効期限が切れている     |
+| `INVALID_ROOM_CODE`   | 400            | ルームコードの形式が不正         |
+| `CONTENT_TOO_LONG`    | 400            | メッセージが10,000文字を超過     |
+| `CONTENT_EMPTY`       | 400            | メッセージが空                   |
+| `RATE_LIMIT_EXCEEDED` | 429            | レート制限を超過                 |
+| `INTERNAL_ERROR`      | 500            | サーバー内部エラー               |
 
 ### レート制限
 
@@ -82,7 +82,7 @@ POST /api/rooms
   "success": true,
   "data": {
     "room": {
-      "code": "A1B2C3",
+      "code": "ABCD23",
       "expiresAt": "2024-12-22T10:30:00.000Z"
     }
   }
@@ -91,10 +91,10 @@ POST /api/rooms
 
 #### レスポンスフィールド
 
-| フィールド | 型 | 説明 |
-|-----------|-----|------|
-| `room.code` | string | 6文字のルームコード |
-| `room.expiresAt` | string (ISO 8601) | 有効期限（作成から24時間後） |
+| フィールド       | 型                | 説明                                      |
+| ---------------- | ----------------- | ----------------------------------------- |
+| `room.code`      | string            | 6文字のルームコード（A-HJ-NP-Z, 2-9のみ） |
+| `room.expiresAt` | string (ISO 8601) | 有効期限（作成から24時間後）              |
 
 #### 例
 
@@ -114,9 +114,9 @@ GET /api/rooms/{code}
 
 #### パスパラメータ
 
-| パラメータ | 型 | 説明 |
-|-----------|-----|------|
-| `code` | string | 6文字のルームコード |
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
 
 #### レスポンス（成功時）
 
@@ -125,9 +125,10 @@ GET /api/rooms/{code}
   "success": true,
   "data": {
     "room": {
-      "code": "A1B2C3",
-      "expiresAt": "2024-12-22T10:30:00.000Z",
+      "id": "clq1234567890",
+      "code": "ABCD23",
       "createdAt": "2024-12-21T10:30:00.000Z",
+      "expiresAt": "2024-12-22T10:30:00.000Z",
       "messageCount": 5
     }
   }
@@ -149,7 +150,7 @@ GET /api/rooms/{code}
 #### 例
 
 ```bash
-curl http://localhost:3000/api/rooms/A1B2C3
+curl http://localhost:3000/api/rooms/ABCD23
 ```
 
 ---
@@ -164,16 +165,16 @@ GET /api/rooms/{code}/messages
 
 #### パスパラメータ
 
-| パラメータ | 型 | 説明 |
-|-----------|-----|------|
-| `code` | string | 6文字のルームコード |
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
 
 #### クエリパラメータ
 
-| パラメータ | 型 | 必須 | 説明 |
-|-----------|-----|------|------|
-| `after` | string | No | このID以降のメッセージのみ取得 |
-| `limit` | number | No | 取得件数（デフォルト: 50、最大: 100） |
+| パラメータ | 型     | 必須 | 説明                                  |
+| ---------- | ------ | ---- | ------------------------------------- |
+| `after`    | string | No   | このID以降のメッセージのみ取得        |
+| `limit`    | number | No   | 取得件数（デフォルト: 50、最大: 100） |
 
 #### レスポンス
 
@@ -200,22 +201,22 @@ GET /api/rooms/{code}/messages
 
 #### レスポンスフィールド
 
-| フィールド | 型 | 説明 |
-|-----------|-----|------|
-| `messages` | array | メッセージの配列 |
-| `messages[].id` | string | メッセージID |
-| `messages[].content` | string | メッセージ内容 |
-| `messages[].createdAt` | string (ISO 8601) | 作成日時 |
-| `hasMore` | boolean | さらにメッセージが存在するか |
+| フィールド             | 型                | 説明                         |
+| ---------------------- | ----------------- | ---------------------------- |
+| `messages`             | array             | メッセージの配列             |
+| `messages[].id`        | string            | メッセージID                 |
+| `messages[].content`   | string            | メッセージ内容               |
+| `messages[].createdAt` | string (ISO 8601) | 作成日時                     |
+| `hasMore`              | boolean           | さらにメッセージが存在するか |
 
 #### 例
 
 ```bash
 # 全件取得
-curl http://localhost:3000/api/rooms/A1B2C3/messages
+curl http://localhost:3000/api/rooms/ABCD23/messages
 
 # 特定ID以降を取得
-curl "http://localhost:3000/api/rooms/A1B2C3/messages?after=clq1234567890"
+curl "http://localhost:3000/api/rooms/ABCD23/messages?after=clq1234567890"
 ```
 
 ---
@@ -230,9 +231,9 @@ POST /api/rooms/{code}/messages
 
 #### パスパラメータ
 
-| パラメータ | 型 | 説明 |
-|-----------|-----|------|
-| `code` | string | 6文字のルームコード |
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
 
 #### リクエストボディ
 
@@ -242,9 +243,9 @@ POST /api/rooms/{code}/messages
 }
 ```
 
-| フィールド | 型 | 必須 | 説明 |
-|-----------|-----|------|------|
-| `content` | string | Yes | メッセージ内容（1〜10,000文字） |
+| フィールド | 型     | 必須 | 説明                            |
+| ---------- | ------ | ---- | ------------------------------- |
+| `content`  | string | Yes  | メッセージ内容（1〜10,000文字） |
 
 #### レスポンス
 
@@ -276,7 +277,7 @@ POST /api/rooms/{code}/messages
 #### 例
 
 ```bash
-curl -X POST http://localhost:3000/api/rooms/A1B2C3/messages \
+curl -X POST http://localhost:3000/api/rooms/ABCD23/messages \
   -H "Content-Type: application/json" \
   -d '{"content": "共有したいテキスト"}'
 ```
@@ -293,9 +294,9 @@ GET /api/sse/{code}
 
 #### パスパラメータ
 
-| パラメータ | 型 | 説明 |
-|-----------|-----|------|
-| `code` | string | 6文字のルームコード |
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
 
 #### レスポンスヘッダー
 
@@ -311,7 +312,7 @@ Connection: keep-alive
 
 ```
 event: connected
-data: {"roomCode":"A1B2C3","timestamp":1703155800000}
+data: {"roomCode":"ABCD23","timestamp":1703155800000}
 ```
 
 ##### message（新規メッセージ）
@@ -333,7 +334,7 @@ data: {"timestamp":1703155830000}
 #### クライアント側実装例
 
 ```javascript
-const eventSource = new EventSource('/api/sse/A1B2C3');
+const eventSource = new EventSource('/api/sse/ABCD23');
 
 eventSource.addEventListener('connected', (event) => {
   console.log('接続しました:', JSON.parse(event.data));
@@ -364,14 +365,14 @@ POST /api/cleanup
 
 #### 認証
 
-| ヘッダー | 値 |
-|----------|-----|
+| ヘッダー        | 値                     |
+| --------------- | ---------------------- |
 | `Authorization` | `Bearer {CRON_SECRET}` |
 
 または、Vercel Cronからの呼び出し:
 
-| ヘッダー | 値 |
-|----------|-----|
+| ヘッダー        | 値  |
+| --------------- | --- |
 | `x-vercel-cron` | `1` |
 
 #### レスポンス
