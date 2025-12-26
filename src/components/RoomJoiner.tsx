@@ -60,9 +60,11 @@ export function RoomJoiner() {
   };
 
   return (
-    <Card title="既存のルームに参加">
+    <Card title="既存ルームに参加">
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">ルームコード</label>
+        <label className="block text-sm font-bold text-neutral-400 mb-2 uppercase tracking-wider">
+          ルームコード
+        </label>
         <Input
           value={code}
           onChange={handleCodeChange}
@@ -70,7 +72,7 @@ export function RoomJoiner() {
           placeholder="A B C D 2 3"
           maxLength={6}
           error={error || undefined}
-          className="text-center text-2xl tracking-widest font-mono"
+          className="text-center text-2xl tracking-widest"
         />
       </div>
 
@@ -80,8 +82,9 @@ export function RoomJoiner() {
         disabled={code.length !== 6}
         className="w-full"
         size="lg"
+        variant="secondary"
       >
-        参加する
+        参加
       </Button>
     </Card>
   );

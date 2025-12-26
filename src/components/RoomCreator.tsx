@@ -34,19 +34,19 @@ export function RoomCreator() {
   };
 
   return (
-    <Card title="新しいルームを作成">
-      <p className="text-gray-500 mb-6">
+    <Card title="新規ルーム作成">
+      <p className="text-neutral-400 mb-6">
         ルームを作成してコードを共有すると、別のデバイスからアクセスできます
       </p>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        <div className="mb-4 p-3 bg-[#ff3366]/10 border-2 border-[#ff3366] text-[#ff3366] text-sm font-mono">
           {error}
         </div>
       )}
 
       <Button onClick={handleCreate} loading={loading} className="w-full" size="lg">
-        ルームを作成する
+        ルーム作成
       </Button>
     </Card>
   );

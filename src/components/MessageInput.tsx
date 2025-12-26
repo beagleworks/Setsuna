@@ -50,7 +50,7 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
   }, [content]);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <div className="bg-neutral-900 border-2 border-white p-4">
       <textarea
         ref={textareaRef}
         value={content}
@@ -58,19 +58,19 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
         onKeyDown={handleKeyDown}
         placeholder="テキストを入力..."
         disabled={disabled || loading}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-150"
+        className="w-full px-4 py-3 bg-black border-2 border-neutral-600 text-white font-mono placeholder:text-neutral-600 resize-none focus:outline-none focus:border-white transition-colors duration-100"
         rows={3}
       />
 
       <div className="mt-3 flex items-center justify-between">
-        <div className="text-sm">
+        <div className="text-sm font-mono">
           {isOverLimit ? (
-            <span className="text-red-500">
+            <span className="text-[#ff3366]">
               {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()} 文字
               （10,000文字を超えています）
             </span>
           ) : (
-            <span className="text-gray-400">
+            <span className="text-neutral-500">
               {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()} 文字
             </span>
           )}
@@ -81,11 +81,13 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
           disabled={isEmpty || isOverLimit || disabled}
           loading={loading}
         >
-          送信する
+          送信
         </Button>
       </div>
 
-      <p className="mt-2 text-xs text-gray-400">Ctrl + Enter で送信</p>
+      <p className="mt-2 text-xs text-neutral-600 font-mono uppercase tracking-wider">
+        Ctrl + Enter で送信
+      </p>
     </div>
   );
 }

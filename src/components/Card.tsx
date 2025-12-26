@@ -8,10 +8,12 @@ interface CardProps {
 
 export function Card({ title, children, className = '' }: CardProps) {
   return (
-    <div
-      className={`bg-white rounded-xl shadow-sm border border-gray-200 p-6 transition-shadow duration-200 hover:shadow-md ${className}`}
-    >
-      {title && <h2 className="text-xl font-semibold text-gray-900 mb-4">{title}</h2>}
+    <div className={`bg-neutral-900 border-2 border-white p-6 ${className}`}>
+      {title && (
+        <h2 className="text-xl font-bold text-white uppercase tracking-wider mb-4 pb-2 border-b-2 border-white">
+          {title}
+        </h2>
+      )}
       {children}
     </div>
   );

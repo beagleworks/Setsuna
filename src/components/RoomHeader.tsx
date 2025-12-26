@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowLeft, Clock } from 'lucide-react';
 import { CopyButton } from './CopyButton';
 import { useCountdown } from '@/hooks/useCountdown';
 
@@ -15,35 +16,33 @@ export function RoomHeader({ code, expiresAt }: RoomHeaderProps) {
   const roomUrl = typeof window !== 'undefined' ? `${window.location.origin}/room/${code}` : '';
 
   return (
-    <header className="bg-white border-b border-gray-200 py-4 px-6">
+    <header className="bg-black border-b-2 border-white py-4 px-6 sticky top-0 z-50">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         <Link
           href="/"
-          className="flex items-center gap-2 text-gray-500 hover:text-gray-700 transition-colors"
+          className="flex items-center gap-2 text-neutral-400 hover:text-[#00ff88] transition-colors duration-100 uppercase tracking-wider"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
-          <span>戻る</span>
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-bold">[戻る]</span>
         </Link>
+
         <div className="flex flex-col items-center">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <span
-              className="text-2xl font-mono font-bold tracking-widest text-gray-900"
+              className="text-2xl sm:text-3xl font-mono font-bold tracking-[0.3em] text-[#00ff88]"
               data-testid="room-code"
             >
               {code}
             </span>
             <CopyButton text={roomUrl} />
           </div>
-          <span className="text-sm text-gray-400">残り: {timeLeft}</span>
+          <div className="flex items-center gap-1.5 mt-1 text-sm text-neutral-500 font-mono">
+            <Clock className="w-4 h-4" />
+            <span>TTL: {timeLeft}</span>
+          </div>
         </div>
-        <div className="w-16" /> {/* Spacer for centering */}
+
+        <div className="w-20" />
       </div>
     </header>
   );

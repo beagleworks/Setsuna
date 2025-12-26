@@ -23,26 +23,20 @@ export function CopyButton({ text, className = '' }: CopyButtonProps) {
   return (
     <button
       onClick={handleCopy}
-      className={`p-2 rounded-lg transition-colors duration-150 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+      className={`p-2 border-2 transition-all duration-100 ${
+        copied
+          ? 'border-[#00ff88] text-[#00ff88] bg-[#00ff88]/10'
+          : 'border-neutral-600 text-neutral-400 hover:border-white hover:text-white hover:bg-white/10'
+      } ${className}`}
       aria-label={copied ? 'コピー完了' : 'コピー'}
       aria-pressed={copied}
     >
       {copied ? (
-        <svg
-          className="w-5 h-5 text-emerald-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
         </svg>
       ) : (
-        <svg
-          className="w-5 h-5 text-gray-500"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

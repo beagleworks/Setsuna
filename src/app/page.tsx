@@ -4,27 +4,33 @@ import { RoomCreator, RoomJoiner } from '@/components';
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-black">
       {/* ロゴとタイトル */}
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Setsuna</h1>
-        <p className="mt-2 text-gray-500">デバイス間でテキストを共有</p>
+      <div className="text-center mb-10 animate-fadeIn">
+        <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight">
+          SETSUNA<span className="text-[#00ff88]">_</span>
+        </h1>
+        <p className="mt-3 text-neutral-500 uppercase tracking-wider">[リアルタイムテキスト共有]</p>
       </div>
 
       {/* カード コンテナ */}
       <div className="w-full max-w-md space-y-6">
         {/* ルーム作成 */}
-        <RoomCreator />
+        <div className="animate-fadeIn" style={{ animationDelay: '50ms' }}>
+          <RoomCreator />
+        </div>
 
         {/* 区切り線 */}
-        <div className="flex items-center gap-4">
-          <div className="flex-1 border-t border-gray-200" />
-          <span className="text-sm text-gray-400">または</span>
-          <div className="flex-1 border-t border-gray-200" />
+        <div className="flex items-center gap-4 animate-fadeIn" style={{ animationDelay: '100ms' }}>
+          <div className="flex-1 border-t-2 border-neutral-700" />
+          <span className="text-sm text-neutral-600 font-mono">{'//OR//'}</span>
+          <div className="flex-1 border-t-2 border-neutral-700" />
         </div>
 
         {/* ルーム参加 */}
-        <RoomJoiner />
+        <div className="animate-fadeIn" style={{ animationDelay: '150ms' }}>
+          <RoomJoiner />
+        </div>
       </div>
     </main>
   );

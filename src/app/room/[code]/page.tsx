@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { RoomHeader, MessageInput, MessageList } from '@/components';
 import { useSSE } from '@/hooks';
-import { Message, GetRoomResponse, GetMessagesResponse } from '@/types/api';
+import { Message, GetRoomResponse, GetMessagesResponse, CreateMessageResponse } from '@/types/api';
 import { validateRoomCode } from '@/lib/room-code';
 
 interface RoomData {
@@ -114,13 +114,25 @@ export default function RoomPage() {
         body: JSON.stringify({ content }),
       });
 
-      const json = await response.json();
+      const json: CreateMessageResponse = await response.json();
 
-      if (!json.success) {
+      if (!json.success || !json.data) {
         throw new Error(json.error?.message || 'メッセージの送信に失敗しました');
       }
 
-      // 送信成功（SSEで自動的にメッセージが届く）
+      // 楽観的更新：送信したメッセージを即座にUIに追加
+      const newMessage = json.data.message;
+      setRoomData((prev) => {
+        if (!prev) return prev;
+        // 重複チェック（SSEからも同じメッセージが届く可能性があるため）
+        if (prev.messages.some((m) => m.id === newMessage.id)) {
+          return prev;
+        }
+        return {
+          ...prev,
+          messages: [newMessage, ...prev.messages],
+        };
+      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'メッセージの送信に失敗しました';
       throw new Error(errorMessage);
@@ -132,10 +144,9 @@ export default function RoomPage() {
   // ローディング中
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto" />
-          <p className="mt-4 text-gray-500">読み込み中...</p>
+      <div className="min-h-screen flex items-center justify-center bg-black">
+        <div className="text-center font-mono">
+          <div className="text-[#00ff88] text-2xl animate-pulse">[LOADING...]</div>
         </div>
       </div>
     );
@@ -144,18 +155,18 @@ export default function RoomPage() {
   // エラー状態
   if (error || !roomData) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-black">
         <div className="text-center max-w-md">
-          <div className="text-4xl mb-4">⚠️</div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            {error === 'このルームは有効期限が切れています' ? 'ルームの期限切れ' : 'エラー'}
+          <div className="text-6xl mb-4 text-[#ff3366]">!</div>
+          <h2 className="text-xl font-bold text-white uppercase tracking-wider mb-2">
+            {error === 'このルームは有効期限が切れています' ? '[期限切れ]' : '[エラー]'}
           </h2>
-          <p className="text-gray-500 mb-6">{error}</p>
+          <p className="text-neutral-400 mb-6 font-mono">{error}</p>
           <button
             onClick={() => router.push('/')}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            className="px-6 py-3 bg-[#00ff88] text-black font-bold uppercase tracking-wider border-2 border-[#00ff88] hover:bg-black hover:text-[#00ff88] transition-colors duration-100"
           >
-            新しいルームを作成
+            新規ルーム作成
           </button>
         </div>
       </div>
@@ -163,19 +174,19 @@ export default function RoomPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-black">
       {/* ヘッダー */}
       <RoomHeader code={roomData.code} expiresAt={roomData.expiresAt.toISOString()} />
 
       {/* 接続ステータス */}
       {sseError && (
-        <div className="bg-amber-50 border-b border-amber-200 px-4 py-2 text-center">
-          <span className="text-amber-700 text-sm">{sseError}</span>
+        <div className="bg-[#ffff00]/10 border-b-2 border-[#ffff00] px-4 py-2 text-center">
+          <span className="text-[#ffff00] text-sm font-mono">{sseError}</span>
           <button
             onClick={reconnect}
-            className="ml-2 text-amber-700 underline text-sm hover:text-amber-800"
+            className="ml-2 text-[#ffff00] underline text-sm font-mono hover:text-white"
           >
-            再接続する
+            [再接続]
           </button>
         </div>
       )}
@@ -194,7 +205,7 @@ export default function RoomPage() {
       {/* 接続インジケーター */}
       <div className="fixed bottom-4 right-4">
         <div
-          className={`w-3 h-3 rounded-full ${isConnected ? 'bg-emerald-500' : 'bg-gray-300'}`}
+          className={`w-3 h-3 ${isConnected ? 'bg-[#00ff88]' : 'bg-neutral-600'}`}
           title={isConnected ? '接続中' : '切断'}
         />
       </div>

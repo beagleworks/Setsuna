@@ -1,9 +1,10 @@
 'use client';
 
 import { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   children: ReactNode;
@@ -18,57 +19,51 @@ export function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const baseClasses =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  // ブルータリストスタイル: 角丸なし、太いボーダー、大文字
+  const baseClasses = `
+    inline-flex items-center justify-center gap-2
+    font-bold uppercase tracking-wider
+    border-2
+    transition-all duration-100
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black
+    active:translate-x-[2px] active:translate-y-[2px]
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-x-0 disabled:active:translate-y-0
+  `;
 
   const variantClasses = {
-    primary: 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-    outline: 'border-2 border-blue-500 text-blue-500 hover:bg-blue-50 focus:ring-blue-500',
+    primary: `
+      bg-[#00ff88] text-black border-[#00ff88]
+      hover:bg-black hover:text-[#00ff88]
+      focus-visible:ring-[#00ff88]
+    `,
+    secondary: `
+      bg-neutral-900 text-white border-white
+      hover:bg-white hover:text-black
+      focus-visible:ring-white
+    `,
+    outline: `
+      bg-transparent text-white border-white
+      hover:bg-white hover:text-black
+      focus-visible:ring-white
+    `,
+    ghost: `
+      bg-transparent text-neutral-400 border-transparent
+      hover:text-white hover:border-white
+      focus-visible:ring-white
+    `,
   };
 
   const sizeClasses = {
     sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
+    md: 'px-4 py-2.5 text-base',
     lg: 'px-6 py-3 text-lg',
   };
 
-  const disabledClasses = 'opacity-50 cursor-not-allowed';
-
-  const classes = [
-    baseClasses,
-    variantClasses[variant],
-    sizeClasses[size],
-    (disabled || loading) && disabledClasses,
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  const classes = [baseClasses, variantClasses[variant], sizeClasses[size], className].join(' ');
 
   return (
     <button className={classes} disabled={disabled || loading} {...props}>
-      {loading && (
-        <svg
-          className="animate-spin -ml-1 mr-2 h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          />
-        </svg>
-      )}
+      {loading && <Loader2 className="w-4 h-4 animate-spin" />}
       {children}
     </button>
   );

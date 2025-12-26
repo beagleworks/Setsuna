@@ -1,25 +1,54 @@
 @import 'tailwindcss';
 
+/* ===========================================
+   Setsuna - Dark Brutalist Theme
+   =========================================== */
+
 :root {
-  --foreground-rgb: 17, 24, 39;
-  --background-rgb: 249, 250, 251;
+  /* ベースカラー */
+  --bg-primary: 10, 10, 10;
+  --bg-secondary: 20, 20, 20;
+  --bg-tertiary: 26, 26, 26;
+
+  /* テキストカラー */
+  --foreground-rgb: 245, 245, 245;
+  --text-secondary: 163, 163, 163;
+  --text-muted: 82, 82, 82;
+
+  /* アクセントカラー（ブルータリスト向け） */
+  --accent-primary: 0, 255, 136;
+  --accent-error: 255, 51, 102;
+  --accent-warning: 255, 255, 0;
+
+  /* ボーダー */
+  --border-strong: 245, 245, 245;
+  --border-medium: 82, 82, 82;
+  --border-subtle: 38, 38, 38;
 }
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
+  background: rgb(var(--bg-primary));
+}
+
+/* セレクション */
+::selection {
+  background: rgb(var(--accent-primary));
+  color: rgb(var(--bg-primary));
 }
 
 @theme {
-  --color-primary: #3b82f6;
-  --color-primary-hover: #2563eb;
+  /* プライマリカラー（ネオングリーン） */
+  --color-primary: #00ff88;
+  --color-primary-hover: #00cc6a;
 
-  --animate-fadeIn: fadeIn 0.3s ease-out;
+  /* シャープなアニメーション */
+  --animate-fadeIn: fadeIn 0.15s linear;
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-4px);
     }
     to {
       opacity: 1;
