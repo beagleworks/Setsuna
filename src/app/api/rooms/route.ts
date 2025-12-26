@@ -7,7 +7,7 @@ import { ROOM_EXPIRY_HOURS, type CreateRoomResponse } from '@/types/api';
  * POST /api/rooms
  * 新しいルームを作成する
  */
-export async function POST(): Promise<NextResponse<CreateRoomResponse>> {
+export async function POST(_request: Request): Promise<NextResponse<CreateRoomResponse>> {
   try {
     const code = generateRoomCode();
     const expiresAt = new Date();
