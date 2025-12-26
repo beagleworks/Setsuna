@@ -34,10 +34,11 @@ npm run build        # ビルド
 
 ## 詳細仕様
 
-| ドキュメント                   | 内容                                |
-| ------------------------------ | ----------------------------------- |
-| [docs/SPEC.md](./docs/SPEC.md) | 全体仕様・機能要件・アーキテクチャ  |
-| [docs/API.md](./docs/API.md)   | APIエンドポイント・TypeScript型定義 |
-| [docs/DB.md](./docs/DB.md)     | DBスキーマ・Prismaクエリ            |
-| [docs/UI.md](./docs/UI.md)     | UI/UXデザイン・コンポーネント       |
-| [docs/TEST.md](./docs/TEST.md) | テスト仕様・TDDガイドライン         |
+| ドキュメント                           | 内容                                |
+| -------------------------------------- | ----------------------------------- |
+| [docs/SPEC.md](./docs/SPEC.md)         | 全体仕様・機能要件・アーキテクチャ  |
+| [docs/API.md](./docs/API.md)           | APIエンドポイント・TypeScript型定義 |
+| [docs/DB.md](./docs/DB.md)             | DBスキーマ・Prismaクエリ            |
+| [docs/UI.md](./docs/UI.md)             | UI/UXデザイン・コンポーネント       |
+| [docs/TEST.md](./docs/TEST.md)         | テスト仕様・TDDガイドライン         |
+| [docs/SECURITY.md](./docs/SECURITY.md) | セキュリティレビュー・脆弱性対応    |
