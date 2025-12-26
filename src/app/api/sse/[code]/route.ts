@@ -68,6 +68,23 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
     );
   }
 
+  // 接続数制限チェック
+  if (!sseManager.canConnect(code)) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          code: 'TOO_MANY_CONNECTIONS',
+          message: 'ルームの接続数が上限に達しています',
+        },
+      }),
+      {
+        status: 429,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
+  }
+
   // SSEストリームを作成
   const stream = new ReadableStream({
     start(controller) {

@@ -1,4 +1,9 @@
 /**
+ * ルームあたりの最大接続数
+ */
+export const MAX_CONNECTIONS_PER_ROOM = 100;
+
+/**
  * SSE接続情報
  */
 interface SSEConnection {
@@ -90,6 +95,15 @@ export class SSEManager {
   getConnectionCount(roomCode: string): number {
     const room = this.rooms.get(roomCode);
     return room ? room.size : 0;
+  }
+
+  /**
+   * ルームに新しい接続を追加できるかチェックする
+   * @param roomCode ルームコード
+   * @returns 接続可能な場合はtrue
+   */
+  canConnect(roomCode: string): boolean {
+    return this.getConnectionCount(roomCode) < MAX_CONNECTIONS_PER_ROOM;
   }
 
   /**
