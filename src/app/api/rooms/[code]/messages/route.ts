@@ -59,22 +59,16 @@ export async function GET(
 
     // クエリパラメータを取得
     const { searchParams } = new URL(request.url);
-    const after = searchParams.get('after');
     const limitParam = searchParams.get('limit');
-    const limit = Math.min(
-      parseInt(limitParam || String(DEFAULT_MESSAGE_LIMIT), 10),
-      MAX_MESSAGE_LIMIT
-    );
+    const parsedLimit = parseInt(limitParam || String(DEFAULT_MESSAGE_LIMIT), 10);
+    const limit = Number.isFinite(parsedLimit)
+      ? Math.min(Math.max(parsedLimit, 1), MAX_MESSAGE_LIMIT)
+      : DEFAULT_MESSAGE_LIMIT;
 
     // メッセージを取得
     const messages = await prisma.message.findMany({
       where: {
         roomId: room.id,
-        ...(after && {
-          id: {
-            gt: after,
-          },
-        }),
       },
       orderBy: {
         createdAt: 'desc',

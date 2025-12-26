@@ -25,6 +25,7 @@ export default function RoomPage() {
     null
   );
   const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
 
   // ルームデータの取得
   const fetchRoom = useCallback(async () => {
@@ -113,6 +114,7 @@ export default function RoomPage() {
     if (!code) return;
 
     setSending(true);
+    setSendError(null);
     try {
       const response = await fetch(`/api/rooms/${code}/messages`, {
         method: 'POST',
@@ -143,7 +145,7 @@ export default function RoomPage() {
       });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'メッセージの送信に失敗しました';
-      throw new Error(errorMessage);
+      setSendError(errorMessage);
     } finally {
       setSending(false);
     }
@@ -202,6 +204,23 @@ export default function RoomPage() {
       {/* メインコンテンツ */}
       <main className="flex-1 overflow-auto p-4 md:p-6">
         <div className="max-w-2xl mx-auto space-y-6">
+          {/* 送信エラー表示 */}
+          {sendError && (
+            <div
+              role="alert"
+              className="p-3 bg-[#ff3366]/10 border-2 border-[#ff3366] text-[#ff3366] text-sm font-mono flex items-center justify-between"
+            >
+              <span>{sendError}</span>
+              <button
+                onClick={() => setSendError(null)}
+                className="ml-2 text-[#ff3366] hover:text-white font-bold"
+                aria-label="エラーを閉じる"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           {/* メッセージ入力 */}
           <MessageInput onSubmit={handleSendMessage} disabled={sending} />
 
