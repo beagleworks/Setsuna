@@ -21,12 +21,16 @@ export default function RoomPage() {
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [errorType, setErrorType] = useState<'ROOM_NOT_FOUND' | 'ROOM_EXPIRED' | 'GENERIC' | null>(
+    null
+  );
   const [sending, setSending] = useState(false);
 
   // ルームデータの取得
   const fetchRoom = useCallback(async () => {
     if (!code || !validateRoomCode(code)) {
       setError('無効なルームコードです');
+      setErrorType('GENERIC');
       setLoading(false);
       return;
     }
@@ -39,10 +43,13 @@ export default function RoomPage() {
       if (!roomJson.success || !roomJson.data) {
         if (roomJson.error?.code === 'ROOM_NOT_FOUND') {
           setError('ルームが見つかりません');
+          setErrorType('ROOM_NOT_FOUND');
         } else if (roomJson.error?.code === 'ROOM_EXPIRED') {
           setError('このルームは有効期限が切れています');
+          setErrorType('ROOM_EXPIRED');
         } else {
           setError(roomJson.error?.message || 'エラーが発生しました');
+          setErrorType('GENERIC');
         }
         setLoading(false);
         return;
@@ -62,6 +69,7 @@ export default function RoomPage() {
       setError(null);
     } catch {
       setError('接続エラーが発生しました');
+      setErrorType('GENERIC');
     } finally {
       setLoading(false);
     }
@@ -159,7 +167,7 @@ export default function RoomPage() {
         <div className="text-center max-w-md">
           <div className="text-6xl mb-4 text-[#ff3366]">!</div>
           <h2 className="text-xl font-bold text-white uppercase tracking-wider mb-2">
-            {error === 'このルームは有効期限が切れています' ? '[期限切れ]' : '[エラー]'}
+            {errorType === 'ROOM_EXPIRED' ? '[期限切れ]' : '[エラー]'}
           </h2>
           <p className="text-neutral-400 mb-6 font-mono">{error}</p>
           <button

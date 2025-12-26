@@ -25,7 +25,7 @@ export function Button({
     font-bold uppercase tracking-wider
     border-2
     transition-all duration-100
-    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
     active:translate-x-[2px] active:translate-y-[2px]
     disabled:opacity-50 disabled:cursor-not-allowed disabled:active:translate-x-0 disabled:active:translate-y-0
   `;

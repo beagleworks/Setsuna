@@ -40,7 +40,10 @@ export function RoomCreator() {
       </p>
 
       {error && (
-        <div className="mb-4 p-3 bg-[#ff3366]/10 border-2 border-[#ff3366] text-[#ff3366] text-sm font-mono">
+        <div
+          role="alert"
+          className="mb-4 p-3 bg-[#ff3366]/10 border-2 border-[#ff3366] text-[#ff3366] text-sm font-mono"
+        >
           {error}
         </div>
       )}

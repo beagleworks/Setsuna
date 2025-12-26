@@ -58,7 +58,7 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
         onKeyDown={handleKeyDown}
         placeholder="テキストを入力..."
         disabled={disabled || loading}
-        className="w-full px-4 py-3 bg-black border-2 border-neutral-600 text-white font-mono placeholder:text-neutral-600 resize-none focus:outline-none focus:border-white transition-colors duration-100"
+        className="w-full px-4 py-3 bg-black border-2 border-neutral-600 text-white font-sans placeholder:text-neutral-400 resize-none focus:outline-none focus:border-white transition-colors duration-100"
         rows={3}
       />
 
@@ -85,7 +85,7 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
         </Button>
       </div>
 
-      <p className="mt-2 text-xs text-neutral-600 font-mono uppercase tracking-wider">
+      <p className="mt-2 text-xs text-neutral-400 font-mono uppercase tracking-wider">
         Ctrl + Enter で送信
       </p>
     </div>

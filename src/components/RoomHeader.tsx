@@ -38,7 +38,7 @@ export function RoomHeader({ code, expiresAt }: RoomHeaderProps) {
           </div>
           <div className="flex items-center gap-1.5 mt-1 text-sm text-neutral-500 font-mono">
             <Clock className="w-4 h-4" />
-            <span>TTL: {timeLeft}</span>
+            <span>残り: {timeLeft}</span>
           </div>
         </div>
 
