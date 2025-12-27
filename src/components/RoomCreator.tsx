@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { Button } from './Button';
 import { Card } from './Card';
 
 export function RoomCreator() {
+  const t = useTranslations('roomCreator');
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,20 +26,18 @@ export function RoomCreator() {
       if (data.success) {
         router.push(`/room/${data.data.room.code}`);
       } else {
-        setError(data.error?.message || 'ルームの作成に失敗しました');
+        setError(data.error?.message || t('error.failed'));
       }
     } catch {
-      setError('ルームの作成に失敗しました');
+      setError(t('error.failed'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Card title="新規ルーム作成">
-      <p className="text-neutral-400 mb-6">
-        ルームを作成してコードを共有すると、別のデバイスからアクセスできます
-      </p>
+    <Card title={t('title')}>
+      <p className="text-neutral-400 mb-6">{t('description')}</p>
 
       {error && (
         <div
@@ -49,7 +49,7 @@ export function RoomCreator() {
       )}
 
       <Button onClick={handleCreate} loading={loading} className="w-full" size="lg">
-        ルーム作成
+        {t('button')}
       </Button>
     </Card>
   );

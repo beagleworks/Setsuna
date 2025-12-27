@@ -9,7 +9,14 @@ Claude Code向けのクイックリファレンス。詳細仕様は `docs/` を
 
 ## Tech Stack
 
-Next.js 14 (App Router) / TypeScript / Turso (Prisma) / Tailwind CSS / Vitest & Playwright
+Next.js 14 (App Router) / TypeScript / Turso (Prisma) / Tailwind CSS / next-intl / Vitest & Playwright
+
+## i18n（国際化）
+
+- **対応言語**: 英語（デフォルト）, 日本語
+- **ライブラリ**: next-intl
+- **翻訳ファイル**: `messages/en.json`, `messages/ja.json`
+- **URL構造**: `/en` (英語), `/ja` (日本語)
 
 ## TDD（テスト駆動開発）
 

@@ -1,9 +1,11 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { RoomHeader, MessageInput, MessageList } from '@/components';
 import { useSSE } from '@/hooks';
+import { Link } from '@/i18n/navigation';
 import { Message, GetRoomResponse, GetMessagesResponse, CreateMessageResponse } from '@/types/api';
 import { validateRoomCode } from '@/lib/room-code';
 
@@ -15,8 +17,8 @@ interface RoomData {
 
 export default function RoomPage() {
   const params = useParams();
-  const router = useRouter();
   const code = (params.code as string)?.toUpperCase();
+  const t = useTranslations('room');
 
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -27,36 +29,36 @@ export default function RoomPage() {
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
 
-  // ルームデータの取得
+  // Fetch room data
   const fetchRoom = useCallback(async () => {
     if (!code || !validateRoomCode(code)) {
-      setError('無効なルームコードです');
+      setError(t('error.invalidCode'));
       setErrorType('GENERIC');
       setLoading(false);
       return;
     }
 
     try {
-      // ルーム情報を取得
+      // Fetch room info
       const roomResponse = await fetch(`/api/rooms/${code}`);
       const roomJson = (await roomResponse.json()) as GetRoomResponse;
 
       if (!roomJson.success || !roomJson.data) {
         if (roomJson.error?.code === 'ROOM_NOT_FOUND') {
-          setError('ルームが見つかりません');
+          setError(t('error.notFound'));
           setErrorType('ROOM_NOT_FOUND');
         } else if (roomJson.error?.code === 'ROOM_EXPIRED') {
-          setError('このルームは有効期限が切れています');
+          setError(t('error.expired'));
           setErrorType('ROOM_EXPIRED');
         } else {
-          setError(roomJson.error?.message || 'エラーが発生しました');
+          setError(roomJson.error?.message || t('error.generic'));
           setErrorType('GENERIC');
         }
         setLoading(false);
         return;
       }
 
-      // メッセージ一覧を取得
+      // Fetch messages
       const messagesResponse = await fetch(`/api/rooms/${code}/messages`);
       const messagesJson = (await messagesResponse.json()) as GetMessagesResponse;
 
@@ -69,19 +71,19 @@ export default function RoomPage() {
       });
       setError(null);
     } catch {
-      setError('接続エラーが発生しました');
+      setError(t('error.connectionError'));
       setErrorType('GENERIC');
     } finally {
       setLoading(false);
     }
-  }, [code]);
+  }, [code, t]);
 
-  // 初期データ取得
+  // Initial data fetch
   useEffect(() => {
     fetchRoom();
   }, [fetchRoom]);
 
-  // SSE接続（新しいメッセージをリアルタイムで受信）
+  // SSE connection (receive new messages in real-time)
   const {
     isConnected,
     error: sseError,
@@ -90,11 +92,11 @@ export default function RoomPage() {
     onMessage: (message) => {
       setRoomData((prev) => {
         if (!prev) return prev;
-        // 重複チェック
+        // Duplicate check
         if (prev.messages.some((m) => m.id === message.id)) {
           return prev;
         }
-        // 新しいメッセージを先頭に追加
+        // Add new message at the beginning
         return {
           ...prev,
           messages: [message, ...prev.messages],
@@ -102,14 +104,14 @@ export default function RoomPage() {
       });
     },
     onConnected: () => {
-      // 接続時に最新のメッセージを取得
+      // Fetch latest messages on connection
     },
     onError: () => {
-      // エラー処理はsseErrorで表示
+      // Error handling via sseError display
     },
   });
 
-  // メッセージ送信
+  // Send message
   const handleSendMessage = async (content: string) => {
     if (!code) return;
 
@@ -127,14 +129,14 @@ export default function RoomPage() {
       const json: CreateMessageResponse = await response.json();
 
       if (!json.success || !json.data) {
-        throw new Error(json.error?.message || 'メッセージの送信に失敗しました');
+        throw new Error(json.error?.message || t('error.sendFailed'));
       }
 
-      // 楽観的更新：送信したメッセージを即座にUIに追加
+      // Optimistic update: add sent message to UI immediately
       const newMessage = json.data.message;
       setRoomData((prev) => {
         if (!prev) return prev;
-        // 重複チェック（SSEからも同じメッセージが届く可能性があるため）
+        // Duplicate check (same message may arrive via SSE)
         if (prev.messages.some((m) => m.id === newMessage.id)) {
           return prev;
         }
@@ -144,40 +146,40 @@ export default function RoomPage() {
         };
       });
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'メッセージの送信に失敗しました';
+      const errorMessage = err instanceof Error ? err.message : t('error.sendFailed');
       setSendError(errorMessage);
     } finally {
       setSending(false);
     }
   };
 
-  // ローディング中
+  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
         <div className="text-center font-mono">
-          <div className="text-[#00ff88] text-2xl animate-pulse">[LOADING...]</div>
+          <div className="text-[#00ff88] text-2xl animate-pulse">{t('loading')}</div>
         </div>
       </div>
     );
   }
 
-  // エラー状態
+  // Error state
   if (error || !roomData) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-black">
         <div className="text-center max-w-md">
           <div className="text-6xl mb-4 text-[#ff3366]">!</div>
           <h2 className="text-xl font-bold text-white uppercase tracking-wider mb-2">
-            {errorType === 'ROOM_EXPIRED' ? '[期限切れ]' : '[エラー]'}
+            {errorType === 'ROOM_EXPIRED' ? t('error.expiredTitle') : t('error.title')}
           </h2>
           <p className="text-neutral-400 mb-6 font-mono">{error}</p>
-          <button
-            onClick={() => router.push('/')}
-            className="px-6 py-3 bg-[#00ff88] text-black font-bold uppercase tracking-wider border-2 border-[#00ff88] hover:bg-black hover:text-[#00ff88] transition-colors duration-100"
+          <Link
+            href="/"
+            className="inline-block px-6 py-3 bg-[#00ff88] text-black font-bold uppercase tracking-wider border-2 border-[#00ff88] hover:bg-black hover:text-[#00ff88] transition-colors duration-100"
           >
-            新規ルーム作成
-          </button>
+            {t('button.createNew')}
+          </Link>
         </div>
       </div>
     );
@@ -185,10 +187,10 @@ export default function RoomPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-black">
-      {/* ヘッダー */}
+      {/* Header */}
       <RoomHeader code={roomData.code} expiresAt={roomData.expiresAt.toISOString()} />
 
-      {/* 接続ステータス */}
+      {/* Connection Status */}
       {sseError && (
         <div className="bg-[#ffff00]/10 border-b-2 border-[#ffff00] px-4 py-2 text-center">
           <span className="text-[#ffff00] text-sm font-mono">{sseError}</span>
@@ -196,15 +198,15 @@ export default function RoomPage() {
             onClick={reconnect}
             className="ml-2 text-[#ffff00] underline text-sm font-mono hover:text-white"
           >
-            [再接続]
+            {t('button.reconnect')}
           </button>
         </div>
       )}
 
-      {/* メインコンテンツ */}
+      {/* Main Content */}
       <main className="flex-1 overflow-auto p-4 md:p-6">
         <div className="max-w-2xl mx-auto space-y-6">
-          {/* 送信エラー表示 */}
+          {/* Send Error Display */}
           {sendError && (
             <div
               role="alert"
@@ -214,26 +216,26 @@ export default function RoomPage() {
               <button
                 onClick={() => setSendError(null)}
                 className="ml-2 text-[#ff3366] hover:text-white font-bold"
-                aria-label="エラーを閉じる"
+                aria-label={t('button.closeError')}
               >
                 ✕
               </button>
             </div>
           )}
 
-          {/* メッセージ入力 */}
+          {/* Message Input */}
           <MessageInput onSubmit={handleSendMessage} disabled={sending} />
 
-          {/* メッセージ一覧 */}
+          {/* Message List */}
           <MessageList messages={roomData.messages} />
         </div>
       </main>
 
-      {/* 接続インジケーター */}
+      {/* Connection Indicator */}
       <div className="fixed bottom-4 right-4">
         <div
           className={`w-3 h-3 ${isConnected ? 'bg-[#00ff88]' : 'bg-neutral-600'}`}
-          title={isConnected ? '接続中' : '切断'}
+          title={isConnected ? t('status.connected') : t('status.disconnected')}
         />
       </div>
     </div>

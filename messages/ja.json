@@ -1,0 +1,78 @@
+{
+  "home": {
+    "title": "SETSUNA",
+    "subtitle": "[リアルタイムテキスト共有]",
+    "description": "6文字のルームコードを共有するだけで、複数デバイス間でテキストをリアルタイム同期。ルームは24時間後に自動削除されます。",
+    "separator": "または"
+  },
+  "roomCreator": {
+    "title": "新規ルーム作成",
+    "description": "ルームを作成してコードを共有すると、別のデバイスからアクセスできます",
+    "button": "ルーム作成",
+    "error": {
+      "failed": "ルームの作成に失敗しました"
+    }
+  },
+  "roomJoiner": {
+    "title": "既存ルームに参加",
+    "label": "ルームコード",
+    "button": "参加",
+    "error": {
+      "invalidLength": "6文字のルームコードを入力してください",
+      "notFound": "ルームが見つかりません",
+      "expired": "ルームの有効期限が切れています",
+      "failed": "ルームへの参加に失敗しました"
+    }
+  },
+  "room": {
+    "loading": "[LOADING...]",
+    "error": {
+      "title": "[エラー]",
+      "expiredTitle": "[期限切れ]",
+      "invalidCode": "無効なルームコードです",
+      "notFound": "ルームが見つかりません",
+      "expired": "このルームは有効期限が切れています",
+      "generic": "エラーが発生しました",
+      "connectionError": "接続エラーが発生しました",
+      "sendFailed": "メッセージの送信に失敗しました"
+    },
+    "button": {
+      "createNew": "新規ルーム作成",
+      "reconnect": "[再接続]",
+      "closeError": "エラーを閉じる"
+    },
+    "status": {
+      "connected": "接続中",
+      "disconnected": "切断",
+      "remaining": "残り:"
+    }
+  },
+  "header": {
+    "back": "[戻る]"
+  },
+  "messageInput": {
+    "placeholder": "テキストを入力...",
+    "charCount": "文字",
+    "charCountOver": "（10,000文字を超えています）",
+    "button": "送信",
+    "hint": "Ctrl + Enter で送信"
+  },
+  "messageList": {
+    "title": "[共有テキスト]",
+    "empty": {
+      "title": "メッセージなし",
+      "description": "テキストを入力して送信してください"
+    }
+  },
+  "copyButton": {
+    "copy": "コピー",
+    "copied": "コピー完了"
+  },
+  "languageSwitcher": {
+    "label": "言語"
+  },
+  "metadata": {
+    "title": "Setsuna - リアルタイムテキスト共有",
+    "description": "6文字のルームコードでデバイス間のテキストをリアルタイム共有。24時間後に自動削除。"
+  }
+}

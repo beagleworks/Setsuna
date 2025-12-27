@@ -1,72 +1,72 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('ルーム作成フロー', () => {
-  test('ルームを作成するとルームページに遷移する', async ({ page }) => {
-    await page.goto('/');
+test.describe('Room creation flow', () => {
+  test('creating a room navigates to room page', async ({ page }) => {
+    await page.goto('/en');
 
-    // ルーム作成ボタンをクリック
-    await page.getByRole('button', { name: 'ルームを作成する' }).click();
+    // Click create room button
+    await page.getByRole('button', { name: 'Create Room' }).click();
 
-    // ルームページへの遷移を待つ
-    await page.waitForURL(/\/room\/[A-HJ-NP-Z2-9]{6}/);
+    // Wait for navigation to room page (with locale prefix)
+    await page.waitForURL(/\/en\/room\/[A-HJ-NP-Z2-9]{6}/);
 
-    // ルームコードが表示されている
+    // Room code is displayed
     const roomCode = page.getByTestId('room-code');
     await expect(roomCode).toBeVisible();
 
-    // ルームコードが6文字の有効な形式
+    // Room code is 6 characters in valid format
     const codeText = await roomCode.textContent();
     expect(codeText).toMatch(/^[A-HJ-NP-Z2-9]{6}$/);
   });
 
-  test('ルームページに残り時間が表示される', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'ルームを作成する' }).click();
-    await page.waitForURL(/\/room\/[A-HJ-NP-Z2-9]{6}/);
+  test('room page displays remaining time', async ({ page }) => {
+    await page.goto('/en');
+    await page.getByRole('button', { name: 'Create Room' }).click();
+    await page.waitForURL(/\/en\/room\/[A-HJ-NP-Z2-9]{6}/);
 
-    // 残り時間の表示を確認（24時間以内の形式）
-    await expect(page.locator('text=残り:')).toBeVisible();
+    // Check remaining time display (within 24 hours format)
+    await expect(page.locator('text=Remaining:')).toBeVisible();
   });
 
-  test('メッセージ入力欄が表示される', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'ルームを作成する' }).click();
-    await page.waitForURL(/\/room\/[A-HJ-NP-Z2-9]{6}/);
+  test('message input field is displayed', async ({ page }) => {
+    await page.goto('/en');
+    await page.getByRole('button', { name: 'Create Room' }).click();
+    await page.waitForURL(/\/en\/room\/[A-HJ-NP-Z2-9]{6}/);
 
-    await expect(page.locator('textarea[placeholder="テキストを入力..."]')).toBeVisible();
-    await expect(page.getByRole('button', { name: '送信する' })).toBeVisible();
+    await expect(page.locator('textarea[placeholder="Enter text..."]')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Send' })).toBeVisible();
   });
 });
 
-test.describe('ルーム参加フロー', () => {
-  test('有効なコードでルームに参加できる', async ({ page }) => {
-    // まずルームを作成
-    await page.goto('/');
-    await page.getByRole('button', { name: 'ルームを作成する' }).click();
-    await page.waitForURL(/\/room\/[A-HJ-NP-Z2-9]{6}/);
+test.describe('Room join flow', () => {
+  test('can join room with valid code', async ({ page }) => {
+    // First create a room
+    await page.goto('/en');
+    await page.getByRole('button', { name: 'Create Room' }).click();
+    await page.waitForURL(/\/en\/room\/[A-HJ-NP-Z2-9]{6}/);
 
-    // ルームコードを取得
+    // Get room code
     const roomCode = await page.getByTestId('room-code').textContent();
     expect(roomCode).toBeTruthy();
 
-    // ホームに戻ってコードで参加
-    await page.goto('/');
+    // Go back home and join with code
+    await page.goto('/en');
     await page.locator('input[placeholder="A B C D 2 3"]').fill(roomCode!);
-    await page.getByRole('button', { name: '参加する' }).click();
+    await page.getByRole('button', { name: 'Join' }).click();
 
-    // 同じルームページに遷移
-    await page.waitForURL(`/room/${roomCode}`);
+    // Navigate to same room page
+    await page.waitForURL(`/en/room/${roomCode}`);
     await expect(page.getByTestId('room-code')).toHaveText(roomCode!);
   });
 
-  test('存在しないコードでエラーが表示される', async ({ page }) => {
-    await page.goto('/');
+  test('shows error for non-existent code', async ({ page }) => {
+    await page.goto('/en');
 
-    // 存在しないルームコードを入力
+    // Enter non-existent room code
     await page.locator('input[placeholder="A B C D 2 3"]').fill('ZZZZZ9');
-    await page.getByRole('button', { name: '参加する' }).click();
+    await page.getByRole('button', { name: 'Join' }).click();
 
-    // RoomJoinerコンポーネント内でエラーメッセージが表示される
-    await expect(page.locator('text=ルームが見つかりません')).toBeVisible({ timeout: 10000 });
+    // Error message is displayed in RoomJoiner component
+    await expect(page.locator('text=Room not found')).toBeVisible({ timeout: 10000 });
   });
 });

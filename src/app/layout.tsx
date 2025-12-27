@@ -15,8 +15,8 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: 'Setsuna - デバイス間でテキストを共有',
-  description: 'デバイス間でテキストをリアルタイム共有するWebアプリケーション',
+  title: 'Setsuna - Real-time Text Sharing',
+  description: 'Share text across devices in real-time with a simple 6-character room code.',
 };
 
 export default function RootLayout({
@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" className={`${inter.variable} ${firaCode.variable}`}>
+    <html className={`${inter.variable} ${firaCode.variable}`}>
       <body className="min-h-screen font-mono antialiased">{children}</body>
     </html>
   );

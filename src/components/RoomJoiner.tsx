@@ -1,15 +1,17 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useRouter } from '@/i18n/navigation';
 import { Button } from './Button';
 import { Card } from './Card';
 import { Input } from './Input';
 
-// 許可される文字のパターン（0, O, 1, I, L を除外）
+// Allowed character pattern (excluding 0, O, 1, I, L)
 const ALLOWED_PATTERN = /^[A-HJ-KM-NP-Z2-9]*$/;
 
 export function RoomJoiner() {
+  const t = useTranslations('roomJoiner');
   const router = useRouter();
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,7 +19,7 @@ export function RoomJoiner() {
 
   const handleCodeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toUpperCase();
-    // 許可された文字のみを受け付ける
+    // Accept only allowed characters
     if (ALLOWED_PATTERN.test(value) && value.length <= 6) {
       setCode(value);
       setError(null);
@@ -26,7 +28,7 @@ export function RoomJoiner() {
 
   const handleJoin = async () => {
     if (code.length !== 6) {
-      setError('6文字のルームコードを入力してください');
+      setError(t('error.invalidLength'));
       return;
     }
 
@@ -40,14 +42,14 @@ export function RoomJoiner() {
       if (data.success) {
         router.push(`/room/${code}`);
       } else if (data.error?.code === 'ROOM_NOT_FOUND') {
-        setError('ルームが見つかりません');
+        setError(t('error.notFound'));
       } else if (data.error?.code === 'ROOM_EXPIRED') {
-        setError('ルームの有効期限が切れています');
+        setError(t('error.expired'));
       } else {
-        setError(data.error?.message || 'ルームへの参加に失敗しました');
+        setError(data.error?.message || t('error.failed'));
       }
     } catch {
-      setError('ルームへの参加に失敗しました');
+      setError(t('error.failed'));
     } finally {
       setLoading(false);
     }
@@ -60,10 +62,10 @@ export function RoomJoiner() {
   };
 
   return (
-    <Card title="既存ルームに参加">
+    <Card title={t('title')}>
       <div className="mb-4">
         <label className="block text-sm font-bold text-neutral-400 mb-2 uppercase tracking-wider">
-          ルームコード
+          {t('label')}
         </label>
         <Input
           value={code}
@@ -84,7 +86,7 @@ export function RoomJoiner() {
         size="lg"
         variant="secondary"
       >
-        参加
+        {t('button')}
       </Button>
     </Card>
   );

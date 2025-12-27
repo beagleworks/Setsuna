@@ -1,0 +1,78 @@
+{
+  "home": {
+    "title": "SETSUNA",
+    "subtitle": "[REAL-TIME TEXT SHARING]",
+    "description": "Share a 6-character room code to sync text across multiple devices in real-time. Rooms are automatically deleted after 24 hours.",
+    "separator": "or"
+  },
+  "roomCreator": {
+    "title": "Create New Room",
+    "description": "Create a room and share the code to access from another device",
+    "button": "Create Room",
+    "error": {
+      "failed": "Failed to create room"
+    }
+  },
+  "roomJoiner": {
+    "title": "Join Existing Room",
+    "label": "Room Code",
+    "button": "Join",
+    "error": {
+      "invalidLength": "Please enter a 6-character room code",
+      "notFound": "Room not found",
+      "expired": "Room has expired",
+      "failed": "Failed to join room"
+    }
+  },
+  "room": {
+    "loading": "[LOADING...]",
+    "error": {
+      "title": "[ERROR]",
+      "expiredTitle": "[EXPIRED]",
+      "invalidCode": "Invalid room code",
+      "notFound": "Room not found",
+      "expired": "This room has expired",
+      "generic": "An error occurred",
+      "connectionError": "Connection error occurred",
+      "sendFailed": "Failed to send message"
+    },
+    "button": {
+      "createNew": "Create New Room",
+      "reconnect": "[RECONNECT]",
+      "closeError": "Close error"
+    },
+    "status": {
+      "connected": "Connected",
+      "disconnected": "Disconnected",
+      "remaining": "Remaining:"
+    }
+  },
+  "header": {
+    "back": "[BACK]"
+  },
+  "messageInput": {
+    "placeholder": "Enter text...",
+    "charCount": "characters",
+    "charCountOver": "(exceeds 10,000 characters)",
+    "button": "Send",
+    "hint": "Ctrl + Enter to send"
+  },
+  "messageList": {
+    "title": "[SHARED TEXT]",
+    "empty": {
+      "title": "No messages",
+      "description": "Enter text and send"
+    }
+  },
+  "copyButton": {
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "metadata": {
+    "title": "Setsuna - Real-time Text Sharing",
+    "description": "Share text across devices in real-time with a simple 6-character room code. Rooms auto-delete after 24 hours."
+  }
+}

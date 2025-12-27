@@ -848,7 +848,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
     await page.click('button:has-text("ルームを作成")');
 
     // ルームページにリダイレクトされる
-    await expect(page).toHaveURL(/\/room\/[A-HJ-NP-Z2-9]{6}/);
+    await expect(page).toHaveURL(/\/en\/room\/[A-HJ-NP-Z2-9]{6}/);
 
     // ルームコードが表示される
     await expect(page.locator('[data-testid="room-code"]')).toBeVisible();
@@ -872,7 +872,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
     await page2.click('button:has-text("参加")');
 
     // 同じルームにいることを確認
-    await expect(page2).toHaveURL(`/room/${roomCode}`);
+    await expect(page2).toHaveURL(`/en/room/${roomCode}`);
 
     await context1.close();
     await context2.close();
@@ -891,7 +891,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
     const roomCode = await page1.locator('[data-testid="room-code"]').textContent();
 
     // タブ2: ルーム参加
-    await page2.goto(`/room/${roomCode}`);
+    await page2.goto(`/en/room/${roomCode}`);
 
     // タブ1からメッセージ送信
     await page1.fill('textarea', 'Hello from Tab 1!');
@@ -926,7 +926,7 @@ test.describe('ルーム作成→参加→テキスト共有フロー', () => {
 
   test('期限切れルームにはアクセスできない', async ({ page }) => {
     // 存在しないルームコードでアクセス
-    await page.goto('/room/XXXXXX');
+    await page.goto('/en/room/XXXXXX');
 
     // エラーメッセージが表示される
     await expect(page.locator('text=ルームが見つかりません')).toBeVisible();

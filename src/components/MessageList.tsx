@@ -1,6 +1,7 @@
 'use client';
 
 import { MessageSquare, Clock } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
 import { Message } from '@/types/api';
 import { CopyButton } from './CopyButton';
 
@@ -9,21 +10,27 @@ interface MessageListProps {
 }
 
 export function MessageList({ messages }: MessageListProps) {
+  const t = useTranslations('messageList');
+  const locale = useLocale();
+
+  // Map locale to locale string for toLocaleTimeString
+  const localeString = locale === 'ja' ? 'ja-JP' : 'en-US';
+
   if (messages.length === 0) {
     return (
       <div className="text-center py-16 text-neutral-500">
         <div className="w-16 h-16 mx-auto mb-4 border-2 border-neutral-600 flex items-center justify-center">
           <MessageSquare className="w-8 h-8 text-neutral-600" />
         </div>
-        <p className="font-bold uppercase tracking-wider">メッセージなし</p>
-        <p className="text-sm mt-2 text-neutral-600">テキストを入力して送信してください</p>
+        <p className="font-bold uppercase tracking-wider">{t('empty.title')}</p>
+        <p className="text-sm mt-2 text-neutral-600">{t('empty.description')}</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-bold text-white uppercase tracking-wider">[共有テキスト]</h3>
+      <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('title')}</h3>
 
       {messages.map((message, index) => (
         <div
@@ -41,7 +48,7 @@ export function MessageList({ messages }: MessageListProps) {
           <div className="mt-3 flex items-center justify-end gap-1.5">
             <Clock className="w-3.5 h-3.5 text-neutral-600" />
             <time className="text-xs text-neutral-500 font-mono">
-              {new Date(message.createdAt).toLocaleTimeString('ja-JP')}
+              {new Date(message.createdAt).toLocaleTimeString(localeString)}
             </time>
           </div>
         </div>

@@ -1,105 +1,117 @@
 # Setsuna
 
-**Setsuna**（刹那）は、デバイス間でテキストをリアルタイム共有するWebアプリケーションです。
+> English | **[日本語](./README.ja.md)**
 
-スマートフォンでコピーしたテキストをPCで取得したり、その逆も簡単に行えます。
+**Setsuna** (刹那, meaning "moment" in Japanese) is a web application for real-time text sharing across devices.
 
-## 特徴
+Easily transfer text copied on your smartphone to your PC, or vice versa.
 
-- **シンプル**: 6文字のルームコードでデバイス間を接続
-- **リアルタイム**: Server-Sent Events (SSE) による即時同期
-- **セキュア**: 暗号学的に安全な乱数でルームコードを生成
-- **一時的**: ルームは24時間後に自動削除（プライバシー保護）
-- **レスポンシブ**: スマホでもPCでも快適に使用可能
-- **ダーク × ブルータリスト**: モノスペースフォント、太いボーダー、ネオンアクセント
+## Features
 
-## デモ
+- **Simple**: Connect devices with a 6-character room code
+- **Real-time**: Instant sync via Server-Sent Events (SSE)
+- **Secure**: Room codes generated with cryptographically secure random numbers
+- **Ephemeral**: Rooms auto-delete after 24 hours (privacy protection)
+- **Responsive**: Works seamlessly on both mobile and desktop
+- **Dark Brutalist Design**: Monospace fonts, thick borders, neon accents
+- **Internationalization**: English and Japanese language support
+
+## Demo
 
 ```
 ┌──────────────────────────────────────────┐
-│          背景: #0a0a0a                   │
+│                                 [EN][JA] │  ← Language Switcher
+│          Background: #0a0a0a             │
 │                                          │
-│           SETSUNA_                       │  ← 白 + 緑カーソル
-│     [リアルタイムテキスト共有]            │  ← グレー、大文字
+│           SETSUNA_                       │  ← White + green cursor
+│     [REAL-TIME TEXT SHARING]             │  ← Gray, uppercase
+│                                          │
+│     Share a 6-character room code to     │  ← Description text
+│     sync text across multiple devices    │
 │                                          │
 │  ┌────────────────────────────────────┐  │
-│  │ 新規ルーム作成                      │  │  ← 白ボーダー2px
+│  │ Create New Room                    │  │  ← White border 2px
 │  │ ──────────────────────────         │  │
+│  │ Create a room and share the code   │  │  ← Description
+│  │ to access from another device      │  │
 │  │  ┌──────────────────────────────┐  │  │
-│  │  │     ルーム作成                │  │  │  ← 緑背景、黒文字
+│  │  │     Create Room              │  │  │  ← Green bg, black text
 │  │  └──────────────────────────────┘  │  │
 │  └────────────────────────────────────┘  │
 │                                          │
-│            ────── //OR// ──────          │  ← コード風セパレーター
+│               ────── or ──────           │  ← Separator
 │                                          │
 │  ┌────────────────────────────────────┐  │
-│  │ 既存ルームに参加                    │  │
+│  │ Join Existing Room                 │  │
+│  │ ──────────────────────────         │  │
+│  │  Room Code                         │  │  ← Label
 │  │  ┌──────────────────────────────┐  │  │
-│  │  │  A B C D 2 3                  │  │  │  ← 黒背景、白ボーダー
+│  │  │  A B C D 2 3                  │  │  │  ← Black bg, white border
 │  │  └──────────────────────────────┘  │  │
 │  │  ┌──────────────────────────────┐  │  │
-│  │  │     参加                      │  │  │  ← 白背景、黒文字
+│  │  │     Join                      │  │  │  ← White bg, black text
 │  │  └──────────────────────────────┘  │  │
 │  └────────────────────────────────────┘  │
 │                                          │
 └──────────────────────────────────────────┘
 ```
 
-## 技術スタック
+## Tech Stack
 
-| カテゴリ         | 技術                                |
-| ---------------- | ----------------------------------- |
-| フレームワーク   | Next.js 14 (App Router)             |
-| 言語             | TypeScript                          |
-| スタイリング     | Tailwind CSS                        |
-| データベース     | Turso (SQLite互換)                  |
-| ORM              | Prisma                              |
-| リアルタイム通信 | Server-Sent Events (SSE)            |
-| テスト           | Vitest, Testing Library, Playwright |
-| Linter/Formatter | ESLint 9, Prettier                  |
-| Gitフック        | husky, lint-staged                  |
-| デプロイ         | Vercel                              |
+| Category      | Technology                          |
+| ------------- | ----------------------------------- |
+| Framework     | Next.js 14 (App Router)             |
+| Language      | TypeScript                          |
+| Styling       | Tailwind CSS                        |
+| Database      | Turso (SQLite compatible)           |
+| ORM           | Prisma                              |
+| Real-time     | Server-Sent Events (SSE)            |
+| Testing       | Vitest, Testing Library, Playwright |
+| Linter/Format | ESLint 9, Prettier                  |
+| Git Hooks     | husky, lint-staged                  |
+| Deployment    | Vercel                              |
+| i18n          | next-intl                           |
 
-## クイックスタート
+## Quick Start
 
-### 必要条件
+### Prerequisites
 
 - Node.js 20+
 - npm 10+
 
-### インストール
+### Installation
 
 ```bash
-# リポジトリをクローン
+# Clone the repository
 git clone https://github.com/your-username/setsuna.git
 cd setsuna
 
-# 依存関係をインストール
+# Install dependencies
 npm install
 
-# Prismaクライアントを生成
+# Generate Prisma client
 npx prisma generate
 
-# データベースをセットアップ（ローカルSQLite）
+# Set up database (local SQLite)
 npx prisma migrate dev
 ```
 
-### 環境変数
+### Environment Variables
 
-`.env.example` をコピーして `.env` を作成します：
+Copy `.env.example` to create `.env`:
 
 ```bash
 cp .env.example .env
 ```
 
-開発環境用の設定：
+Development configuration:
 
 ```env
-# ローカル開発用
+# Local development
 DATABASE_URL="file:./dev.db"
 ```
 
-本番環境用の設定（Turso）：
+Production configuration (Turso):
 
 ```env
 TURSO_DATABASE_URL="libsql://your-db.turso.io"
@@ -107,144 +119,171 @@ TURSO_AUTH_TOKEN="your-token"
 CRON_SECRET="your-secret"
 ```
 
-### 開発サーバーの起動
+### Start Development Server
 
 ```bash
 npm run dev
 ```
 
-ブラウザで http://localhost:3000 を開きます。
+Open http://localhost:3000 in your browser.
 
-## 開発コマンド
+## Development Commands
 
 ```bash
-# 開発サーバー
+# Development server
 npm run dev
 
-# ビルド
+# Build
 npm run build
 
-# 本番サーバー
+# Production server
 npm run start
 
-# リント
+# Lint
 npm run lint
 npm run lint:fix
 
-# フォーマット
+# Format
 npm run format
 npm run format:check
 
-# テスト
-npm run test              # 全テスト実行
-npm run test:watch        # ウォッチモード（TDD用）
-npm run test:coverage     # カバレッジレポート
-npm run test:e2e          # E2Eテスト
+# Test
+npm run test              # Run all tests
+npm run test:watch        # Watch mode (for TDD)
+npm run test:coverage     # Coverage report
+npm run test:e2e          # E2E tests
 
-# データベース
-npx prisma generate       # Prismaクライアント生成
-npx prisma migrate dev    # マイグレーション実行
-npx prisma studio         # DBのGUI
+# Database
+npx prisma generate       # Generate Prisma client
+npx prisma migrate dev    # Run migrations
+npx prisma studio         # Database GUI
 ```
 
-## プロジェクト構成
+## Project Structure
 
 ```
 Setsuna/
-├── docs/                      # 仕様書
-│   ├── SPEC.md               # 全体仕様
-│   ├── API.md                # API仕様
-│   ├── DB.md                 # データベース仕様
-│   ├── UI.md                 # UI/UX仕様
-│   └── TEST.md               # テスト仕様
+├── docs/                      # Documentation
+│   ├── SPEC.md               # Full specification
+│   ├── API.md                # API specification
+│   ├── DB.md                 # Database specification
+│   ├── UI.md                 # UI/UX specification
+│   └── TEST.md               # Test specification
+├── messages/                  # i18n translation files
+│   ├── en.json               # English
+│   └── ja.json               # Japanese
 ├── prisma/
-│   └── schema.prisma         # DBスキーマ
+│   └── schema.prisma         # DB schema
 ├── src/
 │   ├── app/                  # Next.js App Router
-│   │   ├── page.tsx          # ホームページ
-│   │   ├── room/[code]/      # ルームページ
-│   │   └── api/              # APIルート
-│   ├── components/           # Reactコンポーネント
-│   ├── lib/                  # ユーティリティ
-│   ├── hooks/                # カスタムフック
-│   └── types/                # 型定義
-├── e2e/                      # E2Eテスト
+│   │   ├── [locale]/         # Locale-aware routes
+│   │   │   ├── page.tsx      # Home page
+│   │   │   └── room/[code]/  # Room page
+│   │   └── api/              # API routes
+│   ├── components/           # React components
+│   ├── i18n/                 # i18n configuration
+│   ├── lib/                  # Utilities
+│   ├── hooks/                # Custom hooks
+│   └── types/                # Type definitions
+├── e2e/                      # E2E tests
+├── middleware.ts             # next-intl middleware
 └── ...config files
 ```
 
-## 使い方
+## Usage
 
-### ルームを作成する
+### Create a Room
 
-1. トップページで「ルームを作成する」をクリック
-2. 6文字のルームコード（例: `ABCD23`）が生成されます
-3. このコードを別のデバイスで入力するか、URLを共有します
+1. Click "Create Room" on the home page
+2. A 6-character room code (e.g., `ABCD23`) will be generated
+3. Enter this code on another device or share the URL
 
-### ルームに参加する
+### Join a Room
 
-1. トップページでルームコードを入力
-2. 「参加する」をクリック
-3. または、直接URL `/room/ABCD23` にアクセス
+1. Enter the room code on the home page
+2. Click "Join"
+3. Or navigate directly to `/room/ABCD23`
 
-### テキストを共有する
+### Share Text
 
-1. ルームページでテキストを入力
-2. 「送信する」またはCtrl+Enterで送信
-3. 全参加者にリアルタイムで配信されます
-4. コピーボタンでクリップボードにコピー可能
+1. Enter text on the room page
+2. Click "Send" or press Ctrl+Enter
+3. Text is delivered to all participants in real-time
+4. Use the copy button to copy to clipboard
 
 ## API
 
-| エンドポイント               | メソッド | 説明               |
-| ---------------------------- | -------- | ------------------ |
-| `/api/rooms`                 | POST     | ルーム作成         |
-| `/api/rooms/[code]`          | GET      | ルーム情報取得     |
-| `/api/rooms/[code]/messages` | GET      | メッセージ一覧取得 |
-| `/api/rooms/[code]/messages` | POST     | メッセージ送信     |
-| `/api/sse/[code]`            | GET      | SSE接続            |
-| `/api/cleanup`               | POST     | 期限切れルーム削除 |
+| Endpoint                     | Method | Description          |
+| ---------------------------- | ------ | -------------------- |
+| `/api/rooms`                 | POST   | Create room          |
+| `/api/rooms/[code]`          | GET    | Get room info        |
+| `/api/rooms/[code]/messages` | GET    | Get messages         |
+| `/api/rooms/[code]/messages` | POST   | Send message         |
+| `/api/sse/[code]`            | GET    | SSE connection       |
+| `/api/cleanup`               | POST   | Delete expired rooms |
 
-詳細は [API仕様書](./docs/API.md) を参照してください。
+See the [API Documentation](./docs/API.md) for details.
 
-## 開発方針
+## Development Philosophy
 
-このプロジェクトは **TDD（テスト駆動開発）** を採用しています。
+This project follows **TDD (Test-Driven Development)**.
 
 ```
 Red → Green → Refactor
-1. 失敗するテストを書く
-2. テストを通す最小限のコードを書く
-3. コードをリファクタリングする
+1. Write a failing test
+2. Write minimal code to pass the test
+3. Refactor the code
 ```
 
-| 対象              | アプローチ        |
-| ----------------- | ----------------- |
-| `src/lib/`        | TDD（テスト先行） |
-| `src/app/api/`    | TDD（テスト先行） |
-| `src/components/` | 後付けテスト      |
-| E2E               | 後付けテスト      |
+| Target            | Approach         |
+| ----------------- | ---------------- |
+| `src/lib/`        | TDD (test-first) |
+| `src/app/api/`    | TDD (test-first) |
+| `src/components/` | Post-hoc testing |
+| E2E               | Post-hoc testing |
 
-## テスト
+## Testing
 
 ```bash
-# ユニット/統合テスト（35件）
+# Unit/Integration tests (35 tests)
 npm run test
 
-# E2Eテスト（14件）
+# E2E tests (14 tests)
 npm run test:e2e
 
-# カバレッジレポート
+# Coverage report
 npm run test:coverage
 ```
 
-## ドキュメント
+## Internationalization (i18n)
 
-- [全体仕様書](./docs/SPEC.md)
-- [API仕様書](./docs/API.md)
-- [データベース仕様書](./docs/DB.md)
-- [UI/UX仕様書](./docs/UI.md)
-- [テスト仕様書](./docs/TEST.md)
+Setsuna supports English and Japanese. Language switching is available via the UI.
 
-## ライセンス
+### URL Structure
+
+| Language | URL Pattern              |
+| -------- | ------------------------ |
+| English  | `/en`, `/en/room/ABCD23` |
+| Japanese | `/ja`, `/ja/room/ABCD23` |
+
+### Adding Translations
+
+Translation files are located in the `messages/` directory:
+
+```
+messages/
+├── en.json    # English
+└── ja.json    # Japanese
+```
+
+## Documentation
+
+- [Full Specification](./docs/SPEC.md)
+- [API Documentation](./docs/API.md)
+- [Database Documentation](./docs/DB.md)
+- [UI/UX Documentation](./docs/UI.md)
+- [Test Documentation](./docs/TEST.md)
+
+## License
 
 MIT License

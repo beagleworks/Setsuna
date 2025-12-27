@@ -141,18 +141,76 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 - ホバー: `border-white text-white`
 - 成功: `border-[#00ff88] text-[#00ff88] bg-[#00ff88]/10`
 
+### LanguageSwitcher
+
+言語切替コンポーネント。ヘッダーやホームページに配置し、英語/日本語を切り替える。
+
+```tsx
+// src/components/LanguageSwitcher.tsx
+'use client';
+
+import { useLocale } from 'next-intl';
+import { usePathname, useRouter } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
+
+export function LanguageSwitcher() {
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleChange = (newLocale: string) => {
+    router.replace(pathname, { locale: newLocale });
+  };
+
+  return (
+    <div className="flex items-center gap-2 font-mono text-sm">
+      {routing.locales.map((loc) => (
+        <button
+          key={loc}
+          onClick={() => handleChange(loc)}
+          className={`px-2 py-1 uppercase tracking-wider transition-colors duration-100 ${
+            locale === loc
+              ? 'text-[#00ff88] border-b-2 border-[#00ff88]'
+              : 'text-neutral-500 hover:text-white'
+          }`}
+          aria-current={locale === loc ? 'true' : undefined}
+        >
+          {loc}
+        </button>
+      ))}
+    </div>
+  );
+}
+```
+
+#### スタイル
+
+| 状態       | スタイル                                     |
+| ---------- | -------------------------------------------- |
+| 非選択     | `text-neutral-500 hover:text-white`          |
+| 選択中     | `text-[#00ff88] border-b-2 border-[#00ff88]` |
+| レイアウト | `flex items-center gap-2 font-mono text-sm`  |
+
+#### 動作
+
+- クリックで言語を即時切替（ページリロードなし）
+- `router.replace()` でブラウザ履歴を汚さない
+- 現在の言語は `aria-current="true"` でアクセシビリティ対応
+- URL構造: `/en`（英語）、`/ja`（日本語）
+
 ---
 
 ## 画面構成
 
-### ホームページ (`/`)
+### ホームページ (`/en`, `/ja`)
 
 ```
 ┌──────────────────────────────────────────┐
+│                                 [EN][JA] │  ← LanguageSwitcher
 │          背景: #0a0a0a                   │
 │                                          │
 │           SETSUNA_                       │  ← 白 + 緑カーソル
-│     [リアルタイムテキスト共有]            │  ← グレー、大文字
+│     [REAL-TIME TEXT SHARING]             │  ← グレー、大文字
 │                                          │
 │  ┌────────────────────────────────────┐  │
 │  │ 新規ルーム作成                      │  │  ← 白ボーダー2px
@@ -180,11 +238,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 └──────────────────────────────────────────┘
 ```
 
-### ルームページ (`/room/[code]`)
+### ルームページ (`/en/room/[code]`, `/ja/room/[code]`)
 
 ```
 ┌──────────────────────────────────────────┐
-│ [戻る]           ABCD23          [コピー]│  ← ヘッダー、黒背景、白下線
+│ [戻る]   ABCD23   [EN][JA]       [コピー]│  ← ヘッダー + LanguageSwitcher
 │                 TTL: 23:45:30            │  ← 緑文字、TTL表示
 ├──────────────────────────────────────────┤
 │                                          │

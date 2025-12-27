@@ -7,3 +7,4 @@ export { RoomJoiner } from './RoomJoiner';
 export { MessageInput } from './MessageInput';
 export { MessageList } from './MessageList';
 export { RoomHeader } from './RoomHeader';
+export { LanguageSwitcher } from './LanguageSwitcher';

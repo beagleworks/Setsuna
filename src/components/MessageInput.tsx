@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { Button } from './Button';
 import { MAX_MESSAGE_LENGTH } from '@/types/api';
 
@@ -10,6 +11,7 @@ interface MessageInputProps {
 }
 
 export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
+  const t = useTranslations('messageInput');
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -40,7 +42,7 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
     [handleSubmit]
   );
 
-  // テキストエリアの高さを自動調整
+  // Auto-adjust textarea height
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -56,7 +58,7 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
         value={content}
         onChange={(e) => setContent(e.target.value)}
         onKeyDown={handleKeyDown}
-        placeholder="テキストを入力..."
+        placeholder={t('placeholder')}
         disabled={disabled || loading}
         className="w-full px-4 py-3 bg-black border-2 border-neutral-600 text-white font-sans placeholder:text-neutral-400 resize-none focus:outline-none focus:border-white transition-colors duration-100"
         rows={3}
@@ -66,12 +68,13 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
         <div className="text-sm font-mono">
           {isOverLimit ? (
             <span className="text-[#ff3366]">
-              {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()} 文字
-              （10,000文字を超えています）
+              {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()}{' '}
+              {t('charCount')} {t('charCountOver')}
             </span>
           ) : (
             <span className="text-neutral-500">
-              {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()} 文字
+              {content.length.toLocaleString()} / {MAX_MESSAGE_LENGTH.toLocaleString()}{' '}
+              {t('charCount')}
             </span>
           )}
         </div>
@@ -81,12 +84,12 @@ export function MessageInput({ onSubmit, disabled }: MessageInputProps) {
           disabled={isEmpty || isOverLimit || disabled}
           loading={loading}
         >
-          送信
+          {t('button')}
         </Button>
       </div>
 
       <p className="mt-2 text-xs text-neutral-400 font-mono uppercase tracking-wider">
-        Ctrl + Enter で送信
+        {t('hint')}
       </p>
     </div>
   );

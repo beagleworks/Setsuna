@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface CopyButtonProps {
   text: string;
@@ -8,6 +9,7 @@ interface CopyButtonProps {
 }
 
 export function CopyButton({ text, className = '' }: CopyButtonProps) {
+  const t = useTranslations('copyButton');
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -28,7 +30,7 @@ export function CopyButton({ text, className = '' }: CopyButtonProps) {
           ? 'border-[#00ff88] text-[#00ff88] bg-[#00ff88]/10'
           : 'border-neutral-600 text-neutral-400 hover:border-white hover:text-white hover:bg-white/10'
       } ${className}`}
-      aria-label={copied ? 'コピー完了' : 'コピー'}
+      aria-label={copied ? t('copied') : t('copy')}
       aria-pressed={copied}
     >
       {copied ? (

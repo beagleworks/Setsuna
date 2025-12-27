@@ -27,6 +27,7 @@
 | Gitフック        | husky, lint-staged                  |
 | デプロイ先       | Vercel                              |
 | 言語             | TypeScript                          |
+| 国際化           | next-intl                           |
 
 ## 開発方針
 
@@ -82,7 +83,14 @@ Red → Green → Refactor
 - 各テキストにはコピーボタンが付属
 - ワンクリックでクリップボードにコピー可能
 
-### 3. 自動削除
+### 3. 国際化（i18n）
+
+- 英語（デフォルト）と日本語に対応
+- URL構造: `/en`（英語）, `/ja`（日本語）
+- UIから言語切替が可能（LanguageSwitcherコンポーネント）
+- 翻訳ファイルは`messages/`ディレクトリに配置
+
+### 4. 自動削除
 
 - ルームは作成から24時間後に自動削除
 - 削除時にルーム内のすべてのメッセージも同時に削除
@@ -182,6 +190,9 @@ Setsuna/
 │   ├── DB.md                      # データベース仕様
 │   ├── UI.md                      # UI/UX仕様
 │   └── TEST.md                    # テスト仕様
+├── messages/                      # i18n翻訳ファイル
+│   ├── en.json                    # 英語
+│   └── ja.json                    # 日本語
 ├── .husky/                        # Gitフック
 │   ├── pre-commit                 # コミット前にlint-staged実行
 │   └── pre-push                   # プッシュ前にテスト実行
@@ -190,15 +201,23 @@ Setsuna/
 ├── src/
 │   ├── app/                       # Next.js App Router
 │   │   ├── layout.tsx
-│   │   ├── page.tsx               # ホームページ
+│   │   ├── page.tsx               # ルートリダイレクト
 │   │   ├── globals.css
-│   │   ├── room/[code]/page.tsx   # ルームページ
+│   │   ├── [locale]/              # ロケール対応ルート
+│   │   │   ├── layout.tsx         # ロケールレイアウト
+│   │   │   ├── page.tsx           # ホームページ
+│   │   │   └── room/[code]/       # ルームページ
 │   │   └── api/                   # APIルート
 │   ├── components/                # Reactコンポーネント
+│   ├── i18n/                      # i18n設定
+│   │   ├── routing.ts             # ルーティング設定
+│   │   ├── request.ts             # リクエスト設定
+│   │   └── navigation.ts          # ナビゲーションAPI
 │   ├── lib/                       # ユーティリティ + テスト（*.test.ts）
 │   ├── hooks/                     # カスタムフック
 │   └── types/                     # 型定義
 ├── e2e/                           # E2Eテスト（Playwright）
+├── middleware.ts                  # next-intlミドルウェア
 ├── eslint.config.mjs              # ESLint設定（Flat Config）
 ├── prettier.config.mjs            # Prettier設定
 ├── lint-staged.config.mjs         # lint-staged設定

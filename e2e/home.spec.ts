@@ -1,22 +1,27 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('ホームページ', () => {
+test.describe('Home page', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/en');
   });
 
-  test('タイトルとサブタイトルが表示される', async ({ page }) => {
-    await expect(page.locator('h1')).toHaveText('Setsuna');
-    await expect(page.locator('text=デバイス間でテキストを共有')).toBeVisible();
+  test('displays title and subtitle', async ({ page }) => {
+    await expect(page.locator('h1')).toContainText('SETSUNA');
+    await expect(page.locator('text=[REAL-TIME TEXT SHARING]')).toBeVisible();
   });
 
-  test('ルーム作成カードが表示される', async ({ page }) => {
-    await expect(page.locator('text=新しいルームを作成')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'ルームを作成する' })).toBeVisible();
+  test('displays room creator card', async ({ page }) => {
+    await expect(page.locator('text=Create New Room')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Create Room' })).toBeVisible();
   });
 
-  test('ルーム参加カードが表示される', async ({ page }) => {
-    await expect(page.locator('text=ルームに参加')).toBeVisible();
-    await expect(page.getByRole('button', { name: '参加する' })).toBeVisible();
+  test('displays room joiner card', async ({ page }) => {
+    await expect(page.locator('text=Join Existing Room')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Join' })).toBeVisible();
+  });
+
+  test('displays language switcher', async ({ page }) => {
+    await expect(page.locator('button:has-text("EN")')).toBeVisible();
+    await expect(page.locator('button:has-text("JA")')).toBeVisible();
   });
 });
