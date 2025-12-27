@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowLeft, Clock } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { CopyButton } from './CopyButton';
 import { XShareButton } from './XShareButton';
@@ -14,12 +14,14 @@ interface RoomHeaderProps {
 }
 
 export function RoomHeader({ code, expiresAt }: RoomHeaderProps) {
+  const locale = useLocale();
   const t = useTranslations('header');
   const tRoom = useTranslations('room');
   const tShare = useTranslations('share');
   const timeLeft = useCountdown(new Date(expiresAt));
 
-  const roomUrl = typeof window !== 'undefined' ? `${window.location.origin}/room/${code}` : '';
+  const roomUrl =
+    typeof window !== 'undefined' ? `${window.location.origin}/${locale}/room/${code}` : '';
 
   return (
     <header className="bg-black border-b-2 border-white py-4 px-6 sticky top-0 z-50">

@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-12-28
+
+### Fixed
+
+- **XShareButton縦伸び問題** - `inline-flex`を追加してボタンがコンテンツサイズに収まるよう修正
+- **ルームシェアURL 404問題** - シェアURLにlocaleを含めるよう修正（`/room/CODE` → `/ja/room/CODE`）
+
 ## [1.1.0] - 2025-12-28
 
 ### Added
@@ -87,11 +94,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                        |
 | ------- | ---------- | ---------------------------------- |
+| 1.1.1   | 2025-12-28 | XShareButton・シェアURL修正        |
 | 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善 |
 | 1.0.1   | 2025-12-28 | フッター追加                       |
 | 1.0.0   | 2025-12-28 | 初回正式リリース                   |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/beagleworks/Setsuna/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/beagleworks/Setsuna/releases/tag/v1.0.0

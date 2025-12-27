@@ -88,7 +88,7 @@
   },
   "share": {
     "home": {
-      "text": "Setsuna - 6文字のコードでデバイス間テキストをリアルタイム共有"
+      "text": "Setsuna - テキストをリアルタイムで共有"
     },
     "room": {
       "text": "Setsunaルームに参加しよう！コード: {code}"

@@ -26,7 +26,7 @@ export function XShareButton({ url, text, className = '' }: XShareButtonProps) {
       href={shareUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`p-2 border-2 transition-all duration-100 border-neutral-600 text-neutral-400 hover:border-white hover:text-white hover:bg-white/10 ${className}`}
+      className={`inline-flex items-center justify-center p-2 border-2 transition-all duration-100 border-neutral-600 text-neutral-400 hover:border-white hover:text-white hover:bg-white/10 ${className}`}
       aria-label={t('label')}
     >
       <XIcon className="w-5 h-5" />
