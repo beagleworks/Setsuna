@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-12-28
+
+### Added
+
+- **APIレート制限** - スライディングウィンドウ方式で30リクエスト/分を制限
+  - IPベースの識別
+  - X-RateLimit-\* レスポンスヘッダー
+  - 429ステータスとRetry-Afterヘッダー
+- **トースト通知システム** - ブルータリストデザインの通知UI
+  - 成功/エラー/情報/警告の4種類
+  - メッセージ送信成功/失敗、コピー完了、接続状態変化の通知
+- **Xシェアボタン** - ルームURLをTwitter/Xで共有
+- **SSE再接続の指数バックオフ** - 1秒〜30秒のジッター付き遅延
+  - 最大10回の再試行
+  - 再接続中の進捗通知
+- **アクセシビリティ改善**
+  - aria-liveリージョンで新着メッセージをスクリーンリーダーに通知
+  - 接続インジケーターにrole="status"とaria-label追加
+  - メッセージリストにrole="log"追加
+- **クライアント側スロットリングフック** (`useThrottle`)
+
+### Changed
+
+- **useSSE** - `onReconnecting`コールバックと`retryCount`を追加
+
 ## [1.0.1] - 2025-12-28
 
 ### Added
@@ -60,11 +85,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-| Version | Date       | Description      |
-| ------- | ---------- | ---------------- |
-| 1.0.1   | 2025-12-28 | フッター追加     |
-| 1.0.0   | 2025-12-28 | 初回正式リリース |
+| Version | Date       | Description                        |
+| ------- | ---------- | ---------------------------------- |
+| 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善 |
+| 1.0.1   | 2025-12-28 | フッター追加                       |
+| 1.0.0   | 2025-12-28 | 初回正式リリース                   |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/beagleworks/Setsuna/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/beagleworks/Setsuna/releases/tag/v1.0.0

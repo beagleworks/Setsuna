@@ -62,7 +62,19 @@
     "empty": {
       "title": "メッセージなし",
       "description": "テキストを入力して送信してください"
+    },
+    "accessibility": {
+      "newMessage": "新しいメッセージ: {content}"
     }
+  },
+  "toast": {
+    "messageSent": "送信しました",
+    "messageFailed": "送信に失敗しました",
+    "copied": "コピーしました",
+    "connected": "接続しました",
+    "disconnected": "接続が切断されました",
+    "reconnecting": "再接続中... ({attempt}回目)",
+    "reconnected": "再接続しました"
   },
   "copyButton": {
     "copy": "コピー",
@@ -70,6 +82,17 @@
   },
   "languageSwitcher": {
     "label": "言語"
+  },
+  "xShareButton": {
+    "label": "Xでシェア"
+  },
+  "share": {
+    "home": {
+      "text": "Setsuna - 6文字のコードでデバイス間テキストをリアルタイム共有"
+    },
+    "room": {
+      "text": "Setsunaルームに参加しよう！コード: {code}"
+    }
   },
   "metadata": {
     "title": "Setsuna - リアルタイムテキスト共有",

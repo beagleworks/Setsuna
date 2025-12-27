@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { validateRoomCode } from '@/lib/room-code';
 import { sseManager } from '@/lib/sse-manager';
+import { rateLimiter, getClientIP } from '@/lib/rate-limiter';
 import {
   type GetMessagesResponse,
   type CreateMessageResponse,
@@ -24,6 +25,33 @@ export async function GET(
   { params }: RouteParams
 ): Promise<NextResponse<GetMessagesResponse>> {
   try {
+    // レート制限チェック
+    const ip = getClientIP(request);
+    const rateLimit = rateLimiter.check(ip);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'RATE_LIMIT_EXCEEDED',
+            message: ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+          },
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '30',
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+            'X-RateLimit-Reset': String(rateLimit.resetAt),
+            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
+
+    rateLimiter.increment(ip);
+
     const { code } = await params;
 
     // コード形式のバリデーション
@@ -116,6 +144,33 @@ export async function POST(
   { params }: RouteParams
 ): Promise<NextResponse<CreateMessageResponse>> {
   try {
+    // レート制限チェック
+    const ip = getClientIP(request);
+    const rateLimit = rateLimiter.check(ip);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'RATE_LIMIT_EXCEEDED',
+            message: ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+          },
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': '30',
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+            'X-RateLimit-Reset': String(rateLimit.resetAt),
+            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
+
+    rateLimiter.increment(ip);
+
     const { code } = await params;
     const body = await request.json();
     const { content } = body;

@@ -4,6 +4,7 @@ import { ArrowLeft, Clock } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { CopyButton } from './CopyButton';
+import { XShareButton } from './XShareButton';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { useCountdown } from '@/hooks/useCountdown';
 
@@ -15,6 +16,7 @@ interface RoomHeaderProps {
 export function RoomHeader({ code, expiresAt }: RoomHeaderProps) {
   const t = useTranslations('header');
   const tRoom = useTranslations('room');
+  const tShare = useTranslations('share');
   const timeLeft = useCountdown(new Date(expiresAt));
 
   const roomUrl = typeof window !== 'undefined' ? `${window.location.origin}/room/${code}` : '';
@@ -39,6 +41,7 @@ export function RoomHeader({ code, expiresAt }: RoomHeaderProps) {
               {code}
             </span>
             <CopyButton text={roomUrl} />
+            <XShareButton url={roomUrl} text={tShare('room.text', { code })} />
           </div>
           <div className="flex items-center gap-1.5 mt-1 text-sm text-neutral-500 font-mono">
             <Clock className="w-4 h-4" />

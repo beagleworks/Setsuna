@@ -62,7 +62,19 @@
     "empty": {
       "title": "No messages",
       "description": "Enter text and send"
+    },
+    "accessibility": {
+      "newMessage": "New message: {content}"
     }
+  },
+  "toast": {
+    "messageSent": "Message sent",
+    "messageFailed": "Failed to send message",
+    "copied": "Copied to clipboard",
+    "connected": "Connected",
+    "disconnected": "Connection lost",
+    "reconnecting": "Reconnecting... (attempt {attempt})",
+    "reconnected": "Reconnected"
   },
   "copyButton": {
     "copy": "Copy",
@@ -70,6 +82,17 @@
   },
   "languageSwitcher": {
     "label": "Language"
+  },
+  "xShareButton": {
+    "label": "Share on X"
+  },
+  "share": {
+    "home": {
+      "text": "Setsuna - Share text across devices in real-time with a simple 6-character code."
+    },
+    "room": {
+      "text": "Join my Setsuna room! Code: {code}"
+    }
   },
   "metadata": {
     "title": "Setsuna - Real-time Text Sharing",

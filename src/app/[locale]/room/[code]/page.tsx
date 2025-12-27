@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { RoomHeader, MessageInput, MessageList } from '@/components';
 import { useSSE } from '@/hooks';
+import { useToast } from '@/hooks/useToast';
 import { Link } from '@/i18n/navigation';
 import { Message, GetRoomResponse, GetMessagesResponse, CreateMessageResponse } from '@/types/api';
 import { validateRoomCode } from '@/lib/room-code';
@@ -19,6 +20,8 @@ export default function RoomPage() {
   const params = useParams();
   const code = (params.code as string)?.toUpperCase();
   const t = useTranslations('room');
+  const tToast = useTranslations('toast');
+  const { addToast } = useToast();
 
   const [roomData, setRoomData] = useState<RoomData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -28,6 +31,9 @@ export default function RoomPage() {
   );
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+
+  // 初回接続フラグ（初回接続時はトーストを表示しない）
+  const isFirstConnectionRef = useRef(true);
 
   // Fetch room data
   const fetchRoom = useCallback(async () => {
@@ -88,6 +94,7 @@ export default function RoomPage() {
     isConnected,
     error: sseError,
     reconnect,
+    retryCount,
   } = useSSE(code || '', {
     onMessage: (message) => {
       setRoomData((prev) => {
@@ -104,10 +111,32 @@ export default function RoomPage() {
       });
     },
     onConnected: () => {
-      // Fetch latest messages on connection
+      // 初回接続時はトーストを表示しない
+      if (isFirstConnectionRef.current) {
+        isFirstConnectionRef.current = false;
+        return;
+      }
+      // 再接続成功時にトーストを表示
+      addToast({
+        type: 'success',
+        message: tToast('reconnected'),
+      });
     },
     onError: () => {
-      // Error handling via sseError display
+      // 接続切断時にトーストを表示（初回以外）
+      if (!isFirstConnectionRef.current) {
+        addToast({
+          type: 'warning',
+          message: tToast('disconnected'),
+        });
+      }
+    },
+    onReconnecting: (attempt) => {
+      addToast({
+        type: 'info',
+        message: tToast('reconnecting', { attempt }),
+        duration: 2000,
+      });
     },
   });
 
@@ -145,9 +174,21 @@ export default function RoomPage() {
           messages: [newMessage, ...prev.messages],
         };
       });
+
+      // 送信成功トースト
+      addToast({
+        type: 'success',
+        message: tToast('messageSent'),
+      });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('error.sendFailed');
       setSendError(errorMessage);
+
+      // 送信失敗トースト
+      addToast({
+        type: 'error',
+        message: tToast('messageFailed'),
+      });
     } finally {
       setSending(false);
     }
@@ -235,8 +276,19 @@ export default function RoomPage() {
       <div className="fixed bottom-4 right-4">
         <div
           className={`w-3 h-3 ${isConnected ? 'bg-[#00ff88]' : 'bg-neutral-600'}`}
+          role="status"
+          aria-label={
+            isConnected
+              ? t('status.connected')
+              : `${t('status.disconnected')}${retryCount > 0 ? ` (${retryCount})` : ''}`
+          }
+          aria-live="polite"
           title={isConnected ? t('status.connected') : t('status.disconnected')}
-        />
+        >
+          <span className="sr-only">
+            {isConnected ? t('status.connected') : t('status.disconnected')}
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useTranslations } from 'next-intl';
+import { useToast } from '@/hooks/useToast';
 
 interface CopyButtonProps {
   text: string;
@@ -10,6 +11,8 @@ interface CopyButtonProps {
 
 export function CopyButton({ text, className = '' }: CopyButtonProps) {
   const t = useTranslations('copyButton');
+  const tToast = useTranslations('toast');
+  const { addToast } = useToast();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
@@ -17,10 +20,17 @@ export function CopyButton({ text, className = '' }: CopyButtonProps) {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
+
+      // コピー成功トースト
+      addToast({
+        type: 'success',
+        message: tToast('copied'),
+        duration: 2000,
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
     }
-  }, [text]);
+  }, [text, addToast, tToast]);
 
   return (
     <button

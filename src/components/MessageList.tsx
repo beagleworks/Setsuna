@@ -13,6 +13,12 @@ export function MessageList({ messages }: MessageListProps) {
   const t = useTranslations('messageList');
   const locale = useLocale();
 
+  // 最新メッセージの通知テキストを計算（メッセージがある場合のみ）
+  const latestMessage = messages.length > 0 ? messages[0] : null;
+  const latestMessagePreview = latestMessage
+    ? latestMessage.content.slice(0, 50) + (latestMessage.content.length > 50 ? '...' : '')
+    : null;
+
   // Map locale to locale string for toLocaleTimeString
   const localeString = locale === 'ja' ? 'ja-JP' : 'en-US';
 
@@ -29,30 +35,37 @@ export function MessageList({ messages }: MessageListProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('title')}</h3>
+    <>
+      {/* スクリーンリーダー用のライブリージョン（メッセージIDをkeyにして更新を通知） */}
+      <div key={latestMessage?.id} aria-live="polite" aria-atomic="true" className="sr-only">
+        {latestMessagePreview && t('accessibility.newMessage', { content: latestMessagePreview })}
+      </div>
 
-      {messages.map((message, index) => (
-        <div
-          key={message.id}
-          className="bg-neutral-900 border-2 border-neutral-600 p-4 animate-fadeIn hover:border-white transition-colors duration-100"
-          style={{ animationDelay: `${Math.min(index, 5) * 30}ms` }}
-        >
-          <div className="flex justify-between items-start gap-4">
-            <p className="flex-1 whitespace-pre-wrap break-words text-white font-mono leading-relaxed">
-              {message.content}
-            </p>
-            <CopyButton text={message.content} data-testid="copy-button" />
-          </div>
+      <div className="space-y-4" role="log" aria-label={t('title')}>
+        <h3 className="text-lg font-bold text-white uppercase tracking-wider">{t('title')}</h3>
 
-          <div className="mt-3 flex items-center justify-end gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-neutral-600" />
-            <time className="text-xs text-neutral-500 font-mono">
-              {new Date(message.createdAt).toLocaleTimeString(localeString)}
-            </time>
+        {messages.map((message, index) => (
+          <div
+            key={message.id}
+            className="bg-neutral-900 border-2 border-neutral-600 p-4 animate-fadeIn hover:border-white transition-colors duration-100"
+            style={{ animationDelay: `${Math.min(index, 5) * 30}ms` }}
+          >
+            <div className="flex justify-between items-start gap-4">
+              <p className="flex-1 whitespace-pre-wrap break-words text-white font-mono leading-relaxed">
+                {message.content}
+              </p>
+              <CopyButton text={message.content} data-testid="copy-button" />
+            </div>
+
+            <div className="mt-3 flex items-center justify-end gap-1.5">
+              <Clock className="w-3.5 h-3.5 text-neutral-600" />
+              <time className="text-xs text-neutral-500 font-mono">
+                {new Date(message.createdAt).toLocaleTimeString(localeString)}
+              </time>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }

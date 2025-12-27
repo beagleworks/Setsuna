@@ -1,10 +1,21 @@
 'use client';
 
+import { useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
-import { RoomCreator, RoomJoiner, LanguageSwitcher } from '@/components';
+import { RoomCreator, RoomJoiner, LanguageSwitcher, XShareButton } from '@/components';
+
+function useBaseUrl() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => window.location.origin,
+    () => ''
+  );
+}
 
 export default function Home() {
   const t = useTranslations('home');
+  const tShare = useTranslations('share');
+  const baseUrl = useBaseUrl();
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-black relative">
@@ -23,9 +34,16 @@ export default function Home() {
       </div>
 
       {/* Description */}
-      <p className="text-center text-neutral-400 text-sm md:text-base max-w-md mb-8 motion-safe:animate-fadeIn leading-relaxed">
+      <p className="text-center text-neutral-400 text-sm md:text-base max-w-md mb-6 motion-safe:animate-fadeIn leading-relaxed">
         {t('description')}
       </p>
+
+      {/* Share Button */}
+      {baseUrl && (
+        <div className="mb-8 motion-safe:animate-fadeIn">
+          <XShareButton url={baseUrl} text={tShare('home.text')} />
+        </div>
+      )}
 
       {/* Card Container */}
       <div className="w-full max-w-md space-y-6">
