@@ -18,6 +18,8 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 
 ## Demo
 
+🌐 **Live Demo**: [https://setsuna-text.vercel.app](https://setsuna-text.vercel.app)
+
 ```
 ┌──────────────────────────────────────────┐
 │                                 [EN][JA] │  ← Language Switcher
@@ -83,8 +85,8 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/setsuna.git
-cd setsuna
+git clone https://github.com/beagleworks/Setsuna.git
+cd Setsuna
 
 # Install dependencies
 npm install

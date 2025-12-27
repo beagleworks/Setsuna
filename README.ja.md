@@ -18,6 +18,8 @@
 
 ## デモ
 
+🌐 **ライブデモ**: [https://setsuna-text.vercel.app](https://setsuna-text.vercel.app)
+
 ```
 ┌──────────────────────────────────────────┐
 │                                 [EN][JA] │  ← 言語切替
@@ -83,8 +85,8 @@
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/your-username/setsuna.git
-cd setsuna
+git clone https://github.com/beagleworks/Setsuna.git
+cd Setsuna
 
 # 依存関係をインストール
 npm install
