@@ -39,6 +39,21 @@ npm run lint         # ESLint
 npm run build        # ビルド
 ```
 
+## Commit Rules
+
+コミット時は以下を必ずユーザーに確認すること：
+
+1. **バージョンを上げるか？** - 変更内容に応じてSemantic Versioningに従う
+   - `MAJOR`: 破壊的変更
+   - `MINOR`: 機能追加（後方互換あり）
+   - `PATCH`: バグ修正
+2. **CHANGELOGに追記するか？** - バージョンを上げる場合は `CHANGELOG.md` を更新
+
+```
+確認例:
+「この変更をコミットします。バージョンを上げますか？CHANGELOGに追記しますか？」
+```
+
 ## 詳細仕様
 
 | ドキュメント                           | 内容                                |
