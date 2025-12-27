@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-12-28
+
+### Added
+
+- **フッターコンポーネント** - コピーライト表示を全ページに追加
+
 ## [1.0.0] - 2025-12-28
 
 ### Added
@@ -56,7 +62,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description      |
 | ------- | ---------- | ---------------- |
+| 1.0.1   | 2025-12-28 | フッター追加     |
 | 1.0.0   | 2025-12-28 | 初回正式リリース |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/beagleworks/Setsuna/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/beagleworks/Setsuna/releases/tag/v1.0.0
