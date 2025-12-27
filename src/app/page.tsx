@@ -13,6 +13,15 @@ export default function Home() {
         <p className="mt-3 text-neutral-500 uppercase tracking-wider">[リアルタイムテキスト共有]</p>
       </div>
 
+      {/* 説明文 */}
+      <p className="text-center text-neutral-400 text-sm md:text-base max-w-md mb-8 motion-safe:animate-fadeIn leading-relaxed">
+        6文字のルームコードを共有するだけで、
+        <br className="hidden md:inline" />
+        複数デバイス間でテキストをリアルタイム同期。
+        <br />
+        ルームは24時間後に自動削除されます。
+      </p>
+
       {/* カード コンテナ */}
       <div className="w-full max-w-md space-y-6">
         {/* ルーム作成 */}
@@ -26,7 +35,7 @@ export default function Home() {
           style={{ animationDelay: '100ms' }}
         >
           <div className="flex-1 border-t-2 border-neutral-700" />
-          <span className="text-sm text-neutral-400 font-mono">{'//OR//'}</span>
+          <span className="text-sm text-neutral-400">または</span>
           <div className="flex-1 border-t-2 border-neutral-700" />
         </div>
 
