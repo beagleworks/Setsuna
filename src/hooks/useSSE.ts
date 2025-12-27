@@ -34,7 +34,17 @@ export function useSSE(roomCode: string, options: UseSSEOptions = {}): UseSSERet
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const shouldReconnectRef = useRef(true);
 
-  const { onMessage, onConnected, onError } = options;
+  // コールバックを ref で保持（依存配列から除外するため）
+  const onMessageRef = useRef(options.onMessage);
+  const onConnectedRef = useRef(options.onConnected);
+  const onErrorRef = useRef(options.onError);
+
+  // コールバックが変わったら ref を更新
+  useEffect(() => {
+    onMessageRef.current = options.onMessage;
+    onConnectedRef.current = options.onConnected;
+    onErrorRef.current = options.onError;
+  });
 
   // reconnect 用の ref（再接続ロジックで使用）
   const setupConnectionRef = useRef<() => void>(() => {});
@@ -68,13 +78,13 @@ export function useSSE(roomCode: string, options: UseSSEOptions = {}): UseSSERet
 
       eventSource.addEventListener('connected', () => {
         setConnectionState({ isConnected: true, connectionError: null });
-        onConnected?.();
+        onConnectedRef.current?.();
       });
 
       eventSource.addEventListener('message', (event) => {
         try {
           const message = JSON.parse(event.data) as Message;
-          onMessage?.(message);
+          onMessageRef.current?.(message);
         } catch (e) {
           console.error('Failed to parse message:', e);
         }
@@ -86,7 +96,7 @@ export function useSSE(roomCode: string, options: UseSSEOptions = {}): UseSSERet
 
       eventSource.onerror = () => {
         setConnectionState({ isConnected: false, connectionError: '接続が切断されました' });
-        onError?.();
+        onErrorRef.current?.();
 
         // 再接続が許可されている場合のみ自動再接続（5秒後）
         if (shouldReconnectRef.current) {
@@ -115,7 +125,7 @@ export function useSSE(roomCode: string, options: UseSSEOptions = {}): UseSSERet
         clearTimeout(reconnectTimeoutRef.current);
       }
     };
-  }, [roomCode, isValid, onMessage, onConnected, onError]);
+  }, [roomCode, isValid]);
 
   // 派生状態: 無効なルームコードの場合はエラーを返す
   const error = !isValid ? '無効なルームコードです' : connectionState.connectionError;
