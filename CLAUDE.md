@@ -10,7 +10,7 @@ Claude Code向けのクイックリファレンス。詳細仕様は `docs/` を
 
 ## Tech Stack
 
-Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS / next-intl / Vitest & Playwright
+Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS v4 / next-intl / Vitest & Playwright
 
 ## 環境変数
 
