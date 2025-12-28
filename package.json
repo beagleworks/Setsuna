@@ -1,6 +1,6 @@
 {
   "name": "setsuna",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "description": "Real-time text sharing web application",
   "private": true,
   "scripts": {
@@ -30,6 +30,7 @@
     "@libsql/client": "^0.8.1",
     "@prisma/adapter-libsql": "^5.22.0",
     "@prisma/client": "^5.22.0",
+    "jose": "^6.1.3",
     "lucide-react": "^0.562.0",
     "next": "^14.2.35",
     "next-intl": "^4.6.1",

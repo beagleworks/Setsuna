@@ -90,6 +90,7 @@ export type ErrorCode =
   | 'CONTENT_EMPTY'
   | 'RATE_LIMIT_EXCEEDED'
   | 'UNAUTHORIZED'
+  | 'INVALID_PASSWORD'
   | 'INTERNAL_ERROR';
 
 /**
@@ -103,6 +104,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   CONTENT_EMPTY: 'メッセージを入力してください',
   RATE_LIMIT_EXCEEDED: 'リクエストが多すぎます。しばらく待ってから再試行してください',
   UNAUTHORIZED: '認証が必要です',
+  INVALID_PASSWORD: 'パスワードが正しくありません',
   INTERNAL_ERROR: 'サーバーエラーが発生しました',
 };
 

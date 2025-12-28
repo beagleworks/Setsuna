@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2025-12-28
+
+### Added
+
+- **Admin dashboard** - Simple administration panel for managing rooms and viewing statistics
+  - Password-based authentication (environment variable `ADMIN_PASSWORD`)
+  - JWT session management with HttpOnly cookies (24-hour expiry)
+  - Statistics dashboard showing active rooms, total messages, and 7-day activity trends
+  - Room management with search, filtering (active/expired), and pagination
+  - Message viewer for inspecting room contents
+  - Manual cleanup button for expired rooms
+- **Admin API endpoints**
+  - `POST /api/admin/auth/login` - Password authentication
+  - `POST /api/admin/auth/logout` - Session termination
+  - `GET /api/admin/stats` - Statistics retrieval
+  - `GET /api/admin/rooms` - Room listing with search and filters
+  - `GET /api/admin/rooms/[code]` - Room detail with messages
+  - `DELETE /api/admin/rooms/[code]` - Force room deletion
+  - `POST /api/admin/cleanup` - Manual expired room cleanup
+- **Middleware authentication** - Redirect to login for unauthenticated `/admin` access
+
+### Changed
+
+- Updated middleware to handle `/admin` routes separately from i18n
+
 ## [1.1.3] - 2025-12-28
 
 ### Fixed
