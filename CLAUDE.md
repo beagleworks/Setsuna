@@ -6,10 +6,21 @@ Claude Code向けのクイックリファレンス。詳細仕様は `docs/` を
 
 **Setsuna（刹那）** - デバイス間でテキストをリアルタイム共有するWebアプリ。
 6文字のルームコードでルームを作成/参加し、SSEでテキストを即時同期。24時間で自動削除。
+管理ダッシュボード（`/admin`）で統計確認・ルーム管理が可能。
 
 ## Tech Stack
 
 Next.js 14 (App Router) / TypeScript / Turso (Prisma) / Tailwind CSS / next-intl / Vitest & Playwright
+
+## 環境変数
+
+| 変数名               | 説明                           | 必須   |
+| -------------------- | ------------------------------ | ------ |
+| `DATABASE_URL`       | ローカルDB（`file:./dev.db`）  | 開発時 |
+| `TURSO_DATABASE_URL` | Turso DB URL                   | 本番   |
+| `TURSO_AUTH_TOKEN`   | Turso認証トークン              | 本番   |
+| `CRON_SECRET`        | Cronジョブ認証                 | 本番   |
+| `ADMIN_PASSWORD`     | 管理ダッシュボードのパスワード | 任意   |
 
 ## i18n（国際化）
 

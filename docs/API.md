@@ -48,6 +48,8 @@ SetsunaのREST APIおよびSSE（Server-Sent Events）エンドポイントの�
 | `CONTENT_TOO_LONG`    | 400            | メッセージが10,000文字を超過     |
 | `CONTENT_EMPTY`       | 400            | メッセージが空                   |
 | `RATE_LIMIT_EXCEEDED` | 429            | レート制限を超過                 |
+| `INVALID_PASSWORD`    | 400/401        | パスワードが無効または未指定     |
+| `ADMIN_REQUIRED`      | 401            | 管理者認証が必要                 |
 | `INTERNAL_ERROR`      | 500            | サーバー内部エラー               |
 
 ### レート制限
@@ -389,6 +391,251 @@ POST /api/cleanup
 
 ---
 
+## 管理API
+
+管理ダッシュボード用のAPI。すべて`/api/admin`パス配下。Cookie認証が必要なエンドポイントは`admin_token` Cookieを確認します。
+
+### 7. 管理者ログイン
+
+パスワード認証を行い、JWTトークンをCookieに設定します。
+
+```
+POST /api/admin/auth/login
+```
+
+#### リクエストボディ
+
+```json
+{
+  "password": "your-admin-password"
+}
+```
+
+#### レスポンス（成功時）
+
+```json
+{
+  "success": true,
+  "data": {
+    "expiresAt": "2024-12-22T10:30:00.000Z"
+  }
+}
+```
+
+**Cookie**: `admin_token` (HttpOnly, Secure, SameSite=Strict, 24時間有効)
+
+#### エラーレスポンス
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_PASSWORD",
+    "message": "Invalid password"
+  }
+}
+```
+
+---
+
+### 8. 管理者ログアウト
+
+セッションを終了し、Cookie `admin_token` を削除します。
+
+```
+POST /api/admin/auth/logout
+```
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Logged out successfully"
+  }
+}
+```
+
+---
+
+### 9. 統計情報取得
+
+ダッシュボード表示用の統計情報を取得します。
+
+```
+GET /api/admin/stats
+```
+
+#### 認証
+
+Cookie: `admin_token` 必須
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "activeRooms": 42,
+    "totalMessages": 1234,
+    "roomsCreatedToday": 5,
+    "messagesCreatedToday": 67,
+    "dailyStats": [
+      { "date": "2024-12-21", "rooms": 10, "messages": 50 },
+      { "date": "2024-12-20", "rooms": 8, "messages": 42 }
+    ]
+  }
+}
+```
+
+---
+
+### 10. ルーム一覧取得
+
+管理用のルーム一覧を取得します。
+
+```
+GET /api/admin/rooms
+```
+
+#### 認証
+
+Cookie: `admin_token` 必須
+
+#### クエリパラメータ
+
+| パラメータ | 型     | 必須 | 説明                         |
+| ---------- | ------ | ---- | ---------------------------- |
+| `page`     | number | No   | ページ番号（デフォルト: 1）  |
+| `search`   | string | No   | ルームコード検索             |
+| `filter`   | string | No   | `active` / `expired` / `all` |
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "rooms": [
+      {
+        "code": "ABCD23",
+        "createdAt": "2024-12-21T10:30:00.000Z",
+        "expiresAt": "2024-12-22T10:30:00.000Z",
+        "messageCount": 5,
+        "isExpired": false
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "totalPages": 5,
+      "totalItems": 42
+    }
+  }
+}
+```
+
+---
+
+### 11. ルーム詳細取得
+
+メッセージを含むルーム詳細を取得します。
+
+```
+GET /api/admin/rooms/{code}
+```
+
+#### 認証
+
+Cookie: `admin_token` 必須
+
+#### パスパラメータ
+
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "room": {
+      "code": "ABCD23",
+      "createdAt": "2024-12-21T10:30:00.000Z",
+      "expiresAt": "2024-12-22T10:30:00.000Z",
+      "isExpired": false
+    },
+    "messages": [
+      {
+        "id": "clq1234567890",
+        "content": "共有したいテキスト",
+        "createdAt": "2024-12-21T10:30:00.000Z"
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 12. ルーム削除
+
+指定したルームを強制削除します。
+
+```
+DELETE /api/admin/rooms/{code}
+```
+
+#### 認証
+
+Cookie: `admin_token` 必須
+
+#### パスパラメータ
+
+| パラメータ | 型     | 説明                |
+| ---------- | ------ | ------------------- |
+| `code`     | string | 6文字のルームコード |
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "message": "Room deleted successfully"
+  }
+}
+```
+
+---
+
+### 13. 手動クリーンアップ
+
+期限切れルームを即時削除します。
+
+```
+POST /api/admin/cleanup
+```
+
+#### 認証
+
+Cookie: `admin_token` 必須
+
+#### レスポンス
+
+```json
+{
+  "success": true,
+  "data": {
+    "deletedRooms": 15
+  }
+}
+```
+
+---
+
 ## TypeScript型定義
 
 ```typescript
@@ -445,6 +692,58 @@ type SSEEvent =
   | { type: 'connected'; data: { roomCode: string; timestamp: number } }
   | { type: 'message'; data: Message }
   | { type: 'ping'; data: { timestamp: number } };
+
+// 管理者統計
+interface AdminStats {
+  activeRooms: number;
+  totalMessages: number;
+  roomsCreatedToday: number;
+  messagesCreatedToday: number;
+  dailyStats: { date: string; rooms: number; messages: number }[];
+}
+
+// 管理者用ルーム
+interface AdminRoom {
+  code: string;
+  createdAt: string;
+  expiresAt: string;
+  messageCount: number;
+  isExpired: boolean;
+}
+
+// 管理者用メッセージ
+interface AdminMessage {
+  id: string;
+  content: string;
+  createdAt: string;
+}
+
+// ページネーション
+interface Pagination {
+  page: number;
+  totalPages: number;
+  totalItems: number;
+}
+
+// 管理者ログインレスポンス
+type AdminLoginResponse = ApiResponse<{
+  expiresAt: string;
+}>;
+
+// 統計情報レスポンス
+type AdminStatsResponse = ApiResponse<AdminStats>;
+
+// ルーム一覧レスポンス
+type AdminRoomsResponse = ApiResponse<{
+  rooms: AdminRoom[];
+  pagination: Pagination;
+}>;
+
+// ルーム詳細レスポンス
+type AdminRoomDetailResponse = ApiResponse<{
+  room: Omit<AdminRoom, 'messageCount'>;
+  messages: AdminMessage[];
+}>;
 ```
 
 ---

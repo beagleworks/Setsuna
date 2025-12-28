@@ -15,6 +15,7 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 - **Responsive**: Works seamlessly on both mobile and desktop
 - **Dark Brutalist Design**: Monospace fonts, thick borders, neon accents
 - **Internationalization**: English and Japanese language support
+- **Admin Dashboard**: Password-protected management interface for monitoring and cleanup
 
 ## Demo
 
@@ -119,6 +120,7 @@ Production configuration (Turso):
 TURSO_DATABASE_URL="libsql://your-db.turso.io"
 TURSO_AUTH_TOKEN="your-token"
 CRON_SECRET="your-secret"
+ADMIN_PASSWORD="your-secure-password"
 ```
 
 ### Start Development Server
@@ -181,6 +183,10 @@ Setsuna/
 │   │   ├── [locale]/         # Locale-aware routes
 │   │   │   ├── page.tsx      # Home page
 │   │   │   └── room/[code]/  # Room page
+│   │   ├── admin/            # Admin dashboard
+│   │   │   ├── page.tsx      # Dashboard
+│   │   │   ├── login/        # Login page
+│   │   │   └── rooms/        # Room management
 │   │   └── api/              # API routes
 │   ├── components/           # React components
 │   ├── i18n/                 # i18n configuration
@@ -223,6 +229,10 @@ Setsuna/
 | `/api/rooms/[code]/messages` | POST   | Send message         |
 | `/api/sse/[code]`            | GET    | SSE connection       |
 | `/api/cleanup`               | POST   | Delete expired rooms |
+| `/api/admin/auth/login`      | POST   | Admin login          |
+| `/api/admin/stats`           | GET    | Get statistics       |
+| `/api/admin/rooms`           | GET    | List rooms (admin)   |
+| `/api/admin/rooms/[code]`    | DELETE | Delete room          |
 
 See the [API Documentation](./docs/API.md) for details.
 
