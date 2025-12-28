@@ -97,7 +97,8 @@ test.describe('Real-time communication (SSE)', () => {
     await submitButton.click();
 
     // Message appears in real-time on page1 (via SSE)
-    await expect(page1.locator(`text=${testMessage}`)).toBeVisible({ timeout: 15000 });
+    // Use getByText with exact match to avoid matching sr-only elements
+    await expect(page1.getByText(testMessage, { exact: true })).toBeVisible({ timeout: 15000 });
 
     await page1.close();
     await page2.close();
