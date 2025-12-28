@@ -47,7 +47,7 @@ npm run build        # ビルド
    - `MAJOR`: 破壊的変更
    - `MINOR`: 機能追加（後方互換あり）
    - `PATCH`: バグ修正
-2. **CHANGELOGに追記するか？** - バージョンを上げる場合は `CHANGELOG.md` を更新
+2. **CHANGELOGに追記するか？** - バージョンを上げる場合は `CHANGELOG.md`（英語）と `CHANGELOG.ja.md`（日本語）の両方を更新
 
 ```
 確認例:

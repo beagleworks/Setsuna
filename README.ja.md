@@ -285,6 +285,7 @@ messages/
 - [データベース仕様書](./docs/DB.md)
 - [UI/UX仕様書](./docs/UI.md)
 - [テスト仕様書](./docs/TEST.md)
+- [変更履歴](./CHANGELOG.ja.md)
 
 ## ライセンス
 

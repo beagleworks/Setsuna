@@ -285,6 +285,7 @@ messages/
 - [Database Documentation](./docs/DB.md)
 - [UI/UX Documentation](./docs/UI.md)
 - [Test Documentation](./docs/TEST.md)
+- [Changelog](./CHANGELOG.md)
 
 ## License
 
