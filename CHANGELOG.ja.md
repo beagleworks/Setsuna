@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-12-29
+
+### Changed
+
+- **フレームワークアップグレード** - Next.js 15 および React 19 にアップグレード
+  - Next.js 14.2.35 → 15.5.9
+  - React 18.3.1 → 19.x
+  - eslint-config-next 16.1.1 → 16.x（flat config対応）
+- 新しい技術スタックを反映するようドキュメントを更新
+
 ## [1.2.0] - 2025-12-28
 
 ### Added
@@ -132,16 +142,20 @@
 
 ## Version History
 
-| Version | Date       | Description                        |
-| ------- | ---------- | ---------------------------------- |
-| 1.1.3   | 2025-12-28 | フッター表示問題を修正             |
-| 1.1.2   | 2025-12-28 | プライバシーポリシー・利用規約追加 |
-| 1.1.1   | 2025-12-28 | XShareButton・シェアURL修正        |
-| 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善 |
-| 1.0.1   | 2025-12-28 | フッター追加                       |
-| 1.0.0   | 2025-12-28 | 初回正式リリース                   |
+| Version | Date       | Description                          |
+| ------- | ---------- | ------------------------------------ |
+| 1.3.0   | 2025-12-29 | Next.js 15 & React 19 アップグレード |
+| 1.2.0   | 2025-12-28 | 管理ダッシュボード                   |
+| 1.1.3   | 2025-12-28 | フッター表示問題を修正               |
+| 1.1.2   | 2025-12-28 | プライバシーポリシー・利用規約追加   |
+| 1.1.1   | 2025-12-28 | XShareButton・シェアURL修正          |
+| 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善   |
+| 1.0.1   | 2025-12-28 | フッター追加                         |
+| 1.0.0   | 2025-12-28 | 初回正式リリース                     |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/beagleworks/Setsuna/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
