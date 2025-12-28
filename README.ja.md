@@ -62,7 +62,7 @@
 
 | カテゴリ         | 技術                                |
 | ---------------- | ----------------------------------- |
-| フレームワーク   | Next.js 14 (App Router)             |
+| フレームワーク   | Next.js 15 (App Router), React 19   |
 | 言語             | TypeScript                          |
 | スタイリング     | Tailwind CSS                        |
 | データベース     | Turso (SQLite互換)                  |

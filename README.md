@@ -63,7 +63,7 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 
 | Category      | Technology                          |
 | ------------- | ----------------------------------- |
-| Framework     | Next.js 14 (App Router)             |
+| Framework     | Next.js 15 (App Router), React 19   |
 | Language      | TypeScript                          |
 | Styling       | Tailwind CSS                        |
 | Database      | Turso (SQLite compatible)           |
