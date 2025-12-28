@@ -7,99 +7,110 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2025-12-28
+
+### Added
+
+- **Privacy Policy page** - `/privacy` route with data collection, retention (24h auto-delete), and third-party service disclosure
+- **Terms of Service page** - `/terms` route with prohibited use, liability limitations, and data expiration warnings
+- **Legal page layout component** - Reusable `LegalPageLayout` for consistent legal page styling
+- **Footer legal links** - Added Privacy Policy and Terms of Service links to footer
+
 ## [1.1.1] - 2025-12-28
 
 ### Fixed
 
-- **XShareButton縦伸び問題** - `inline-flex`を追加してボタンがコンテンツサイズに収まるよう修正
-- **ルームシェアURL 404問題** - シェアURLにlocaleを含めるよう修正（`/room/CODE` → `/ja/room/CODE`）
+- **XShareButton vertical stretch issue** - Added `inline-flex` to ensure the button fits its content size
+- **Room share URL 404 issue** - Fixed share URL to include locale (`/room/CODE` → `/ja/room/CODE`)
 
 ## [1.1.0] - 2025-12-28
 
 ### Added
 
-- **APIレート制限** - スライディングウィンドウ方式で30リクエスト/分を制限
-  - IPベースの識別
-  - X-RateLimit-\* レスポンスヘッダー
-  - 429ステータスとRetry-Afterヘッダー
-- **トースト通知システム** - ブルータリストデザインの通知UI
-  - 成功/エラー/情報/警告の4種類
-  - メッセージ送信成功/失敗、コピー完了、接続状態変化の通知
-- **Xシェアボタン** - ルームURLをTwitter/Xで共有
-- **SSE再接続の指数バックオフ** - 1秒〜30秒のジッター付き遅延
-  - 最大10回の再試行
-  - 再接続中の進捗通知
-- **アクセシビリティ改善**
-  - aria-liveリージョンで新着メッセージをスクリーンリーダーに通知
-  - 接続インジケーターにrole="status"とaria-label追加
-  - メッセージリストにrole="log"追加
-- **クライアント側スロットリングフック** (`useThrottle`)
+- **API rate limiting** - Sliding window algorithm limiting 30 requests/minute
+  - IP-based identification
+  - X-RateLimit-\* response headers
+  - 429 status with Retry-After header
+- **Toast notification system** - Brutalist-design notification UI
+  - 4 types: success/error/info/warning
+  - Notifications for message send success/failure, copy completion, connection state changes
+- **X share button** - Share room URL to Twitter/X
+- **SSE reconnection exponential backoff** - 1-30 second delay with jitter
+  - Maximum 10 retry attempts
+  - Progress notification during reconnection
+- **Accessibility improvements**
+  - aria-live region to announce new messages to screen readers
+  - Added role="status" and aria-label to connection indicator
+  - Added role="log" to message list
+- **Client-side throttling hook** (`useThrottle`)
 
 ### Changed
 
-- **useSSE** - `onReconnecting`コールバックと`retryCount`を追加
+- **useSSE** - Added `onReconnecting` callback and `retryCount`
 
 ## [1.0.1] - 2025-12-28
 
 ### Added
 
-- **フッターコンポーネント** - コピーライト表示を全ページに追加
+- **Footer component** - Added copyright display to all pages
 
 ## [1.0.0] - 2025-12-28
 
 ### Added
 
-- **国際化（i18n）サポート** - next-intlによる英語/日本語対応
-  - 翻訳ファイル（`messages/en.json`, `messages/ja.json`）
-  - 言語切替コンポーネント（LanguageSwitcher）
-  - Accept-Languageによる自動リダイレクト
-  - URL構造: `/en`, `/ja`
-- **セキュリティ強化**
-  - セキュリティヘッダー（X-Frame-Options, X-Content-Type-Options, Referrer-Policy）
-  - SSEレート制限（ルームあたり最大100接続、超過時429エラー）
-  - セキュリティレビューレポート（`docs/SECURITY.md`）
-- **ダークブルータリストUI** - モダンでミニマルなダークテーマデザイン
-- **ホームページ改善** - アプリ機能の説明テキストを追加
-- **Lucide React アイコン** - UIアイコンライブラリの導入
+- **Internationalization (i18n) support** - English/Japanese via next-intl
+  - Translation files (`messages/en.json`, `messages/ja.json`)
+  - Language switcher component (LanguageSwitcher)
+  - Automatic redirect based on Accept-Language
+  - URL structure: `/en`, `/ja`
+- **Security enhancements**
+  - Security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
+  - SSE rate limiting (max 100 connections per room, 429 error on exceed)
+  - Security review report (`docs/SECURITY.md`)
+- **Dark brutalist UI** - Modern and minimal dark theme design
+- **Homepage improvements** - Added app feature description text
+- **Lucide React icons** - Introduced UI icon library
 
 ### Fixed
 
-- **SSE再接続ループ** - コールバック依存性によるパフォーマンス問題を解消
-- **glob脆弱性（CVE）** - eslint-config-nextを16.1.1に更新
-- **アクセシビリティ（a11y）**
-  - Input コンポーネントにARIA属性追加（aria-invalid, aria-describedby）
-  - エラーメッセージに`role="alert"`を追加
-  - WCAGコンプライアンスのための色コントラスト改善
-  - 動作軽減設定（reduced-motion）サポート
-- **API改善**
-  - `limit`パラメータのNaNハンドリング追加
-  - 無効/空のルームコードでのSSE接続を防止
-  - 送信エラーのUI表示と閉じるボタン追加
+- **SSE reconnection loop** - Resolved performance issue caused by callback dependencies
+- **glob vulnerability (CVE)** - Updated eslint-config-next to 16.1.1
+- **Accessibility (a11y)**
+  - Added ARIA attributes to Input component (aria-invalid, aria-describedby)
+  - Added `role="alert"` to error messages
+  - Improved color contrast for WCAG compliance
+  - Added reduced-motion support
+- **API improvements**
+  - Added NaN handling for `limit` parameter
+  - Prevented SSE connections with invalid/empty room codes
+  - Added UI display for send errors with close button
 
 ### Changed
 
-- **ESLint設定** - フラット設定形式（eslint.config.mjs）に移行
-- **Vercelデプロイ設定** - prisma generateをビルドスクリプトに追加
-- **cronスケジュール** - Hobbyプラン制限に対応し日次実行に変更
+- **ESLint configuration** - Migrated to flat config format (eslint.config.mjs)
+- **Vercel deployment settings** - Added prisma generate to build script
+- **Cron schedule** - Changed to daily execution for Hobby plan limitations
 
 ### Security
 
-- glob パッケージの脆弱性を修正（eslint-config-next更新）
-- SSE接続のレート制限を実装
-- セキュリティヘッダーを追加
+- Fixed glob package vulnerability (eslint-config-next update)
+- Implemented SSE connection rate limiting
+- Added security headers
 
 ---
 
 ## Version History
 
-| Version | Date       | Description                        |
-| ------- | ---------- | ---------------------------------- |
-| 1.1.1   | 2025-12-28 | XShareButton・シェアURL修正        |
-| 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善 |
-| 1.0.1   | 2025-12-28 | フッター追加                       |
-| 1.0.0   | 2025-12-28 | 初回正式リリース                   |
+| Version | Date       | Description                                           |
+| ------- | ---------- | ----------------------------------------------------- |
+| 1.1.2   | 2025-12-28 | Privacy Policy & Terms of Service pages               |
+| 1.1.1   | 2025-12-28 | XShareButton & share URL fixes                        |
+| 1.1.0   | 2025-12-28 | Rate limiting, toast notifications, a11y improvements |
+| 1.0.1   | 2025-12-28 | Footer addition                                       |
+| 1.0.0   | 2025-12-28 | Initial official release                              |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/beagleworks/Setsuna/compare/v1.0.0...v1.0.1

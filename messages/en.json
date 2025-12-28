@@ -97,5 +97,97 @@
   "metadata": {
     "title": "Setsuna - Real-time Text Sharing",
     "description": "Share text across devices in real-time with a simple 6-character room code. Rooms auto-delete after 24 hours."
+  },
+  "footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated: {date}",
+    "sections": {
+      "overview": {
+        "title": "Overview",
+        "content": "Setsuna is a real-time text sharing application. We are committed to protecting your privacy and handling your data responsibly."
+      },
+      "dataCollection": {
+        "title": "Data We Collect",
+        "content": "We collect minimal data necessary for the service:",
+        "items": [
+          "Room codes (randomly generated)",
+          "Text messages you share within rooms",
+          "Timestamps of message creation"
+        ]
+      },
+      "dataRetention": {
+        "title": "Data Retention",
+        "content": "All data is automatically deleted after 24 hours. Rooms and their messages are permanently removed from our servers after this period. We do not retain any backup copies of deleted data."
+      },
+      "noPersonalData": {
+        "title": "No Personal Data Required",
+        "content": "Setsuna does not require:",
+        "items": [
+          "User registration or accounts",
+          "Email addresses",
+          "Names or personal identifiers",
+          "Cookies for tracking"
+        ]
+      },
+      "thirdParty": {
+        "title": "Third-Party Services",
+        "content": "We use the following third-party services:",
+        "items": ["Vercel (hosting)", "Turso (database)"]
+      },
+      "contact": {
+        "title": "Contact",
+        "content": "For privacy-related inquiries, please contact us through our GitHub repository."
+      }
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated: {date}",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "content": "By using Setsuna, you agree to these Terms of Service. If you do not agree, please do not use the service."
+      },
+      "serviceDescription": {
+        "title": "Service Description",
+        "content": "Setsuna provides real-time text sharing between devices using 6-character room codes. All rooms and messages are automatically deleted after 24 hours."
+      },
+      "prohibitedUse": {
+        "title": "Prohibited Use",
+        "content": "You agree not to use Setsuna for:",
+        "items": [
+          "Sharing illegal content or engaging in illegal activities",
+          "Harassment, abuse, or threatening behavior",
+          "Distributing malware, viruses, or harmful code",
+          "Infringing on intellectual property rights",
+          "Any activity that violates applicable laws or regulations"
+        ]
+      },
+      "noGuarantee": {
+        "title": "No Guarantee",
+        "content": "Setsuna is provided \"as is\" without warranties of any kind. We do not guarantee:",
+        "items": [
+          "Continuous, uninterrupted service",
+          "Data delivery or persistence",
+          "Security of transmitted content"
+        ]
+      },
+      "dataExpiration": {
+        "title": "Data Expiration",
+        "content": "All rooms and messages are automatically deleted after 24 hours. This is a core feature of the service and cannot be changed. Do not use Setsuna for storing important data."
+      },
+      "limitation": {
+        "title": "Limitation of Liability",
+        "content": "We are not liable for any damages arising from the use of this service, including but not limited to data loss, service interruption, or unauthorized access to your content."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "content": "We may update these terms at any time. Continued use of the service after changes constitutes acceptance of the new terms."
+      }
+    }
   }
 }

@@ -9,3 +9,4 @@ export { MessageList } from './MessageList';
 export { RoomHeader } from './RoomHeader';
 export { LanguageSwitcher } from './LanguageSwitcher';
 export { XShareButton } from './XShareButton';
+export { LegalPageLayout } from './LegalPageLayout';
