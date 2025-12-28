@@ -101,7 +101,7 @@ export function getAuthCookieOptions(maxAge: number = ADMIN_SESSION_EXPIRY_HOURS
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict' as const,
     maxAge,
-    path: '/admin',
+    path: '/',
   };
 }
 

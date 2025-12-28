@@ -28,7 +28,9 @@ function AdminRoomsContent() {
         ...(status !== 'all' && { status }),
       });
 
-      const response = await fetch(`/api/admin/rooms?${params}`);
+      const response = await fetch(`/api/admin/rooms?${params}`, {
+        credentials: 'include',
+      });
       const data = await response.json();
 
       if (response.status === 401) {
@@ -70,6 +72,7 @@ function AdminRoomsContent() {
     try {
       const response = await fetch(`/api/admin/rooms/${code}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       const data = await response.json();
 

@@ -19,7 +19,9 @@ export default function AdminRoomDetailPage({ params }: PageProps) {
   useEffect(() => {
     const fetchRoom = async () => {
       try {
-        const response = await fetch(`/api/admin/rooms/${code}`);
+        const response = await fetch(`/api/admin/rooms/${code}`, {
+          credentials: 'include',
+        });
         const data = await response.json();
 
         if (response.status === 401) {
@@ -50,6 +52,7 @@ export default function AdminRoomDetailPage({ params }: PageProps) {
     try {
       const response = await fetch(`/api/admin/rooms/${code}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       const data = await response.json();
 

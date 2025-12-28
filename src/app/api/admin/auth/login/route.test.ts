@@ -88,7 +88,7 @@ describe('POST /api/admin/auth/login', () => {
     expect(setCookie).toBeDefined();
     expect(setCookie).toContain('admin_token=');
     expect(setCookie).toContain('HttpOnly');
-    expect(setCookie).toContain('Path=/admin');
+    expect(setCookie).toContain('Path=/');
   });
 
   it('不正なJSONで400を返す', async () => {

@@ -15,7 +15,9 @@ export default function AdminDashboardPage() {
 
   const fetchStats = useCallback(async () => {
     try {
-      const response = await fetch('/api/admin/stats');
+      const response = await fetch('/api/admin/stats', {
+        credentials: 'include',
+      });
       const data = await response.json();
 
       if (response.status === 401) {
@@ -50,6 +52,7 @@ export default function AdminDashboardPage() {
     try {
       const response = await fetch('/api/admin/cleanup', {
         method: 'POST',
+        credentials: 'include',
       });
       const data = await response.json();
 

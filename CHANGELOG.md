@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.2] - 2025-12-29
+
+### Fixed
+
+- **Admin login redirect loop** - Fixed issue where successful login still redirected to login page
+  - Changed Cookie path from `/admin` to `/` so cookies are sent to `/api/admin/*` endpoints
+  - Added `credentials: 'include'` to all admin fetch calls for proper cookie handling
+
+### Changed
+
+- Cookie path for admin authentication changed from `/admin` to `/`
+
 ## [1.3.1] - 2025-12-29
 
 ### Fixed

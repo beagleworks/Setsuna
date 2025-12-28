@@ -7,6 +7,18 @@
 
 ## [Unreleased]
 
+## [1.3.2] - 2025-12-29
+
+### Fixed
+
+- **管理画面ログイン後リダイレクトループ** - ログイン成功後もログイン画面にリダイレクトされる問題を修正
+  - Cookie の Path を `/admin` から `/` に変更し、`/api/admin/*` エンドポイントにも Cookie が送信されるように修正
+  - すべての管理画面の fetch 呼び出しに `credentials: 'include'` を追加
+
+### Changed
+
+- 管理者認証の Cookie Path を `/admin` から `/` に変更
+
 ## [1.3.1] - 2025-12-29
 
 ### Fixed
