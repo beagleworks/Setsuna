@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.3] - 2025-12-29
+
+### Fixed
+
+- **Admin logout not working** - Fixed issue where logout didn't clear the authentication cookie
+  - Cookie deletion used `Path=/admin` but login set cookie with `Path=/`
+  - Updated logout endpoint to use `getAuthCookieOptions()` for consistent cookie path
+
 ## [1.3.2] - 2025-12-29
 
 ### Fixed
@@ -173,6 +181,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                                           |
 | ------- | ---------- | ----------------------------------------------------- |
+| 1.3.3   | 2025-12-29 | Fix admin logout not clearing cookie                  |
+| 1.3.2   | 2025-12-29 | Fix admin login redirect loop                         |
+| 1.3.1   | 2025-12-29 | Fix admin login 400 error, add env var docs           |
 | 1.3.0   | 2025-12-29 | Next.js 15 & React 19 upgrade                         |
 | 1.2.0   | 2025-12-28 | Admin dashboard                                       |
 | 1.1.3   | 2025-12-28 | Fix footer visibility issue                           |
@@ -182,7 +193,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 1.0.1   | 2025-12-28 | Footer addition                                       |
 | 1.0.0   | 2025-12-28 | Initial official release                              |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.3...HEAD
+[1.3.3]: https://github.com/beagleworks/Setsuna/compare/v1.3.2...v1.3.3
+[1.3.2]: https://github.com/beagleworks/Setsuna/compare/v1.3.1...v1.3.2
+[1.3.1]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/beagleworks/Setsuna/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...v1.1.3

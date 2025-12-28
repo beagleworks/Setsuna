@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAuthCookieName } from '@/lib/admin-auth';
+import { getAuthCookieName, getAuthCookieOptions } from '@/lib/admin-auth';
 import type { AdminLogoutResponse } from '@/types/admin';
 
 /**
@@ -15,12 +15,13 @@ export async function POST(): Promise<NextResponse<AdminLogoutResponse>> {
   });
 
   // Cookie削除（Max-Age=0で即座に期限切れ）
+  const cookieOptions = getAuthCookieOptions(0);
   const cookieValue = [
     `${getAuthCookieName()}=`,
     'Max-Age=0',
-    'Path=/admin',
+    `Path=${cookieOptions.path}`,
     'HttpOnly',
-    'SameSite=Strict',
+    `SameSite=${cookieOptions.sameSite}`,
   ].join('; ');
 
   response.headers.set('Set-Cookie', cookieValue);
