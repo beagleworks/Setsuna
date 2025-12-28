@@ -18,7 +18,7 @@ export default function Home() {
   const baseUrl = useBaseUrl();
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 bg-black relative">
+    <main className="flex-1 flex flex-col items-center justify-center p-4 md:p-8 bg-black relative">
       {/* Language Switcher */}
       <div className="absolute top-4 right-4">
         <LanguageSwitcher />

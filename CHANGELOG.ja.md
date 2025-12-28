@@ -7,6 +7,12 @@
 
 ## [Unreleased]
 
+## [1.1.3] - 2025-12-28
+
+### Fixed
+
+- **フッター表示問題** - フッターがデフォルトで隠れておりスクロールしないと見えなかった問題を修正。ホームページのmain要素で`min-h-screen`を`flex-1`に変更
+
 ## [1.1.2] - 2025-12-28
 
 ### Added
@@ -103,13 +109,15 @@
 
 | Version | Date       | Description                        |
 | ------- | ---------- | ---------------------------------- |
+| 1.1.3   | 2025-12-28 | フッター表示問題を修正             |
 | 1.1.2   | 2025-12-28 | プライバシーポリシー・利用規約追加 |
 | 1.1.1   | 2025-12-28 | XShareButton・シェアURL修正        |
 | 1.1.0   | 2025-12-28 | レート制限、トースト通知、a11y改善 |
 | 1.0.1   | 2025-12-28 | フッター追加                       |
 | 1.0.0   | 2025-12-28 | 初回正式リリース                   |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...v1.1.0

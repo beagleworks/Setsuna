@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2025-12-28
+
+### Fixed
+
+- **Footer visibility issue** - Footer was hidden by default and required scrolling to view; fixed by replacing `min-h-screen` with `flex-1` on homepage main element
+
 ## [1.1.2] - 2025-12-28
 
 ### Added
@@ -103,13 +109,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                                           |
 | ------- | ---------- | ----------------------------------------------------- |
+| 1.1.3   | 2025-12-28 | Fix footer visibility issue                           |
 | 1.1.2   | 2025-12-28 | Privacy Policy & Terms of Service pages               |
 | 1.1.1   | 2025-12-28 | XShareButton & share URL fixes                        |
 | 1.1.0   | 2025-12-28 | Rate limiting, toast notifications, a11y improvements |
 | 1.0.1   | 2025-12-28 | Footer addition                                       |
 | 1.0.0   | 2025-12-28 | Initial official release                              |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/beagleworks/Setsuna/compare/v1.0.1...v1.1.0
