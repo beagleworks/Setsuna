@@ -14,13 +14,17 @@ Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS 
 
 ## 環境変数
 
-| 変数名               | 説明                           | 必須   |
-| -------------------- | ------------------------------ | ------ |
-| `DATABASE_URL`       | ローカルDB（`file:./dev.db`）  | 開発時 |
-| `TURSO_DATABASE_URL` | Turso DB URL                   | 本番   |
-| `TURSO_AUTH_TOKEN`   | Turso認証トークン              | 本番   |
-| `CRON_SECRET`        | Cronジョブ認証                 | 本番   |
-| `ADMIN_PASSWORD`     | 管理ダッシュボードのパスワード | 任意   |
+| 変数名               | 説明                           | 必須           |
+| -------------------- | ------------------------------ | -------------- |
+| `DATABASE_URL`       | ローカルDB（`file:./dev.db`）  | 開発時         |
+| `TURSO_DATABASE_URL` | Turso DB URL                   | 本番           |
+| `TURSO_AUTH_TOKEN`   | Turso認証トークン              | 本番           |
+| `CRON_SECRET`        | Cronジョブ認証                 | 本番           |
+| `ADMIN_PASSWORD`     | 管理ダッシュボードのパスワード | 任意           |
+| `ADMIN_JWT_SECRET`   | JWT署名用シークレット          | 管理機能使用時 |
+
+> **注意**: `/admin` を使用する場合、`ADMIN_PASSWORD` と `ADMIN_JWT_SECRET` の両方が必要。
+> シークレット生成: `openssl rand -base64 32`
 
 ## i18n（国際化）
 

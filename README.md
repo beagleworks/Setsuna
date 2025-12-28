@@ -107,21 +107,47 @@ Copy `.env.example` to create `.env`:
 cp .env.example .env
 ```
 
-Development configuration:
+#### Required Variables
+
+| Variable             | Description                        | Required                |
+| -------------------- | ---------------------------------- | ----------------------- |
+| `DATABASE_URL`       | Local SQLite database path         | Development             |
+| `TURSO_DATABASE_URL` | Turso database URL                 | Production              |
+| `TURSO_AUTH_TOKEN`   | Turso authentication token         | Production              |
+| `CRON_SECRET`        | Secret for cron job authentication | Production              |
+| `ADMIN_PASSWORD`     | Admin dashboard login password     | Optional                |
+| `ADMIN_JWT_SECRET`   | Secret key for JWT token signing   | Required if using admin |
+
+#### Development Configuration
 
 ```env
 # Local development
 DATABASE_URL="file:./dev.db"
+
+# Admin dashboard (optional)
+ADMIN_PASSWORD="your-password"
+ADMIN_JWT_SECRET="your-jwt-secret"
 ```
 
-Production configuration (Turso):
+To generate a secure JWT secret:
+
+```bash
+openssl rand -base64 32
+```
+
+#### Production Configuration (Turso)
 
 ```env
 TURSO_DATABASE_URL="libsql://your-db.turso.io"
 TURSO_AUTH_TOKEN="your-token"
 CRON_SECRET="your-secret"
+
+# Admin dashboard
 ADMIN_PASSWORD="your-secure-password"
+ADMIN_JWT_SECRET="your-secure-jwt-secret"
 ```
+
+> **Note**: If you want to use the admin dashboard (`/admin`), both `ADMIN_PASSWORD` and `ADMIN_JWT_SECRET` must be set.
 
 ### Start Development Server
 

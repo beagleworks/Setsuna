@@ -27,9 +27,15 @@ export function validatePassword(password: string): boolean {
 
 /**
  * JWTトークンを生成する
+ * @throws {Error} ADMIN_JWT_SECRET が未設定の場合
  */
 export async function generateToken(): Promise<string> {
-  const secret = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET);
+  const secretKey = process.env.ADMIN_JWT_SECRET;
+  if (!secretKey) {
+    throw new Error('ADMIN_JWT_SECRET is not configured');
+  }
+
+  const secret = new TextEncoder().encode(secretKey);
 
   const token = await new SignJWT({ role: 'admin' as const })
     .setProtectedHeader({ alg: 'HS256' })

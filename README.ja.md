@@ -15,6 +15,7 @@
 - **レスポンシブ**: スマホでもPCでも快適に使用可能
 - **ダーク × ブルータリスト**: モノスペースフォント、太いボーダー、ネオンアクセント
 - **国際化対応**: 英語・日本語に対応
+- **管理ダッシュボード**: パスワード保護された管理画面でルーム監視・削除が可能
 
 ## デモ
 
@@ -106,20 +107,47 @@ npx prisma migrate dev
 cp .env.example .env
 ```
 
-開発環境用の設定：
+#### 必要な環境変数
+
+| 変数名               | 説明                                   | 必須           |
+| -------------------- | -------------------------------------- | -------------- |
+| `DATABASE_URL`       | ローカルSQLiteデータベースのパス       | 開発時         |
+| `TURSO_DATABASE_URL` | TursoデータベースのURL                 | 本番           |
+| `TURSO_AUTH_TOKEN`   | Turso認証トークン                      | 本番           |
+| `CRON_SECRET`        | Cronジョブ認証用シークレット           | 本番           |
+| `ADMIN_PASSWORD`     | 管理ダッシュボードのログインパスワード | 任意           |
+| `ADMIN_JWT_SECRET`   | JWTトークン署名用のシークレットキー    | 管理機能使用時 |
+
+#### 開発環境用の設定
 
 ```env
 # ローカル開発用
 DATABASE_URL="file:./dev.db"
+
+# 管理ダッシュボード（任意）
+ADMIN_PASSWORD="your-password"
+ADMIN_JWT_SECRET="your-jwt-secret"
 ```
 
-本番環境用の設定（Turso）：
+安全なJWTシークレットを生成するには：
+
+```bash
+openssl rand -base64 32
+```
+
+#### 本番環境用の設定（Turso）
 
 ```env
 TURSO_DATABASE_URL="libsql://your-db.turso.io"
 TURSO_AUTH_TOKEN="your-token"
 CRON_SECRET="your-secret"
+
+# 管理ダッシュボード
+ADMIN_PASSWORD="your-secure-password"
+ADMIN_JWT_SECRET="your-secure-jwt-secret"
 ```
+
+> **注意**: 管理ダッシュボード（`/admin`）を使用する場合、`ADMIN_PASSWORD` と `ADMIN_JWT_SECRET` の両方を設定する必要があります。
 
 ### 開発サーバーの起動
 
@@ -215,14 +243,18 @@ Setsuna/
 
 ## API
 
-| エンドポイント               | メソッド | 説明               |
-| ---------------------------- | -------- | ------------------ |
-| `/api/rooms`                 | POST     | ルーム作成         |
-| `/api/rooms/[code]`          | GET      | ルーム情報取得     |
-| `/api/rooms/[code]/messages` | GET      | メッセージ一覧取得 |
-| `/api/rooms/[code]/messages` | POST     | メッセージ送信     |
-| `/api/sse/[code]`            | GET      | SSE接続            |
-| `/api/cleanup`               | POST     | 期限切れルーム削除 |
+| エンドポイント               | メソッド | 説明                 |
+| ---------------------------- | -------- | -------------------- |
+| `/api/rooms`                 | POST     | ルーム作成           |
+| `/api/rooms/[code]`          | GET      | ルーム情報取得       |
+| `/api/rooms/[code]/messages` | GET      | メッセージ一覧取得   |
+| `/api/rooms/[code]/messages` | POST     | メッセージ送信       |
+| `/api/sse/[code]`            | GET      | SSE接続              |
+| `/api/cleanup`               | POST     | 期限切れルーム削除   |
+| `/api/admin/auth/login`      | POST     | 管理者ログイン       |
+| `/api/admin/stats`           | GET      | 統計情報取得         |
+| `/api/admin/rooms`           | GET      | ルーム一覧（管理用） |
+| `/api/admin/rooms/[code]`    | DELETE   | ルーム削除           |
 
 詳細は [API仕様書](./docs/API.md) を参照してください。
 

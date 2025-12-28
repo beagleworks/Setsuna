@@ -73,7 +73,21 @@ export async function POST(request: Request): Promise<NextResponse<AdminLoginRes
     response.headers.set('Set-Cookie', cookieValue);
 
     return response;
-  } catch {
+  } catch (error) {
+    // 設定エラー（ADMIN_JWT_SECRET未設定など）
+    if (error instanceof Error && error.message.includes('not configured')) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'INTERNAL_ERROR',
+            message: 'Server configuration error',
+          },
+        },
+        { status: 500 }
+      );
+    }
+
     // JSONパースエラーなど
     return NextResponse.json(
       {

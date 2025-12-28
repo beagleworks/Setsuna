@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2025-12-29
+
+### Fixed
+
+- **Admin login authentication bug** - Fixed issue where correct password returned 400 error instead of 200
+  - Root cause: `ADMIN_JWT_SECRET` environment variable was not documented and often missing
+  - Added proper error handling in `generateToken()` to throw explicit error when secret is not configured
+  - Server configuration errors now return 500 instead of 400
+
+### Added
+
+- **Environment variable documentation** - Added `ADMIN_JWT_SECRET` to all documentation
+  - Updated `.env.example` with the new variable
+  - Added environment variable setup guide to `docs/SPEC.md`
+  - Updated `README.md`, `README.ja.md`, and `CLAUDE.md` with configuration instructions
+  - Added command for generating secure secrets: `openssl rand -base64 32`
+
 ## [1.3.0] - 2025-12-29
 
 ### Changed

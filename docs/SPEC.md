@@ -10,7 +10,7 @@
 | 項目               | 内容    |
 | ------------------ | ------- |
 | アプリケーション名 | Setsuna |
-| バージョン         | 1.3.0   |
+| バージョン         | 1.3.1   |
 | ライセンス         | MIT     |
 
 ## 技術スタック
@@ -101,8 +101,9 @@ Red → Green → Refactor
 #### 5.1 認証
 
 - 管理者は環境変数（`ADMIN_PASSWORD`）で設定したパスワードでログイン
-- JWTトークンをHttpOnly Cookieで管理（24時間有効）
+- JWTトークン（`ADMIN_JWT_SECRET`で署名）をHttpOnly Cookieで管理（24時間有効）
 - 未認証の`/admin`アクセスはログインページへリダイレクト
+- **重要**: `ADMIN_PASSWORD` と `ADMIN_JWT_SECRET` の両方を設定しないと認証が動作しない
 
 #### 5.2 統計ダッシュボード
 
@@ -154,6 +155,71 @@ Red → Green → Refactor
 | ------------------- | ---------------------------------------------------------------------- |
 | SSEブロードキャスト | インメモリ管理のため、単一インスタンス前提での運用                     |
 | スケールアウト      | 複数インスタンス間でのSSE通知は非対応（将来的にRedis Pub/Sub導入検討） |
+
+## 環境変数
+
+### 必須環境変数
+
+| 変数名               | 説明                                   | 必須           | 例                                 |
+| -------------------- | -------------------------------------- | -------------- | ---------------------------------- |
+| `DATABASE_URL`       | ローカルSQLiteデータベースのパス       | 開発時         | `file:./dev.db`                    |
+| `TURSO_DATABASE_URL` | TursoデータベースのURL                 | 本番           | `libsql://your-db.turso.io`        |
+| `TURSO_AUTH_TOKEN`   | Turso認証トークン                      | 本番           | (Tursoから取得)                    |
+| `CRON_SECRET`        | Cronジョブ認証用シークレット           | 本番           | (ランダム文字列)                   |
+| `ADMIN_PASSWORD`     | 管理ダッシュボードのログインパスワード | 任意           | (任意のパスワード)                 |
+| `ADMIN_JWT_SECRET`   | JWTトークン署名用のシークレットキー    | 管理機能使用時 | (ランダム文字列、32バイト以上推奨) |
+
+### 環境変数の設定方法
+
+#### 1. `.env` ファイルの作成
+
+```bash
+cp .env.example .env
+```
+
+#### 2. 開発環境の設定
+
+```env
+# データベース
+DATABASE_URL="file:./dev.db"
+
+# 管理ダッシュボード（任意）
+ADMIN_PASSWORD="your-password"
+ADMIN_JWT_SECRET="your-jwt-secret"
+```
+
+#### 3. 本番環境の設定
+
+```env
+# データベース（Turso）
+TURSO_DATABASE_URL="libsql://your-db.turso.io"
+TURSO_AUTH_TOKEN="your-token"
+
+# Cronジョブ認証
+CRON_SECRET="your-cron-secret"
+
+# 管理ダッシュボード
+ADMIN_PASSWORD="your-secure-password"
+ADMIN_JWT_SECRET="your-secure-jwt-secret"
+```
+
+#### 4. シークレットキーの生成
+
+安全なシークレットキーを生成するには、以下のコマンドを使用：
+
+```bash
+# ADMIN_JWT_SECRET用
+openssl rand -base64 32
+
+# CRON_SECRET用
+openssl rand -hex 32
+```
+
+### 注意事項
+
+- **管理ダッシュボード**: `ADMIN_PASSWORD` と `ADMIN_JWT_SECRET` の両方を設定しないと、管理画面へのログインが失敗します（500エラー）
+- **本番環境**: シークレットキーは十分な長さ（32バイト以上）のランダム文字列を使用してください
+- **Vercel**: Vercelの環境変数設定画面から設定してください
 
 ## ユーザーフロー
 
