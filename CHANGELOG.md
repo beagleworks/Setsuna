@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-12-29
+
+### Changed
+
+- **Framework upgrade** - Upgraded to Next.js 15 and React 19
+  - Next.js 14.2.35 → 15.5.9
+  - React 18.3.1 → 19.x
+  - eslint-config-next 16.1.1 → 16.x (flat config compatible)
+- Updated documentation to reflect new tech stack
+
 ## [1.2.0] - 2025-12-28
 
 ### Added
@@ -134,6 +144,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                                           |
 | ------- | ---------- | ----------------------------------------------------- |
+| 1.3.0   | 2025-12-29 | Next.js 15 & React 19 upgrade                         |
+| 1.2.0   | 2025-12-28 | Admin dashboard                                       |
 | 1.1.3   | 2025-12-28 | Fix footer visibility issue                           |
 | 1.1.2   | 2025-12-28 | Privacy Policy & Terms of Service pages               |
 | 1.1.1   | 2025-12-28 | XShareButton & share URL fixes                        |
@@ -141,7 +153,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 1.0.1   | 2025-12-28 | Footer addition                                       |
 | 1.0.0   | 2025-12-28 | Initial official release                              |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/beagleworks/Setsuna/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/beagleworks/Setsuna/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/beagleworks/Setsuna/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/beagleworks/Setsuna/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/beagleworks/Setsuna/compare/v1.1.0...v1.1.1
