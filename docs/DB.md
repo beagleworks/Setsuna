@@ -358,11 +358,12 @@ turso db shell setsuna < migration.sql
 
 ## 環境変数
 
-| 変数名               | 開発環境        | 本番環境                |
-| -------------------- | --------------- | ----------------------- |
-| `DATABASE_URL`       | `file:./dev.db` | -                       |
-| `TURSO_DATABASE_URL` | -               | `libsql://xxx.turso.io` |
-| `TURSO_AUTH_TOKEN`   | -               | `eyJhbGciOi...`         |
+DB関連の環境変数設定は [SPEC.md#環境変数](./SPEC.md#環境変数) を参照。
+
+**要約:**
+
+- **開発:** `DATABASE_URL=file:./dev.db`
+- **本番:** `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`
 
 ---
 

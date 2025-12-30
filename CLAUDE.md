@@ -14,17 +14,13 @@ Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS 
 
 ## 環境変数
 
-| 変数名               | 説明                           | 必須           |
-| -------------------- | ------------------------------ | -------------- |
-| `DATABASE_URL`       | ローカルDB（`file:./dev.db`）  | 開発時         |
-| `TURSO_DATABASE_URL` | Turso DB URL                   | 本番           |
-| `TURSO_AUTH_TOKEN`   | Turso認証トークン              | 本番           |
-| `CRON_SECRET`        | Cronジョブ認証                 | 本番           |
-| `ADMIN_PASSWORD`     | 管理ダッシュボードのパスワード | 任意           |
-| `ADMIN_JWT_SECRET`   | JWT署名用シークレット          | 管理機能使用時 |
+詳細は [docs/SPEC.md#環境変数](./docs/SPEC.md#環境変数) を参照。
 
-> **注意**: `/admin` を使用する場合、`ADMIN_PASSWORD` と `ADMIN_JWT_SECRET` の両方が必要。
-> シークレット生成: `openssl rand -base64 32`
+**主要な変数:**
+
+- `DATABASE_URL` / `TURSO_DATABASE_URL` + `TURSO_AUTH_TOKEN`: データベース接続
+- `ADMIN_PASSWORD` + `ADMIN_JWT_SECRET`: 管理機能（**両方必須**）
+- `CRON_SECRET`: 自動クリーンアップ認証（本番）
 
 ## i18n（国際化）
 
@@ -35,14 +31,12 @@ Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS 
 
 ## TDD（テスト駆動開発）
 
-```
-Red → Green → Refactor
-```
+詳細は [docs/TEST.md#テスト戦略](./docs/TEST.md#テスト戦略) を参照。
 
-| 対象                       | アプローチ            |
-| -------------------------- | --------------------- |
-| `src/lib/`, `src/app/api/` | **TDD（テスト先行）** |
-| `src/components/`, E2E     | 後付けテスト          |
+**基本サイクル:** `Red → Green → Refactor`
+
+**TDD対象:** `src/lib/`, `src/app/api/`（ロジック・API）
+**後付け:** `src/components/`, E2E（UI・結合）
 
 ## Commands
 
