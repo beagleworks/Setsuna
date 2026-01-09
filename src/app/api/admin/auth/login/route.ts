@@ -1,10 +1,5 @@
 import { NextResponse } from 'next/server';
-import {
-  validatePassword,
-  generateToken,
-  getAuthCookieOptions,
-  getAuthCookieName,
-} from '@/lib/admin-auth';
+import { validatePassword, generateToken, buildAuthCookieValue } from '@/lib/admin-auth';
 import type { AdminLoginResponse } from '@/types/admin';
 import { ADMIN_SESSION_EXPIRY_HOURS } from '@/types/admin';
 
@@ -49,28 +44,14 @@ export async function POST(request: Request): Promise<NextResponse<AdminLoginRes
     const token = await generateToken();
     const expiresAt = new Date(Date.now() + ADMIN_SESSION_EXPIRY_HOURS * 60 * 60 * 1000);
 
-    // レスポンス作成
+    // レスポンス作成とCookie設定
     const response = NextResponse.json({
       success: true,
       data: {
         expiresAt: expiresAt.toISOString(),
       },
     });
-
-    // Cookie設定
-    const cookieOptions = getAuthCookieOptions();
-    const cookieValue = [
-      `${getAuthCookieName()}=${token}`,
-      `Max-Age=${cookieOptions.maxAge}`,
-      `Path=${cookieOptions.path}`,
-      cookieOptions.httpOnly ? 'HttpOnly' : '',
-      cookieOptions.secure ? 'Secure' : '',
-      `SameSite=${cookieOptions.sameSite}`,
-    ]
-      .filter(Boolean)
-      .join('; ');
-
-    response.headers.set('Set-Cookie', cookieValue);
+    response.headers.set('Set-Cookie', buildAuthCookieValue(token));
 
     return response;
   } catch (error) {

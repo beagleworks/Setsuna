@@ -7,6 +7,16 @@
 
 ## [Unreleased]
 
+## [1.3.4] - 2026-01-09
+
+### Changed
+
+- **管理認証Cookie処理のリファクタリング** - Cookie生成ロジックを共通ヘルパー関数に抽出
+  - `buildAuthCookieValue(token)` を追加（認証Cookie設定用）
+  - `buildClearAuthCookieValue()` を追加（認証Cookie削除用）
+  - ログイン/ログアウトエンドポイントの重複コードを削減
+  - Cookieロジックを `src/lib/admin-auth.ts` に集約
+
 ## [1.3.3] - 2025-12-29
 
 ### Fixed
@@ -181,6 +191,7 @@
 
 | Version | Date       | Description                          |
 | ------- | ---------- | ------------------------------------ |
+| 1.3.4   | 2026-01-09 | 管理認証Cookie処理リファクタリング   |
 | 1.3.3   | 2025-12-29 | 管理画面ログアウト修正               |
 | 1.3.2   | 2025-12-29 | 管理画面ログインリダイレクト修正     |
 | 1.3.1   | 2025-12-29 | 管理画面ログイン400エラー修正        |
@@ -193,7 +204,8 @@
 | 1.0.1   | 2025-12-28 | フッター追加                         |
 | 1.0.0   | 2025-12-28 | 初回正式リリース                     |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.3...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.4...HEAD
+[1.3.4]: https://github.com/beagleworks/Setsuna/compare/v1.3.3...v1.3.4
 [1.3.3]: https://github.com/beagleworks/Setsuna/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/beagleworks/Setsuna/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...v1.3.1

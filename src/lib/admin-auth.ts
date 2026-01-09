@@ -113,6 +113,37 @@ export function getAuthCookieName(): string {
 }
 
 /**
+ * 認証Cookieを設定するためのSet-Cookie値を生成する
+ */
+export function buildAuthCookieValue(token: string): string {
+  const options = getAuthCookieOptions();
+  return [
+    `${COOKIE_NAME}=${token}`,
+    `Max-Age=${options.maxAge}`,
+    `Path=${options.path}`,
+    options.httpOnly ? 'HttpOnly' : '',
+    options.secure ? 'Secure' : '',
+    `SameSite=${options.sameSite}`,
+  ]
+    .filter(Boolean)
+    .join('; ');
+}
+
+/**
+ * 認証Cookieを削除するためのSet-Cookie値を生成する
+ */
+export function buildClearAuthCookieValue(): string {
+  const options = getAuthCookieOptions(0);
+  return [
+    `${COOKIE_NAME}=`,
+    'Max-Age=0',
+    `Path=${options.path}`,
+    'HttpOnly',
+    `SameSite=${options.sameSite}`,
+  ].join('; ');
+}
+
+/**
  * リクエストから認証状態を確認する
  */
 export async function verifyAdminAuth(request: Request): Promise<boolean> {

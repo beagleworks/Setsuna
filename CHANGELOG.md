@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.4] - 2026-01-09
+
+### Changed
+
+- **Refactor admin auth cookie handling** - Extracted cookie generation logic into shared helper functions
+  - Added `buildAuthCookieValue(token)` for setting auth cookies
+  - Added `buildClearAuthCookieValue()` for clearing auth cookies
+  - Reduced code duplication in login/logout endpoints
+  - Cookie logic now centralized in `src/lib/admin-auth.ts`
+
 ## [1.3.3] - 2025-12-29
 
 ### Fixed
@@ -181,6 +191,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                                           |
 | ------- | ---------- | ----------------------------------------------------- |
+| 1.3.4   | 2026-01-09 | Refactor admin auth cookie handling                   |
 | 1.3.3   | 2025-12-29 | Fix admin logout not clearing cookie                  |
 | 1.3.2   | 2025-12-29 | Fix admin login redirect loop                         |
 | 1.3.1   | 2025-12-29 | Fix admin login 400 error, add env var docs           |
@@ -193,7 +204,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 1.0.1   | 2025-12-28 | Footer addition                                       |
 | 1.0.0   | 2025-12-28 | Initial official release                              |
 
-[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.3...HEAD
+[Unreleased]: https://github.com/beagleworks/Setsuna/compare/v1.3.4...HEAD
+[1.3.4]: https://github.com/beagleworks/Setsuna/compare/v1.3.3...v1.3.4
 [1.3.3]: https://github.com/beagleworks/Setsuna/compare/v1.3.2...v1.3.3
 [1.3.2]: https://github.com/beagleworks/Setsuna/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/beagleworks/Setsuna/compare/v1.3.0...v1.3.1
