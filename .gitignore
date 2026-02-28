@@ -23,6 +23,7 @@
 
 # debug
 npm-debug.log*
+pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
@@ -44,3 +45,6 @@ prisma/dev.db-journal
 # IDE
 .idea
 .vscode
+
+# pnpm
+.pnpm-store

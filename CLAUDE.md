@@ -41,11 +41,11 @@ Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS 
 ## Commands
 
 ```bash
-npm run dev          # 開発サーバー
-npm run test         # テスト実行
-npm run test:watch   # TDD用ウォッチモード
-npm run lint         # ESLint
-npm run build        # ビルド
+pnpm dev          # 開発サーバー
+pnpm test         # テスト実行
+pnpm test:watch   # TDD用ウォッチモード
+pnpm lint         # ESLint
+pnpm build        # ビルド
 ```
 
 ## Commit Rules

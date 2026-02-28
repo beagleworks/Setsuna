@@ -80,7 +80,7 @@
 ### 必要条件
 
 - Node.js 20+
-- npm 10+
+- pnpm 10+
 
 ### インストール
 
@@ -90,13 +90,13 @@ git clone https://github.com/beagleworks/Setsuna.git
 cd Setsuna
 
 # 依存関係をインストール
-npm install
+pnpm install
 
 # Prismaクライアントを生成
-npx prisma generate
+pnpm prisma generate
 
 # データベースをセットアップ（ローカルSQLite）
-npx prisma migrate dev
+pnpm prisma migrate dev
 ```
 
 ### 環境変数
@@ -152,7 +152,7 @@ ADMIN_JWT_SECRET="your-secure-jwt-secret"
 ### 開発サーバーの起動
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ブラウザで http://localhost:3000 を開きます。
@@ -161,32 +161,32 @@ npm run dev
 
 ```bash
 # 開発サーバー
-npm run dev
+pnpm dev
 
 # ビルド
-npm run build
+pnpm build
 
 # 本番サーバー
-npm run start
+pnpm start
 
 # リント
-npm run lint
-npm run lint:fix
+pnpm lint
+pnpm lint:fix
 
 # フォーマット
-npm run format
-npm run format:check
+pnpm format
+pnpm format:check
 
 # テスト
-npm run test              # 全テスト実行
-npm run test:watch        # ウォッチモード（TDD用）
-npm run test:coverage     # カバレッジレポート
-npm run test:e2e          # E2Eテスト
+pnpm test              # 全テスト実行
+pnpm test:watch        # ウォッチモード（TDD用）
+pnpm test:coverage     # カバレッジレポート
+pnpm test:e2e          # E2Eテスト
 
 # データベース
-npx prisma generate       # Prismaクライアント生成
-npx prisma migrate dev    # マイグレーション実行
-npx prisma studio         # DBのGUI
+pnpm prisma generate       # Prismaクライアント生成
+pnpm prisma migrate dev    # マイグレーション実行
+pnpm prisma studio         # DBのGUI
 ```
 
 ## プロジェクト構成
@@ -280,13 +280,13 @@ Red → Green → Refactor
 
 ```bash
 # ユニット/統合テスト（35件）
-npm run test
+pnpm test
 
 # E2Eテスト（14件）
-npm run test:e2e
+pnpm test:e2e
 
 # カバレッジレポート
-npm run test:coverage
+pnpm test:coverage
 ```
 
 ## 国際化（i18n）

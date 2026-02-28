@@ -80,7 +80,7 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 ### Prerequisites
 
 - Node.js 20+
-- npm 10+
+- pnpm 10+
 
 ### Installation
 
@@ -90,13 +90,13 @@ git clone https://github.com/beagleworks/Setsuna.git
 cd Setsuna
 
 # Install dependencies
-npm install
+pnpm install
 
 # Generate Prisma client
-npx prisma generate
+pnpm prisma generate
 
 # Set up database (local SQLite)
-npx prisma migrate dev
+pnpm prisma migrate dev
 ```
 
 ### Environment Variables
@@ -152,7 +152,7 @@ ADMIN_JWT_SECRET="your-secure-jwt-secret"
 ### Start Development Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Open http://localhost:3000 in your browser.
@@ -161,32 +161,32 @@ Open http://localhost:3000 in your browser.
 
 ```bash
 # Development server
-npm run dev
+pnpm dev
 
 # Build
-npm run build
+pnpm build
 
 # Production server
-npm run start
+pnpm start
 
 # Lint
-npm run lint
-npm run lint:fix
+pnpm lint
+pnpm lint:fix
 
 # Format
-npm run format
-npm run format:check
+pnpm format
+pnpm format:check
 
 # Test
-npm run test              # Run all tests
-npm run test:watch        # Watch mode (for TDD)
-npm run test:coverage     # Coverage report
-npm run test:e2e          # E2E tests
+pnpm test              # Run all tests
+pnpm test:watch        # Watch mode (for TDD)
+pnpm test:coverage     # Coverage report
+pnpm test:e2e          # E2E tests
 
 # Database
-npx prisma generate       # Generate Prisma client
-npx prisma migrate dev    # Run migrations
-npx prisma studio         # Database GUI
+pnpm prisma generate       # Generate Prisma client
+pnpm prisma migrate dev    # Run migrations
+pnpm prisma studio         # Database GUI
 ```
 
 ## Project Structure
@@ -284,13 +284,13 @@ Red → Green → Refactor
 
 ```bash
 # Unit/Integration tests (35 tests)
-npm run test
+pnpm test
 
 # E2E tests (14 tests)
-npm run test:e2e
+pnpm test:e2e
 
 # Coverage report
-npm run test:coverage
+pnpm test:coverage
 ```
 
 ## Internationalization (i18n)
