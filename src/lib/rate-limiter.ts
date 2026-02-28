@@ -27,6 +27,21 @@ export interface RateLimitResult {
   resetAt: number;
 }
 
+export const DEFAULT_RATE_LIMIT_WINDOW_MS = 60000; // 1分
+export const DEFAULT_RATE_LIMIT_MAX_REQUESTS = 30;
+
+export function createRateLimitHeaders(
+  rateLimit: RateLimitResult,
+  maxRequests: number
+): Record<string, string> {
+  return {
+    'X-RateLimit-Limit': String(maxRequests),
+    'X-RateLimit-Remaining': String(rateLimit.remaining),
+    'X-RateLimit-Reset': String(rateLimit.resetAt),
+    'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+  };
+}
+
 export class RateLimiter {
   private store: Map<string, RateLimitEntry>;
   private config: RateLimitConfig;
@@ -123,8 +138,8 @@ export function getClientIP(request: Request): string {
 // デフォルト設定でシングルトンインスタンスを作成
 // 30リクエスト/分（SECURITY.mdで定義された値）
 const DEFAULT_CONFIG: RateLimitConfig = {
-  windowMs: 60000, // 1分
-  maxRequests: 30,
+  windowMs: DEFAULT_RATE_LIMIT_WINDOW_MS,
+  maxRequests: DEFAULT_RATE_LIMIT_MAX_REQUESTS,
 };
 
 // グローバルインスタンス（開発時のホットリロード対応）

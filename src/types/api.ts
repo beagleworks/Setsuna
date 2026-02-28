@@ -86,6 +86,7 @@ export type ErrorCode =
   | 'ROOM_NOT_FOUND'
   | 'ROOM_EXPIRED'
   | 'INVALID_ROOM_CODE'
+  | 'TOO_MANY_CONNECTIONS'
   | 'CONTENT_TOO_LONG'
   | 'CONTENT_EMPTY'
   | 'RATE_LIMIT_EXCEEDED'
@@ -100,6 +101,7 @@ export const ERROR_MESSAGES: Record<ErrorCode, string> = {
   ROOM_NOT_FOUND: '指定されたルームは存在しないか、有効期限が切れています',
   ROOM_EXPIRED: 'ルームの有効期限が切れています',
   INVALID_ROOM_CODE: 'ルームコードの形式が不正です',
+  TOO_MANY_CONNECTIONS: 'ルームの接続数が上限に達しています',
   CONTENT_TOO_LONG: 'メッセージは10,000文字以内で入力してください',
   CONTENT_EMPTY: 'メッセージを入力してください',
   RATE_LIMIT_EXCEEDED: 'リクエストが多すぎます。しばらく待ってから再試行してください',

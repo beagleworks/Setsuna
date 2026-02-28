@@ -1,17 +1,62 @@
 import { prisma } from '@/lib/db';
 import { validateRoomCode } from '@/lib/room-code';
 import { sseManager } from '@/lib/sse-manager';
+import { RateLimiter, getClientIP, createRateLimitHeaders } from '@/lib/rate-limiter';
+import { ERROR_MESSAGES } from '@/types/api';
 
 interface RouteParams {
   params: Promise<{ code: string }>;
+}
+
+const SSE_RATE_LIMIT_WINDOW_MS = 60000;
+const SSE_MAX_CONNECTION_ATTEMPTS_PER_WINDOW = 60;
+const SSE_PING_INTERVAL_MS = 30000;
+
+const globalForSseRateLimiter = globalThis as typeof globalThis & {
+  sseConnectionRateLimiter?: RateLimiter;
+};
+
+function getSseConnectionRateLimiter(): RateLimiter {
+  if (!globalForSseRateLimiter.sseConnectionRateLimiter) {
+    globalForSseRateLimiter.sseConnectionRateLimiter = new RateLimiter({
+      windowMs: SSE_RATE_LIMIT_WINDOW_MS,
+      maxRequests: SSE_MAX_CONNECTION_ATTEMPTS_PER_WINDOW,
+    });
+  }
+
+  return globalForSseRateLimiter.sseConnectionRateLimiter;
 }
 
 /**
  * GET /api/sse/[code]
  * SSEストリームを開始する
  */
-export async function GET(_request: Request, { params }: RouteParams): Promise<Response> {
+export async function GET(request: Request, { params }: RouteParams): Promise<Response> {
   const { code } = await params;
+  const rateLimiter = getSseConnectionRateLimiter();
+  const ip = getClientIP(request);
+  const rateLimitIdentifier = `sse:${ip}`;
+
+  const rateLimit = rateLimiter.check(rateLimitIdentifier);
+  if (!rateLimit.allowed) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: {
+          code: 'RATE_LIMIT_EXCEEDED',
+          message: ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+        },
+      }),
+      {
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          ...createRateLimitHeaders(rateLimit, SSE_MAX_CONNECTION_ATTEMPTS_PER_WINDOW),
+        },
+      }
+    );
+  }
+  rateLimiter.increment(rateLimitIdentifier);
 
   // コード形式のバリデーション
   if (!validateRoomCode(code)) {
@@ -20,7 +65,7 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
         success: false,
         error: {
           code: 'INVALID_ROOM_CODE',
-          message: 'ルームコードの形式が不正です',
+          message: ERROR_MESSAGES.INVALID_ROOM_CODE,
         },
       }),
       {
@@ -41,7 +86,7 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
         success: false,
         error: {
           code: 'ROOM_NOT_FOUND',
-          message: '指定されたルームは存在しないか、有効期限が切れています',
+          message: ERROR_MESSAGES.ROOM_NOT_FOUND,
         },
       }),
       {
@@ -58,7 +103,7 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
         success: false,
         error: {
           code: 'ROOM_EXPIRED',
-          message: 'ルームの有効期限が切れています',
+          message: ERROR_MESSAGES.ROOM_EXPIRED,
         },
       }),
       {
@@ -75,7 +120,7 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
         success: false,
         error: {
           code: 'TOO_MANY_CONNECTIONS',
-          message: 'ルームの接続数が上限に達しています',
+          message: ERROR_MESSAGES.TOO_MANY_CONNECTIONS,
         },
       }),
       {
@@ -86,41 +131,62 @@ export async function GET(_request: Request, { params }: RouteParams): Promise<R
   }
 
   // SSEストリームを作成
+  let cleanupConnection: (() => void) | null = null;
+
   const stream = new ReadableStream({
     start(controller) {
+      const encoder = new TextEncoder();
+
       // 接続を追加
-      const connectionId = sseManager.addConnection(code, controller);
+      let connectionId: string | null = sseManager.addConnection(code, controller);
+      let pingInterval: ReturnType<typeof setInterval> | null = null;
+      let isCleanedUp = false;
+
+      const cleanup = () => {
+        if (isCleanedUp) {
+          return;
+        }
+        isCleanedUp = true;
+
+        if (pingInterval) {
+          clearInterval(pingInterval);
+          pingInterval = null;
+        }
+
+        if (connectionId) {
+          sseManager.removeConnection(code, connectionId);
+          connectionId = null;
+        }
+
+        request.signal.removeEventListener('abort', cleanup);
+      };
+
+      cleanupConnection = cleanup;
+      request.signal.addEventListener('abort', cleanup);
 
       // 接続確立イベントを送信
-      const encoder = new TextEncoder();
       const connectedEvent = `event: connected\ndata: ${JSON.stringify({
         roomCode: code,
         timestamp: Date.now(),
       })}\n\n`;
       controller.enqueue(encoder.encode(connectedEvent));
 
-      // キープアライブ用のping（30秒ごと）
-      const pingInterval = setInterval(() => {
+      // キープアライブ用のping
+      pingInterval = setInterval(() => {
         try {
           const pingEvent = `event: ping\ndata: ${JSON.stringify({
             timestamp: Date.now(),
           })}\n\n`;
           controller.enqueue(encoder.encode(pingEvent));
         } catch {
-          // 接続が切れている場合
-          clearInterval(pingInterval);
-          sseManager.removeConnection(code, connectionId);
+          // 接続が切れている場合はクリーンアップ
+          cleanup();
         }
-      }, 30000);
-
-      // クリーンアップ関数を返す（接続終了時に呼ばれる）
-      return () => {
-        clearInterval(pingInterval);
-        sseManager.removeConnection(code, connectionId);
-      };
+      }, SSE_PING_INTERVAL_MS);
     },
     cancel() {
-      // キャンセル時の処理（必要に応じて）
+      cleanupConnection?.();
+      cleanupConnection = null;
     },
   });
 

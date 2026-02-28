@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { generateRoomCode } from '@/lib/room-code';
-import { rateLimiter, getClientIP } from '@/lib/rate-limiter';
+import {
+  rateLimiter,
+  getClientIP,
+  createRateLimitHeaders,
+  DEFAULT_RATE_LIMIT_MAX_REQUESTS,
+} from '@/lib/rate-limiter';
 import { ROOM_EXPIRY_HOURS, ERROR_MESSAGES, type CreateRoomResponse } from '@/types/api';
 
 /**
@@ -26,10 +31,7 @@ export async function POST(request: Request): Promise<NextResponse<CreateRoomRes
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': '30',
-            'X-RateLimit-Remaining': String(rateLimit.remaining),
-            'X-RateLimit-Reset': String(rateLimit.resetAt),
-            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+            ...createRateLimitHeaders(rateLimit, DEFAULT_RATE_LIMIT_MAX_REQUESTS),
           },
         }
       );
@@ -66,7 +68,7 @@ export async function POST(request: Request): Promise<NextResponse<CreateRoomRes
         success: false,
         error: {
           code: 'INTERNAL_ERROR',
-          message: 'サーバーエラーが発生しました',
+          message: ERROR_MESSAGES.INTERNAL_ERROR,
         },
       },
       { status: 500 }

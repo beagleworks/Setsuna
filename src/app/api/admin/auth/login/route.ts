@@ -1,7 +1,25 @@
 import { NextResponse } from 'next/server';
 import { validatePassword, generateToken, buildAuthCookieValue } from '@/lib/admin-auth';
+import { RateLimiter, getClientIP, createRateLimitHeaders } from '@/lib/rate-limiter';
 import type { AdminLoginResponse } from '@/types/admin';
-import { ADMIN_SESSION_EXPIRY_HOURS } from '@/types/admin';
+import { ADMIN_LOGIN_RATE_LIMIT, ADMIN_SESSION_EXPIRY_HOURS } from '@/types/admin';
+import { ERROR_MESSAGES } from '@/types/api';
+
+const LOGIN_RATE_LIMIT_WINDOW_MS = 60000;
+
+const globalForAdminLoginRateLimiter = globalThis as typeof globalThis & {
+  adminLoginRateLimiter?: RateLimiter;
+};
+
+function getAdminLoginRateLimiter(): RateLimiter {
+  if (!globalForAdminLoginRateLimiter.adminLoginRateLimiter) {
+    globalForAdminLoginRateLimiter.adminLoginRateLimiter = new RateLimiter({
+      windowMs: LOGIN_RATE_LIMIT_WINDOW_MS,
+      maxRequests: ADMIN_LOGIN_RATE_LIMIT,
+    });
+  }
+  return globalForAdminLoginRateLimiter.adminLoginRateLimiter;
+}
 
 /**
  * POST /api/admin/auth/login
@@ -9,6 +27,30 @@ import { ADMIN_SESSION_EXPIRY_HOURS } from '@/types/admin';
  */
 export async function POST(request: Request): Promise<NextResponse<AdminLoginResponse>> {
   try {
+    const adminLoginRateLimiter = getAdminLoginRateLimiter();
+
+    // レート制限チェック（IPごと）
+    const ip = getClientIP(request);
+    const rateLimit = adminLoginRateLimiter.check(ip);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'RATE_LIMIT_EXCEEDED',
+            message: ERROR_MESSAGES.RATE_LIMIT_EXCEEDED,
+          },
+        },
+        {
+          status: 429,
+          headers: {
+            ...createRateLimitHeaders(rateLimit, ADMIN_LOGIN_RATE_LIMIT),
+          },
+        }
+      );
+    }
+    adminLoginRateLimiter.increment(ip);
+
     const body = await request.json();
     const { password } = body;
 

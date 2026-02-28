@@ -92,4 +92,31 @@ describe('GET /api/admin/rooms', () => {
       })
     );
   });
+
+  it('sortBy=messageCount でメッセージ数ソートを使う', async () => {
+    const request = new Request(
+      'http://localhost/api/admin/rooms?sortBy=messageCount&sortOrder=asc'
+    );
+    await GET(request);
+
+    expect(prisma.room.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        orderBy: {
+          messages: {
+            _count: 'asc',
+          },
+        },
+      })
+    );
+  });
+
+  it('不正な page/pageSize はデフォルト値にフォールバックする', async () => {
+    const request = new Request('http://localhost/api/admin/rooms?page=abc&pageSize=xyz');
+    const response = await GET(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.data.page).toBe(1);
+    expect(data.data.pageSize).toBe(20);
+  });
 });

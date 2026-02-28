@@ -4,6 +4,7 @@
  */
 
 import { SignJWT, jwtVerify } from 'jose';
+import { timingSafeEqual } from 'crypto';
 import type { AdminJWTPayload } from '@/types/admin';
 import { ADMIN_SESSION_EXPIRY_HOURS } from '@/types/admin';
 
@@ -22,7 +23,19 @@ export function validatePassword(password: string): boolean {
     return false;
   }
 
-  return password === adminPassword;
+  // 比較対象の長さ差による情報漏えいを抑えるために、同一長へパディングして定時間比較する
+  const providedBytes = Buffer.from(password, 'utf8');
+  const expectedBytes = Buffer.from(adminPassword, 'utf8');
+  const compareLength = Math.max(providedBytes.length, expectedBytes.length, 1);
+
+  const providedPadded = Buffer.alloc(compareLength);
+  const expectedPadded = Buffer.alloc(compareLength);
+  providedBytes.copy(providedPadded);
+  expectedBytes.copy(expectedPadded);
+
+  return (
+    timingSafeEqual(providedPadded, expectedPadded) && providedBytes.length === expectedBytes.length
+  );
 }
 
 /**

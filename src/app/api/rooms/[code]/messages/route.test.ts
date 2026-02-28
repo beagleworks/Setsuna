@@ -33,7 +33,11 @@ describe('GET /api/rooms/[code]/messages', () => {
   });
 
   it('メッセージ一覧を返す', async () => {
-    const mockRoom = { id: 'room-id', code: VALID_CODE };
+    const mockRoom = {
+      id: 'room-id',
+      code: VALID_CODE,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+    };
     const mockMessages = [
       { id: 'msg-1', content: 'First', createdAt: new Date() },
       { id: 'msg-2', content: 'Second', createdAt: new Date() },
@@ -62,6 +66,21 @@ describe('GET /api/rooms/[code]/messages', () => {
     expect(response.status).toBe(404);
     expect(data.error.code).toBe('ROOM_NOT_FOUND');
   });
+
+  it('期限切れルームは410を返す', async () => {
+    (prisma.room.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 'room-id',
+      code: VALID_CODE,
+      expiresAt: new Date(Date.now() - 60 * 1000),
+    });
+
+    const request = new Request(`http://localhost/api/rooms/${VALID_CODE}/messages`);
+    const response = await GET(request, { params: Promise.resolve({ code: VALID_CODE }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(410);
+    expect(data.error.code).toBe('ROOM_EXPIRED');
+  });
 });
 
 describe('POST /api/rooms/[code]/messages', () => {
@@ -70,7 +89,11 @@ describe('POST /api/rooms/[code]/messages', () => {
   });
 
   it('メッセージを作成する', async () => {
-    const mockRoom = { id: 'room-id', code: VALID_CODE };
+    const mockRoom = {
+      id: 'room-id',
+      code: VALID_CODE,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+    };
     const mockMessage = {
       id: 'msg-id',
       content: 'Hello, World!',
@@ -95,7 +118,11 @@ describe('POST /api/rooms/[code]/messages', () => {
   });
 
   it('SSEでブロードキャストする', async () => {
-    const mockRoom = { id: 'room-id', code: VALID_CODE };
+    const mockRoom = {
+      id: 'room-id',
+      code: VALID_CODE,
+      expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+    };
     const mockMessage = { id: 'msg-id', content: 'Test', createdAt: new Date() };
 
     (prisma.room.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue(mockRoom);
@@ -160,5 +187,25 @@ describe('POST /api/rooms/[code]/messages', () => {
 
     expect(response.status).toBe(404);
     expect(data.error.code).toBe('ROOM_NOT_FOUND');
+  });
+
+  it('期限切れルームは410を返す', async () => {
+    (prisma.room.findUnique as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: 'room-id',
+      code: VALID_CODE,
+      expiresAt: new Date(Date.now() - 60 * 1000),
+    });
+
+    const request = new Request(`http://localhost/api/rooms/${VALID_CODE}/messages`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: 'Test' }),
+    });
+
+    const response = await POST(request, { params: Promise.resolve({ code: VALID_CODE }) });
+    const data = await response.json();
+
+    expect(response.status).toBe(410);
+    expect(data.error.code).toBe('ROOM_EXPIRED');
   });
 });

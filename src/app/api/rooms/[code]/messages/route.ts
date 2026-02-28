@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { validateRoomCode } from '@/lib/room-code';
 import { sseManager } from '@/lib/sse-manager';
-import { rateLimiter, getClientIP } from '@/lib/rate-limiter';
+import {
+  rateLimiter,
+  getClientIP,
+  createRateLimitHeaders,
+  DEFAULT_RATE_LIMIT_MAX_REQUESTS,
+} from '@/lib/rate-limiter';
 import {
   type GetMessagesResponse,
   type CreateMessageResponse,
@@ -41,10 +46,7 @@ export async function GET(
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': '30',
-            'X-RateLimit-Remaining': String(rateLimit.remaining),
-            'X-RateLimit-Reset': String(rateLimit.resetAt),
-            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+            ...createRateLimitHeaders(rateLimit, DEFAULT_RATE_LIMIT_MAX_REQUESTS),
           },
         }
       );
@@ -82,6 +84,20 @@ export async function GET(
           },
         },
         { status: 404 }
+      );
+    }
+
+    // 期限切れチェック
+    if (room.expiresAt < new Date()) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'ROOM_EXPIRED',
+            message: ERROR_MESSAGES.ROOM_EXPIRED,
+          },
+        },
+        { status: 410 }
       );
     }
 
@@ -160,10 +176,7 @@ export async function POST(
         {
           status: 429,
           headers: {
-            'X-RateLimit-Limit': '30',
-            'X-RateLimit-Remaining': String(rateLimit.remaining),
-            'X-RateLimit-Reset': String(rateLimit.resetAt),
-            'Retry-After': String(Math.ceil((rateLimit.resetAt - Date.now()) / 1000)),
+            ...createRateLimitHeaders(rateLimit, DEFAULT_RATE_LIMIT_MAX_REQUESTS),
           },
         }
       );
@@ -230,6 +243,20 @@ export async function POST(
           },
         },
         { status: 404 }
+      );
+    }
+
+    // 期限切れチェック
+    if (room.expiresAt < new Date()) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: 'ROOM_EXPIRED',
+            message: ERROR_MESSAGES.ROOM_EXPIRED,
+          },
+        },
+        { status: 410 }
       );
     }
 

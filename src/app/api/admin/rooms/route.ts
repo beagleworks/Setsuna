@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { verifyAdminAuth } from '@/lib/admin-auth';
 import type { AdminRoomsResponse, AdminRoomsQuery } from '@/types/admin';
@@ -43,9 +44,7 @@ export async function GET(request: Request): Promise<NextResponse<AdminRoomsResp
           select: { messages: true },
         },
       },
-      orderBy: {
-        [query.sortBy]: query.sortOrder,
-      },
+      orderBy: buildOrderBy(query),
       skip: (query.page - 1) * query.pageSize,
       take: query.pageSize,
     });
@@ -85,20 +84,49 @@ export async function GET(request: Request): Promise<NextResponse<AdminRoomsResp
 }
 
 function parseQuery(searchParams: URLSearchParams): Required<AdminRoomsQuery> {
-  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+  const page = parsePositiveInt(searchParams.get('page'), 1);
   const pageSize = Math.min(
     ADMIN_MAX_PAGE_SIZE,
-    Math.max(1, parseInt(searchParams.get('pageSize') || String(ADMIN_DEFAULT_PAGE_SIZE), 10))
+    parsePositiveInt(searchParams.get('pageSize'), ADMIN_DEFAULT_PAGE_SIZE)
   );
-  const search = searchParams.get('search') || '';
-  const status = (searchParams.get('status') || 'all') as 'all' | 'active' | 'expired';
-  const sortBy = (searchParams.get('sortBy') || 'createdAt') as
-    | 'createdAt'
-    | 'expiresAt'
-    | 'messageCount';
-  const sortOrder = (searchParams.get('sortOrder') || 'desc') as 'asc' | 'desc';
+  const search = (searchParams.get('search') || '').trim();
+
+  const statusParam = searchParams.get('status');
+  const status = statusParam === 'active' || statusParam === 'expired' ? statusParam : 'all';
+
+  const sortByParam = searchParams.get('sortBy');
+  const sortBy =
+    sortByParam === 'expiresAt' || sortByParam === 'messageCount' ? sortByParam : 'createdAt';
+
+  const sortOrderParam = searchParams.get('sortOrder');
+  const sortOrder = sortOrderParam === 'asc' ? 'asc' : 'desc';
 
   return { page, pageSize, search, status, sortBy, sortOrder };
+}
+
+function parsePositiveInt(rawValue: string | null, fallback: number): number {
+  if (!rawValue) {
+    return fallback;
+  }
+  const parsed = Number.parseInt(rawValue, 10);
+  if (!Number.isFinite(parsed) || parsed < 1) {
+    return fallback;
+  }
+  return parsed;
+}
+
+function buildOrderBy(query: Required<AdminRoomsQuery>): Prisma.RoomOrderByWithRelationInput {
+  if (query.sortBy === 'messageCount') {
+    return {
+      messages: {
+        _count: query.sortOrder,
+      },
+    };
+  }
+
+  return {
+    [query.sortBy]: query.sortOrder,
+  } as Prisma.RoomOrderByWithRelationInput;
 }
 
 function buildWhereClause(query: Required<AdminRoomsQuery>, now: Date) {

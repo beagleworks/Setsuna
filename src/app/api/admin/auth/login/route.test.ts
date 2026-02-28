@@ -1,11 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { POST } from './route';
+import { ADMIN_LOGIN_RATE_LIMIT } from '@/types/admin';
 
 describe('POST /api/admin/auth/login', () => {
   const originalEnv = process.env;
 
   beforeEach(() => {
     vi.resetModules();
+    delete (globalThis as { adminLoginRateLimiter?: unknown }).adminLoginRateLimiter;
     process.env = {
       ...originalEnv,
       ADMIN_PASSWORD: 'test-admin-password',
@@ -103,5 +105,27 @@ describe('POST /api/admin/auth/login', () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
+  });
+
+  it('ログイン試行回数が上限を超えると429を返す', async () => {
+    const requests = Array.from(
+      { length: ADMIN_LOGIN_RATE_LIMIT + 1 },
+      () =>
+        new Request('http://localhost/api/admin/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-forwarded-for': '203.0.113.10' },
+          body: JSON.stringify({ password: 'wrong-password' }),
+        })
+    );
+
+    let lastResponse: Response | null = null;
+    for (const request of requests) {
+      lastResponse = await POST(request);
+    }
+
+    expect(lastResponse).not.toBeNull();
+    expect(lastResponse?.status).toBe(429);
+    const data = await lastResponse!.json();
+    expect(data.error.code).toBe('RATE_LIMIT_EXCEEDED');
   });
 });
