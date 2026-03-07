@@ -19,8 +19,6 @@
 
 ## デモ
 
-🌐 **ライブデモ**: [https://setsuna-text.vercel.app](https://setsuna-text.vercel.app)
-
 ```
 ┌──────────────────────────────────────────┐
 │                                 [EN][JA] │  ← 言語切替

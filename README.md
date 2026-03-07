@@ -19,8 +19,6 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 
 ## Demo
 
-🌐 **Live Demo**: [https://setsuna-text.vercel.app](https://setsuna-text.vercel.app)
-
 ```
 ┌──────────────────────────────────────────┐
 │                                 [EN][JA] │  ← Language Switcher
