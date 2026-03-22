@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.5] - 2026-03-23
+
+### Added
+
+- **Dependabot configuration** - Added automated dependency update monitoring
+  - Weekly npm dependency checks with grouped PRs (dev/production separated)
+  - Weekly GitHub Actions version checks
+  - Pull request limit set to 5 to reduce noise
+
 ## [1.3.4] - 2026-01-09
 
 ### Changed
