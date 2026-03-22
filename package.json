@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && next build",
+    "build": "pnpm exec prisma generate && next build",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -28,13 +28,13 @@
   "license": "MIT",
   "dependencies": {
     "@libsql/client": "^0.8.1",
-    "@prisma/adapter-libsql": "^5.22.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/adapter-libsql": "5.22.0",
+    "@prisma/client": "5.22.0",
     "jose": "^6.1.3",
     "lucide-react": "^0.562.0",
     "next": "^15.5.10",
     "next-intl": "^4.6.1",
-    "prisma": "^5.22.0",
+    "prisma": "5.22.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },
