@@ -1,6 +1,6 @@
 {
   "name": "setsuna",
-  "version": "1.3.5",
+  "version": "1.4.0",
   "description": "Real-time text sharing web application",
   "private": true,
   "scripts": {
@@ -27,14 +27,13 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@libsql/client": "^0.8.1",
-    "@prisma/adapter-libsql": "5.22.0",
-    "@prisma/client": "5.22.0",
+    "@prisma/adapter-libsql": "7.5.0",
+    "@prisma/client": "7.5.0",
     "jose": "^6.1.3",
     "lucide-react": "^0.562.0",
     "next": "^15.5.10",
     "next-intl": "^4.6.1",
-    "prisma": "5.22.0",
+    "prisma": "7.5.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
   },

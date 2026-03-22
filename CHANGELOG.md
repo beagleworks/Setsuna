@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-23
+
+### Changed
+
+- **Upgrade Prisma to v7.5.0** - Major ORM upgrade from v5.22.0
+  - Migrated schema to Prisma 7 format (`prisma-client` generator, removed `url` from datasource)
+  - Added `prisma.config.ts` for datasource URL configuration
+  - Driver adapters are now a core feature (removed `previewFeatures = ["driverAdapters"]`)
+  - `PrismaLibSql` adapter now accepts connection config directly (removed `@libsql/client` direct dependency)
+  - Generated Prisma client output moved to `src/generated/prisma/`
+  - Added `serverExternalPackages` in Next.js config for libsql compatibility
+  - Updated documentation (`docs/DB.md`, `docs/IMPLEMENTATION_PLAN.md`)
+
 ## [1.3.5] - 2026-03-23
 
 ### Added

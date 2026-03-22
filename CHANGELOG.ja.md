@@ -7,6 +7,19 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-23
+
+### Changed
+
+- **Prisma v7.5.0にアップグレード** - ORM のメジャーアップグレード（v5.22.0 → v7.5.0）
+  - スキーマをPrisma 7形式に移行（`prisma-client`ジェネレーター、datasourceから`url`を削除）
+  - `prisma.config.ts`を新規作成（datasource URLの定義先）
+  - ドライバーアダプターがコア機能に昇格（`previewFeatures = ["driverAdapters"]`を削除）
+  - `PrismaLibSql`アダプターが接続設定を直接受け取る形式に変更（`@libsql/client`の直接依存を削除）
+  - 生成されるPrismaクライアントの出力先を`src/generated/prisma/`に変更
+  - Next.js設定に`serverExternalPackages`を追加（libsql互換性のため）
+  - ドキュメントを更新（`docs/DB.md`、`docs/IMPLEMENTATION_PLAN.md`）
+
 ## [1.3.5] - 2026-03-23
 
 ### Added

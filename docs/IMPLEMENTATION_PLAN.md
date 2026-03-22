@@ -36,12 +36,11 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 
 #### 本番依存
 
-| パッケージ               | 用途               |
-| ------------------------ | ------------------ |
-| `prisma`                 | ORM                |
-| `@prisma/client`         | Prisma Client      |
-| `@prisma/adapter-libsql` | Tursoアダプター    |
-| `@libsql/client`         | libSQLクライアント |
+| パッケージ               | 用途            |
+| ------------------------ | --------------- |
+| `prisma`                 | ORM             |
+| `@prisma/client`         | Prisma Client   |
+| `@prisma/adapter-libsql` | Tursoアダプター |
 
 #### 開発依存
 
