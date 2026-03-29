@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-03-29
+
+### Changed
+
+- **Modernized frontend/tooling stack**
+  - Replaced ESLint with oxlint for project linting and pre-commit checks
+  - Upgraded TypeScript to 6.0.2
+  - Upgraded Vite to 8.0.3 and `@vitejs/plugin-react` to 6.0.1
+  - Refreshed supporting dev dependencies for testing, formatting, and Tailwind
+- **Documentation refresh**
+  - Updated project docs and references to reflect the oxlint-based workflow
+
+### Fixed
+
+- **TypeScript 6 compatibility**
+  - Added a CSS module declaration for global stylesheet side-effect imports
+- **Accessibility polish**
+  - Added a root `lang` attribute
+  - Removed `autoFocus` from the admin login password field
+
 ## [1.4.0] - 2026-03-23
 
 ### Changed
@@ -213,6 +233,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date       | Description                                           |
 | ------- | ---------- | ----------------------------------------------------- |
+| 1.5.0   | 2026-03-29 | Switch to oxlint, upgrade TypeScript 6 and Vite 8     |
 | 1.3.4   | 2026-01-09 | Refactor admin auth cookie handling                   |
 | 1.3.3   | 2025-12-29 | Fix admin logout not clearing cookie                  |
 | 1.3.2   | 2025-12-29 | Fix admin login redirect loop                         |

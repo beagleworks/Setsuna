@@ -68,7 +68,7 @@
 | ORM              | Prisma                              |
 | リアルタイム通信 | Server-Sent Events (SSE)            |
 | テスト           | Vitest, Testing Library, Playwright |
-| Linter/Formatter | ESLint 9, Prettier                  |
+| Linter/Formatter | oxlint, Prettier                    |
 | Gitフック        | husky, lint-staged                  |
 | デプロイ         | Vercel                              |
 | 国際化           | next-intl                           |

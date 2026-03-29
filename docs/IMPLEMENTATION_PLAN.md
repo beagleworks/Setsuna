@@ -69,7 +69,7 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 | `playwright.config.ts`   | Playwright設定       |
 | `prettier.config.mjs`    | Prettier設定         |
 | `lint-staged.config.mjs` | lint-staged設定      |
-| `eslint.config.mjs`      | ESLint Flat Config   |
+| `.oxlintrc.json`         | Oxlint設定           |
 | `.env`                   | 環境変数（ローカル） |
 | `.env.example`           | 環境変数テンプレート |
 

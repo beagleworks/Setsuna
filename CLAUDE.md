@@ -44,7 +44,7 @@ Next.js 15 (App Router) / React 19 / TypeScript / Turso (Prisma) / Tailwind CSS 
 pnpm dev          # 開発サーバー
 pnpm test         # テスト実行
 pnpm test:watch   # TDD用ウォッチモード
-pnpm lint         # ESLint
+pnpm lint         # oxlint
 pnpm build        # ビルド
 ```
 

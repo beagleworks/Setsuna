@@ -23,7 +23,7 @@
 | ORM              | Prisma                              |
 | リアルタイム通信 | Server-Sent Events (SSE)            |
 | テスト           | Vitest, Testing Library, Playwright |
-| Linter/Formatter | ESLint 9, Prettier                  |
+| Linter/Formatter | oxlint, Prettier                    |
 | Gitフック        | husky, lint-staged                  |
 | デプロイ先       | Vercel                              |
 | 言語             | TypeScript                          |
@@ -310,7 +310,7 @@ Setsuna/
 │   └── types/                     # 型定義
 ├── e2e/                           # E2Eテスト（Playwright）
 ├── middleware.ts                  # next-intlミドルウェア
-├── eslint.config.mjs              # ESLint設定（Flat Config）
+├── .oxlintrc.json                 # Oxlint設定
 ├── prettier.config.mjs            # Prettier設定
 ├── lint-staged.config.mjs         # lint-staged設定
 ├── vitest.config.ts               # Vitest設定

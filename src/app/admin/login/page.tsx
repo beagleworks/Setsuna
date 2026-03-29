@@ -61,7 +61,6 @@ export default function AdminLoginPage() {
                 placeholder="Enter admin password"
                 required
                 disabled={isLoading}
-                autoFocus
               />
             </div>
 

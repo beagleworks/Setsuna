@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "react", "nextjs", "jsx-a11y", "vitest"],
+  "ignorePatterns": [".next/**", "out/**", "build/**", "next-env.d.ts"],
+  "rules": {
+    "eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/**/*.test.{ts,tsx}", "vitest.setup.ts"],
+      "env": {
+        "vitest": true
+      }
+    }
+  ]
+}

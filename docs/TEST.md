@@ -983,7 +983,7 @@ npm run test:e2e:ui
 
 | フック     | タイミング      | 実行内容                         |
 | ---------- | --------------- | -------------------------------- |
-| pre-commit | `git commit` 前 | lint-staged（ESLint + Prettier） |
+| pre-commit | `git commit` 前 | lint-staged（oxlint + Prettier） |
 | pre-push   | `git push` 前   | `npm run test`                   |
 
 ### lint-staged設定
@@ -991,7 +991,7 @@ npm run test:e2e:ui
 ```javascript
 // lint-staged.config.mjs
 export default {
-  '*.{ts,tsx}': ['eslint --fix', 'prettier --write'],
+  '*.{ts,tsx}': ['oxlint --fix', 'prettier --write'],
   '*.{json,md,css}': ['prettier --write'],
 };
 ```
@@ -1038,7 +1038,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
+      - name: Run oxlint
         run: npm run lint
 
       - name: Check Prettier formatting

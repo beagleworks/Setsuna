@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className={`${inter.variable} ${firaCode.variable}`}>
+    <html lang="en" className={`${inter.variable} ${firaCode.variable}`}>
       <body className="min-h-screen font-mono antialiased">{children}</body>
     </html>
   );

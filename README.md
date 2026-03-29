@@ -68,7 +68,7 @@ Easily transfer text copied on your smartphone to your PC, or vice versa.
 | ORM           | Prisma                              |
 | Real-time     | Server-Sent Events (SSE)            |
 | Testing       | Vitest, Testing Library, Playwright |
-| Linter/Format | ESLint 9, Prettier                  |
+| Linter/Format | oxlint, Prettier                    |
 | Git Hooks     | husky, lint-staged                  |
 | Deployment    | Vercel                              |
 | i18n          | next-intl                           |
